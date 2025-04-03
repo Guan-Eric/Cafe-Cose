@@ -9,6 +9,7 @@ module.exports = {
         primary: '#762e1f',
         text: '#1a1a1a',
         secondaryText: '#f8f9fa',
+        input: '#e5e5e5',
       },
     },
   },
