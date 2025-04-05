@@ -14,7 +14,7 @@ import {
 import { router, useLocalSearchParams } from 'expo-router';
 import { register } from '../../backend/auth';
 import BackButton from '../../components/BackButton';
-import PasswordErrorModal from '../../components/modal/PasswordErrorModal';
+import PasswordErrorModal from '../../components/modals/PasswordErrorModal';
 
 function SignUpScreen() {
   const [email, onChangeEmail] = useState('');
@@ -87,7 +87,7 @@ function SignUpScreen() {
                 <View className="h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Name</Text>
                   <TextInput
-                    className="bg-input text-m mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                     placeholder="Enter your name"
                     value={name}
                     onChangeText={setName}
@@ -99,7 +99,7 @@ function SignUpScreen() {
                 <View className="mt-10 h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">E-mail</Text>
                   <TextInput
-                    className="bg-input text-m mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                     placeholder="e.g. johnsmith@email.com"
                     value={email}
                     onChangeText={onChangeEmail}
@@ -112,7 +112,7 @@ function SignUpScreen() {
                 <View className="mt-10 h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Password</Text>
                   <TextInput
-                    className="bg-input text-m mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
@@ -123,7 +123,7 @@ function SignUpScreen() {
                 <View className="mt-10 h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Confirm Password</Text>
                   <TextInput
-                    className="bg-input text-m mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
                     secureTextEntry
