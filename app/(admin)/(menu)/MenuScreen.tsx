@@ -1,0 +1,60 @@
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
+import MenuCard from '../../../components/cards/MenuCard';
+import { getMenu } from 'backend/menu';
+import { router, useFocusEffect } from 'expo-router';
+import BackButton from 'components/BackButton';
+import { MenuItem } from 'components/types';
+
+function MenuScreen() {
+  const [menu, setMenu] = useState<MenuItem[]>([]);
+
+  const fetchMenu = async () => {
+    setMenu(await getMenu());
+  };
+
+  useEffect(() => {
+    fetchMenu();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchMenu();
+    }, [])
+  );
+
+  const handleAddMenuItem = () => {
+    router.push({ pathname: '/(admin)/(menu)/AddMenuItemForm' });
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-background">
+      <View className="flex-1">
+        <View className="flex-row items-center justify-between px-4 py-2">
+          <Text className="text-2xl font-bold text-text">Edit Menu</Text>
+        </View>
+        <ScrollView className="flex-1 px-4">
+          <View className="mt-2">
+            <Text className="text-lg font-semibold text-text">Menu Items</Text>
+            <View className="mt-2 items-center">
+              {menu.map((menuItem) => (
+                <MenuCard
+                  key={menuItem.id}
+                  menuItem={menuItem}
+                  onPress={() => console.log('Menu item pressed')}
+                />
+              ))}
+            </View>
+            <Pressable
+              onPress={handleAddMenuItem}
+              className="m-2 w-[95%] items-center self-center rounded-2xl bg-white p-4 shadow-sm">
+              <Text className="text-lg font-[Lato_400Regular] text-text">+ Add Menu Item</Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+export default MenuScreen;

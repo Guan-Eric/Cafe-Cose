@@ -3,13 +3,16 @@ import { router } from 'expo-router';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { useEffect, useState } from 'react';
+import { getUser } from 'backend/user';
 
 export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      if (user) {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
+      if (user && (await getUser(FIREBASE_AUTH.currentUser?.uid as string))?.admin) {
+        router.replace('/(admin)/(home)/HomeScreen');
+      } else if (user) {
         router.replace('/(tabs)/(home)/HomeScreen');
       } else {
         router.replace('/(auth)/WelcomeScreen');

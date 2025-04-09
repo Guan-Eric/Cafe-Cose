@@ -23,21 +23,13 @@ function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
-        name="(qr)"
+        name="(menu)"
         options={{
           title: '',
           tabBarIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="qrcode-scan" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="(profile)"
-        options={{
-          title: '',
-          tabBarIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="account" size={size} color={color} />
+            <MaterialCommunityIcons name="coffee" size={size} color={color} />
           ),
         }}
       />

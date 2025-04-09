@@ -1,4 +1,4 @@
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
@@ -7,29 +7,40 @@ interface User {
   imageUrl?: string;
   announcements: boolean;
   runs: boolean;
+  admin: boolean;
 }
 
-interface MenuItem {
+export interface MenuItem {
   id: string;
   name: string;
   description: string;
   price: number;
-  category: string;
-  imageUrl?: string;
+  category: Category;
+  imageUrl: string;
   available: boolean;
+  index: number;
 }
 
-interface Announcement {
+export interface Announcement {
   id: string;
   title: string;
   message: string;
   createdAt: Date;
 }
 
-interface Run {
+export interface Run {
   id: string;
   title: string;
   message: string;
   date: Date;
-  participants: string[];
+  participants: User[];
+}
+
+export enum Category {
+  Coffee = 'Coffee',
+  Tea = 'Tea',
+  Specialty = 'Specialty',
+  Smoothie = 'Smoothie',
+  Food = 'Food',
+  Pastry = 'Pastry',
 }

@@ -140,7 +140,7 @@ function SignUpScreen() {
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (
-                  <Text className="font-[Lato_400Regular] text-text">Sign Up</Text>
+                  <Text className="font-[Lato_400Regular] text-white">Sign Up</Text>
                 )}
               </Pressable>
 

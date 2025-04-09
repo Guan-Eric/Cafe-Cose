@@ -1,5 +1,6 @@
 import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIRESTORE_DB } from '../firebaseConfig';
+import { User } from 'components/types';
 
 export async function addUser(name: string) {
   try {
@@ -14,6 +15,7 @@ export async function addUser(name: string) {
       showTermsCondition: true,
       announcements: false,
       runs: false,
+      admin: false,
     });
   } catch (error) {
     console.error('Error creating user:', error);
@@ -88,5 +90,22 @@ export async function deleteAccount() {
     await deleteDoc(userDocRef);
   } catch (error) {
     console.error('Error deleting account:', error);
+  }
+}
+
+export async function incrementStamp(userId: string) {
+  try {
+    const userDocRef = doc(FIRESTORE_DB, `Users/${userId}`);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+      const currentStamps = userData.points ?? 0;
+      await updateDoc(userDocRef, { points: currentStamps + 1 });
+    } else {
+      console.error('User document does not exist');
+    }
+  } catch (error) {
+    console.error('Error incrementing stamp:', error);
   }
 }

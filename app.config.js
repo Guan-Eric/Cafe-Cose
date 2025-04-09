@@ -24,6 +24,12 @@ export default {
       favicon: './assets/images/favicon.png',
     },
     plugins: [
+      [
+        'expo-camera',
+        {
+          cameraPermission: 'Allow Café Cosé to access your camera',
+        },
+      ],
       'expo-router',
       [
         'expo-splash-screen',

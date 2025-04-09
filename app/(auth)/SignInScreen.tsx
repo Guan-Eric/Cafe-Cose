@@ -59,7 +59,7 @@ function SignInScreen() {
                 <View className="h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">E-mail</Text>
                   <TextInput
-                    className="bg-input text-m mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                     placeholder="e.g. johnsmith@email.com"
                     value={email}
                     onChangeText={onChangeEmail}
@@ -72,7 +72,7 @@ function SignInScreen() {
                 <View className="mt-10 h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Password</Text>
                   <TextInput
-                    className="bg-input text-m mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                     value={password}
                     onChangeText={onChangePassword}
                     secureTextEntry
@@ -89,7 +89,7 @@ function SignInScreen() {
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (
-                  <Text className="font-[Lato_400Regular] text-text">Sign In</Text>
+                  <Text className="font-[Lato_400Regular] text-white">Sign In</Text>
                 )}
               </Pressable>
 
