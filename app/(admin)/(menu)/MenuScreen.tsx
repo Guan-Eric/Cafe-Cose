@@ -41,7 +41,7 @@ function MenuScreen() {
                 <MenuCard
                   key={menuItem.id}
                   menuItem={menuItem}
-                  onPress={() => console.log('Menu item pressed')}
+                  onPress={() => router.push({ pathname: '/(admin)/(menu)/EditMenuItemForm' })}
                 />
               ))}
             </View>
