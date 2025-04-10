@@ -25,6 +25,7 @@ export interface Announcement {
   id: string;
   title: string;
   message: string;
+  imageUrl?: string;
   createdAt: Date;
 }
 
@@ -33,6 +34,7 @@ export interface Run {
   title: string;
   message: string;
   date: Date;
+  imageUrl?: string;
   participants: User[];
 }
 
