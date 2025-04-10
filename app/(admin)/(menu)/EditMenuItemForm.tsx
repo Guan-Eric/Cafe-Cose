@@ -9,15 +9,16 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
-  ActivityIndicator,
   ScrollView,
-  Image,
   Switch,
+  Image,
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
-import { editMenuItem } from 'backend/menu';
+import { deleteMenuItem, editMenuItem } from 'backend/menu';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Category, MenuItem } from 'components/types';
+import BackButton from 'components/BackButton';
 
 const EditMenuItemForm = () => {
   const {
@@ -30,12 +31,41 @@ const EditMenuItemForm = () => {
     menuCategory,
     index,
   } = useLocalSearchParams();
+
   const [name, setName] = useState<string>(menuName as string);
   const [description, setDescription] = useState<string>(menuDescription as string);
-  const [price, setPrice] = useState<string>(menuPrice.toString());
+  const [price, setPrice] = useState<string>(menuPrice?.toString());
   const [available, setAvailable] = useState<boolean>(menuAvailable === 'true');
   const [category, setCategory] = useState<Category>(menuCategory as Category);
-  const [imageUrl, setImageUrl] = useState<string>(menuImageUrl as string);
+  const [imageUrl, setImageUrl] = useState<string>(
+    (menuImageUrl as string)?.replace('/o/posts/', '/o/posts%2F')
+  );
+  const [blob, setBlob] = useState<Blob>();
+
+  const handleImageUpload = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: false,
+      aspect: [1, 1],
+      allowsEditing: true,
+      quality: 0.5,
+    });
+
+    if (!result.canceled) {
+      try {
+        const response = await fetch(result.assets[0].uri);
+        const blob = await response.blob();
+
+        console.log('Upload successful:', response, blob);
+        setImageUrl(result.assets[0].uri);
+        setBlob(blob);
+      } catch (error) {
+        console.error('Error uploading images:', error);
+      }
+    } else {
+      console.log('Image selection was canceled.');
+    }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -54,6 +84,42 @@ const EditMenuItemForm = () => {
     } catch (error) {
       console.error('Error updating menu item:', error);
       Alert.alert('Error', 'Failed to update menu item.');
+    } finally {
+      router.back();
+    }
+  };
+
+  const handleDelete = async () => {
+    const confirmDelete = await new Promise<boolean>((resolve) => {
+      Alert.alert(
+        'Confirm Delete',
+        'Are you sure you want to delete this menu item?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => resolve(false),
+            style: 'cancel',
+          },
+          {
+            text: 'Delete',
+            onPress: () => resolve(true),
+            style: 'destructive',
+          },
+        ],
+        { cancelable: false }
+      );
+    });
+
+    if (confirmDelete) {
+      try {
+        await deleteMenuItem(id as string);
+        Alert.alert('Success', 'Menu item deleted successfully!');
+      } catch (error) {
+        console.error('Error deleting menu item:', error);
+        Alert.alert('Error', 'Failed to delete menu item.');
+      } finally {
+        router.back();
+      }
     }
   };
 
@@ -62,10 +128,13 @@ const EditMenuItemForm = () => {
       <SafeAreaView className="flex-1 bg-background p-4">
         <KeyboardAvoidingView behavior="padding" className="flex-1">
           <ScrollView>
-            <View className="flex-1 items-center justify-center">
-              <Text className="self-center text-4xl font-[Lato_400Regular] text-text">
-                Edit Menu Item
-              </Text>
+            <BackButton />
+            <View className="flex-1 items-center justify-center ">
+              <View className="items-center pb-[30px]">
+                <Text className="self-center text-4xl font-[Lato_400Regular] text-text">
+                  Add Menu Item
+                </Text>
+              </View>
               <View className="pb-[30px]">
                 <View className="h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Name</Text>
@@ -122,12 +191,33 @@ const EditMenuItemForm = () => {
                   <Text className="font-[Lato_400Regular] text-text">Available</Text>
                   <Switch value={available} onValueChange={setAvailable} className="ml-2" />
                 </View>
+                {imageUrl ? (
+                  <Pressable
+                    onPress={handleImageUpload}
+                    className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
+                    <Image
+                      source={{ uri: imageUrl }}
+                      className="h-full w-full rounded-lg"
+                      resizeMode="cover"
+                    />
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    onPress={handleImageUpload}
+                    className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
+                    <Text className="text-text">Upload Image</Text>
+                  </Pressable>
+                )}
               </View>
-
               <Pressable
                 onPress={handleSubmit}
                 className="h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
-                <Text className="font-[Lato_400Regular] text-white">Update Item</Text>
+                <Text className="font-bold text-white">Update Item</Text>
+              </Pressable>
+              <Pressable
+                onPress={handleDelete}
+                className="mb-4 mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-red-500">
+                <Text className="font-bold text-white">Delete Item</Text>
               </Pressable>
             </View>
           </ScrollView>

@@ -109,9 +109,9 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-background p-4">
-        <BackButton />
         <KeyboardAvoidingView behavior="padding" className="flex-1">
           <ScrollView>
+            <BackButton />
             <View className="flex-1 items-center justify-center">
               <View className="items-center pb-[30px]">
                 <Text className="self-center text-4xl font-[Lato_400Regular] text-text">

@@ -1,4 +1,13 @@
-import { addDoc, collection, doc, getDoc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import { FIRESTORE_DB } from '../firebaseConfig';
 import { MenuItem } from 'components/types';
 
@@ -80,6 +89,16 @@ export async function editMenuItem(menuItem: MenuItem): Promise<void> {
     });
   } catch (error) {
     console.error('Error editing menu item:', error);
+  }
+}
+
+export async function deleteMenuItem(id: string): Promise<void> {
+  try {
+    const menuItemRef = doc(FIRESTORE_DB, `Menu/${id}`);
+    await deleteDoc(menuItemRef);
+  } catch (error) {
+    console.error('Error deleting menu item:', error);
+    throw error;
   }
 }
 
