@@ -1,14 +1,32 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable, Alert, SafeAreaView, Image } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  Alert,
+  SafeAreaView,
+  Image,
+  ScrollView,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import { router } from 'expo-router';
-import { Announcement } from 'components/types';
+import { Announcement, Run } from 'components/types';
 import * as ImagePicker from 'expo-image-picker';
+import BackButton from 'components/BackButton';
+import { createRun } from 'backend/announcement';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const CreateRunAnnouncementScreen = () => {
-  const [title, setTitle] = useState('');
-  const [message, setMessage] = useState('');
-  const [imageUrl, setImageUrl] = useState<string>();
+  const [title, setTitle] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+  const [notificationMessage, setNotificationMessage] = useState<string>('');
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [date, setDate] = useState<Date>(new Date());
   const [blob, setBlob] = useState<Blob>();
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
   const handleImageUpload = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -34,65 +52,114 @@ const CreateRunAnnouncementScreen = () => {
       console.log('Image selection was canceled.');
     }
   };
-  const handleCreateAnnouncement = () => {
-    if (!title || !message) {
-      Alert.alert('Error', 'Please fill in both fields.');
+
+  const handleCreateRun = async () => {
+    if (!title || !message || !notificationMessage) {
+      Alert.alert('Error', 'Please fill in all 3 input fields.');
       return;
     }
 
-    const newAnnouncement: Announcement = {
-      id: Date.now().toString(),
+    const newAnnouncement: Partial<Run> = {
       title,
       message,
-      createdAt: new Date(),
+      notificationMessage,
+      date,
     };
 
-    // Here you would typically send the newAnnouncement to your backend or state management
-    console.log('Announcement created:', newAnnouncement);
+    console.log('Run created:', newAnnouncement);
+    try {
+      await createRun(newAnnouncement);
+      Alert.alert('Success', 'Created run');
+      router.push('/(admin)/(home)/HomeScreen');
+    } catch (error) {
+      console.error('Error creating announcement:', error);
+      Alert.alert('Error', 'Cannot create announcement');
+    }
+  };
 
-    // Navigate back to the home screen after creating the announcement
-    router.push('/(admin)/(home)/HomeScreen');
+  const onChangeDate = (event: any, selectedDate: Date | undefined) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(false);
+    setDate(currentDate);
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background p-4">
-      <View className="flex-1">
-        <Text className="text-2xl font-bold text-text">Create Announcement</Text>
-        <TextInput
-          placeholder="Title"
-          value={title}
-          onChangeText={setTitle}
-          className="my-4 border-b border-gray-300 p-2"
-        />
-        <TextInput
-          placeholder="Message"
-          value={message}
-          onChangeText={setMessage}
-          multiline
-          className="my-4 border-b border-gray-300 p-2"
-        />
-        {imageUrl ? (
-          <Pressable
-            onPress={handleImageUpload}
-            className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
-            <Image
-              source={{ uri: imageUrl }}
-              className="h-full w-full rounded-lg"
-              resizeMode="cover"
-            />
-          </Pressable>
-        ) : (
-          <Pressable
-            onPress={handleImageUpload}
-            className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
-            <Text className="text-text">Upload Image</Text>
-          </Pressable>
-        )}
-        <Pressable onPress={handleCreateAnnouncement} className="rounded-lg bg-green-500 px-4 py-2">
-          <Text className="text-center text-white">Create Announcement</Text>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView className="flex-1 bg-background p-4">
+        <KeyboardAvoidingView behavior="padding" className="flex-1">
+          <ScrollView>
+            <View className="flex-row items-center">
+              <BackButton />
+              <Text className="text-2xl font-bold text-text">Create Run</Text>
+            </View>
+            <View className="flex-1 items-center justify-center">
+              <View className="h-[60px] w-[254px]">
+                <Text className="font-[Lato_400Regular] text-text">Title</Text>
+                <TextInput
+                  value={title}
+                  onChangeText={setTitle}
+                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                />
+              </View>
+              <View className="mt-3 h-[60px] w-[254px]">
+                <Text className="font-[Lato_400Regular] text-text">Notification Message</Text>
+                <TextInput
+                  value={notificationMessage}
+                  onChangeText={setNotificationMessage}
+                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                />
+              </View>
+              <View className="mt-3 h-[180px] w-[254px]">
+                <Text className="font-[Lato_400Regular] text-text">Message</Text>
+                <TextInput
+                  value={message}
+                  onChangeText={setMessage}
+                  multiline
+                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                />
+              </View>
+              <View className="mt-3">
+                <Text className="mb-2 font-[Lato_400Regular] text-text">Date & Time</Text>
+                <View className="h-12 w-[254px] justify-center rounded-md  px-3">
+                  <DateTimePicker
+                    value={date || new Date()}
+                    mode="datetime"
+                    display="default"
+                    textColor="#1a1a1a"
+                    accentColor="#762e1f"
+                    onChange={onChangeDate}
+                    style={{ width: '100%' }}
+                  />
+                </View>
+              </View>
+
+              {imageUrl ? (
+                <Pressable
+                  onPress={handleImageUpload}
+                  className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
+                  <Image
+                    source={{ uri: imageUrl }}
+                    className="h-full w-full rounded-lg"
+                    resizeMode="cover"
+                  />
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={handleImageUpload}
+                  className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
+                  <Text className="text-text">Upload Image</Text>
+                </Pressable>
+              )}
+              <Pressable
+                onPress={handleCreateRun}
+                className="mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
+                <Text className="font-[Lato_400Regular] text-white">Create Run</Text>
+              </Pressable>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -99,10 +99,10 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
         setImageUrl(result.assets[0].uri);
         setBlob(blob);
       } catch (error) {
-        console.error('Error uploading images:', error);
+        Alert.alert('Error', 'Cannot upload image');
       }
     } else {
-      console.log('Image selection was canceled.');
+      Alert.alert('Image selection was canceled.');
     }
   };
 
