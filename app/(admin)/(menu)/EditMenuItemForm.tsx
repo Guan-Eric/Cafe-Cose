@@ -12,6 +12,7 @@ import {
   ScrollView,
   Switch,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
@@ -19,6 +20,8 @@ import { deleteMenuItem, editMenuItem } from 'backend/menu';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Category, MenuItem } from 'components/types';
 import BackButton from 'components/BackButton';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { FIREBASE_STR } from 'firebaseConfig';
 
 const EditMenuItemForm = () => {
   const {
@@ -41,6 +44,7 @@ const EditMenuItemForm = () => {
     (menuImageUrl as string)?.replace('/o/posts/', '/o/posts%2F')
   );
   const [blob, setBlob] = useState<Blob>();
+  const [loading, setLoading] = useState(false);
 
   const handleImageUpload = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -68,24 +72,64 @@ const EditMenuItemForm = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
+    if (!price || !name || !description) {
+      Alert.alert('Error', 'Please fill in all 3 input fields.');
+      return;
+    }
+
     try {
-      const updatedMenuItem: MenuItem = {
-        name,
-        description,
-        price: parseFloat(price),
-        available,
-        category,
-        id: id as string,
-        imageUrl: imageUrl,
-        index: Number(index),
-      };
-      await editMenuItem(updatedMenuItem);
+      if (blob) {
+        const imageRef = ref(FIREBASE_STR, `menu/${id}`);
+        const uploadTask = uploadBytesResumable(imageRef, blob as Blob);
+
+        const downloadUrl = await new Promise((resolve, reject) => {
+          uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            },
+            (error) => {
+              console.error(`Error uploading image:`, error);
+              reject(error);
+            },
+            async () => {
+              const url = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(url);
+            }
+          );
+        });
+
+        const updatedMenuItem: MenuItem = {
+          name,
+          description,
+          price: parseFloat(price),
+          available,
+          category,
+          id: id as string,
+          imageUrl: downloadUrl as string,
+          index: Number(index),
+        };
+        await editMenuItem(updatedMenuItem);
+      } else {
+        const updatedMenuItem: MenuItem = {
+          name,
+          description,
+          price: parseFloat(price),
+          available,
+          category,
+          id: id as string,
+          imageUrl: imageUrl,
+          index: Number(index),
+        };
+        await editMenuItem(updatedMenuItem);
+      }
+      setLoading(false);
       Alert.alert('Success', 'Menu item updated successfully!');
+      router.back();
     } catch (error) {
       console.error('Error updating menu item:', error);
       Alert.alert('Error', 'Failed to update menu item.');
-    } finally {
-      router.back();
     }
   };
 
@@ -212,7 +256,11 @@ const EditMenuItemForm = () => {
               <Pressable
                 onPress={handleSubmit}
                 className="h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
-                <Text className="font-bold text-white">Update Item</Text>
+                {loading ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <Text className="font-bold text-white">Update Item</Text>
+                )}
               </Pressable>
               <Pressable
                 onPress={handleDelete}

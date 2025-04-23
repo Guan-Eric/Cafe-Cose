@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -11,22 +11,28 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Switch,
+  ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
-import { Announcement, Run } from 'components/types';
+import { Run } from 'components/types';
 import * as ImagePicker from 'expo-image-picker';
 import BackButton from 'components/BackButton';
-import { createRun } from 'backend/announcement';
+import { createRun, editRun } from 'backend/run';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { FIREBASE_STR } from 'firebaseConfig';
 
-const CreateRunAnnouncementScreen = () => {
+const CreateRunScreen = () => {
   const [title, setTitle] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [notificationMessage, setNotificationMessage] = useState<string>('');
   const [imageUrl, setImageUrl] = useState<string>('');
   const [date, setDate] = useState<Date>(new Date());
+  const [isRSVP, setIsRSVP] = useState<boolean>(true);
   const [blob, setBlob] = useState<Blob>();
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleImageUpload = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -54,23 +60,47 @@ const CreateRunAnnouncementScreen = () => {
   };
 
   const handleCreateRun = async () => {
+    setLoading(true);
     if (!title || !message || !notificationMessage) {
       Alert.alert('Error', 'Please fill in all 3 input fields.');
       return;
     }
 
-    const newAnnouncement: Partial<Run> = {
+    const newRunData: Partial<Run> = {
       title,
       message,
       notificationMessage,
       date,
+      isRSVP,
     };
 
-    console.log('Run created:', newAnnouncement);
     try {
-      await createRun(newAnnouncement);
+      const newRun = await createRun(newRunData);
+      const imageRef = ref(FIREBASE_STR, `runs/${newRun.id}`);
+      const uploadTask = uploadBytesResumable(imageRef, blob as Blob);
+
+      const downloadUrl = await new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          },
+          (error) => {
+            console.error(`Error uploading image:`, error);
+            reject(error);
+          },
+          async () => {
+            const url = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(url);
+          }
+        );
+      });
+
+      const updatedRun = { ...newRun, imageUrl: downloadUrl as string };
+      editRun(updatedRun);
       Alert.alert('Success', 'Created run');
-      router.push('/(admin)/(home)/HomeScreen');
+      setLoading(false);
+      router.back();
     } catch (error) {
       console.error('Error creating announcement:', error);
       Alert.alert('Error', 'Cannot create announcement');
@@ -132,7 +162,10 @@ const CreateRunAnnouncementScreen = () => {
                   />
                 </View>
               </View>
-
+              <View className="mt-3 h-[60px] w-[254px] flex-row items-center justify-between">
+                <Text className="font-[Lato_400Regular] text-text">RSVP?</Text>
+                <Switch value={isRSVP} onValueChange={setIsRSVP} className="ml-2" />
+              </View>
               {imageUrl ? (
                 <Pressable
                   onPress={handleImageUpload}
@@ -153,7 +186,11 @@ const CreateRunAnnouncementScreen = () => {
               <Pressable
                 onPress={handleCreateRun}
                 className="mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
-                <Text className="font-[Lato_400Regular] text-white">Create Run</Text>
+                {loading ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <Text className="font-[Lato_400Regular] text-white">Create Run</Text>
+                )}
               </Pressable>
             </View>
           </ScrollView>
@@ -163,4 +200,4 @@ const CreateRunAnnouncementScreen = () => {
   );
 };
 
-export default CreateRunAnnouncementScreen;
+export default CreateRunScreen;

@@ -30,6 +30,8 @@ export interface Announcement {
   createdAt: Date;
 }
 
+export type RSVPStatus = 'yes' | 'no' | 'maybe';
+
 export interface Run {
   id: string;
   title: string;
@@ -37,7 +39,10 @@ export interface Run {
   notificationMessage: string;
   date: Date;
   imageUrl?: string;
-  participants: User[];
+  isRSVP: boolean;
+  rsvps: {
+    [userId: string]: RSVPStatus;
+  };
 }
 
 export enum Category {

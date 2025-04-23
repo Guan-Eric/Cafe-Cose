@@ -25,16 +25,6 @@ function HomeScreen() {
               className="rounded-lg bg-blue-500 px-4 py-4">
               <Text className="text-text">Scan QR Code</Text>
             </Pressable>
-            <Pressable
-              onPress={() => router.push('/(admin)/(home)/CreateAnnouncementScreen')}
-              className="mt-10 rounded-lg bg-green-500 px-4 py-4">
-              <Text className="text-text">Create Announcement</Text>
-            </Pressable>
-            <Pressable
-              onPress={() => router.push('/(admin)/(home)/CreateRunAnnouncementScreen')}
-              className="mt-10 rounded-lg bg-green-500 px-4 py-4">
-              <Text className="text-text">Create Run</Text>
-            </Pressable>
           </View>
         </View>
       </View>

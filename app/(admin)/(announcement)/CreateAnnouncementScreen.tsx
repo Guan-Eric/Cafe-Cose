@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -11,12 +11,15 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Announcement } from 'components/types';
 import * as ImagePicker from 'expo-image-picker';
 import BackButton from 'components/BackButton';
-import { createAnnouncement } from 'backend/announcement';
+import { createAnnouncement, editAnnouncement } from 'backend/announcement';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { FIREBASE_STR } from 'firebaseConfig';
 
 const CreateAnnouncementScreen = () => {
   const [title, setTitle] = useState<string>('');
@@ -24,6 +27,7 @@ const CreateAnnouncementScreen = () => {
   const [notificationMessage, setNotificationMessage] = useState<string>('');
   const [imageUrl, setImageUrl] = useState<string>('');
   const [blob, setBlob] = useState<Blob>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleImageUpload = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -51,24 +55,46 @@ const CreateAnnouncementScreen = () => {
   };
 
   const handleCreateAnnouncement = async () => {
+    setLoading(true);
     if (!title || !message || !notificationMessage) {
       Alert.alert('Error', 'Please fill in all 3 input fields.');
       return;
     }
 
-    const newAnnouncement: Partial<Announcement> = {
+    const newAnnouncementData: Partial<Announcement> = {
       title,
       message,
       notificationMessage,
       createdAt: new Date(),
+      imageUrl,
     };
-
-    // Here you would typically send the newAnnouncement to your backend or state management
-    console.log('Announcement created:', newAnnouncement);
     try {
-      await createAnnouncement(newAnnouncement);
+      const newAnnouncement = await createAnnouncement(newAnnouncementData);
+      const imageRef = ref(FIREBASE_STR, `accouncements/${newAnnouncement.id}`);
+      const uploadTask = uploadBytesResumable(imageRef, blob as Blob);
+
+      const downloadUrl = await new Promise((resolve, reject) => {
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          },
+          (error) => {
+            console.error(`Error uploading image:`, error);
+            reject(error);
+          },
+          async () => {
+            const url = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(url);
+          }
+        );
+      });
+
+      const updatedAnnouncement = { ...newAnnouncement, imageUrl: downloadUrl as string };
+      editAnnouncement(updatedAnnouncement);
       Alert.alert('Success', 'Created announcement');
-      router.push('/(admin)/(home)/HomeScreen');
+      setLoading(false);
+      router.back();
     } catch (error) {
       console.error('Error creating announcement:', error);
       Alert.alert('Error', 'Cannot create announcement');
@@ -131,7 +157,11 @@ const CreateAnnouncementScreen = () => {
               <Pressable
                 onPress={handleCreateAnnouncement}
                 className="mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
-                <Text className="font-[Lato_400Regular] text-white">Create Announcement</Text>
+                {loading ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <Text className="font-[Lato_400Regular] text-white">Create Announcement</Text>
+                )}
               </Pressable>
             </View>
           </ScrollView>

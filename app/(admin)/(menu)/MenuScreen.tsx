@@ -32,10 +32,12 @@ function MenuScreen() {
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
           <Text className="text-2xl font-bold text-text">Edit Menu</Text>
+          <Pressable onPress={handleAddMenuItem} className="rounded-lg bg-blue-500 px-4 py-2">
+            <Text className="text-lg font-[Lato_400Regular] text-text">+ Add Menu Item</Text>
+          </Pressable>
         </View>
         <ScrollView className="flex-1 px-4">
           <View className="mt-2">
-            <Text className="text-lg font-semibold text-text">Menu Items</Text>
             <View className="mt-2 items-center">
               {menu.map((menuItem) => (
                 <MenuCard
@@ -59,11 +61,6 @@ function MenuScreen() {
                 />
               ))}
             </View>
-            <Pressable
-              onPress={handleAddMenuItem}
-              className="m-2 w-[95%] items-center self-center rounded-2xl bg-white p-4 shadow-sm">
-              <Text className="text-lg font-[Lato_400Regular] text-text">+ Add Menu Item</Text>
-            </Pressable>
           </View>
         </ScrollView>
       </View>

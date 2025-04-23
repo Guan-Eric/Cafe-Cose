@@ -49,7 +49,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
         category,
       };
       const menuItem = await addMenuItem(menuItemData);
-      const imageRef = ref(FIREBASE_STR, `posts/${menuItem.id}`);
+      const imageRef = ref(FIREBASE_STR, `menu/${menuItem.id}`);
       const uploadTask = uploadBytesResumable(imageRef, blob as Blob);
 
       const downloadUrl = await new Promise((resolve, reject) => {

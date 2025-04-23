@@ -33,6 +33,24 @@ function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="(announcement)"
+        options={{
+          title: '',
+          tabBarIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="bell" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="(run)"
+        options={{
+          title: '',
+          tabBarIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="run" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
