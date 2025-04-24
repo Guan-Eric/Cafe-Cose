@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, Modal, Pressable } from 'react-native';
+import { View, Text, Button, Modal, Pressable, SafeAreaView } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { getUser, incrementStamp } from 'backend/user';
 import { User } from 'components/types';
@@ -34,10 +34,10 @@ function QRScannerScreen() {
   }
   if (!permission.granted) {
     return (
-      <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1 }}>
         <Text>No access to camera</Text>
         <Button onPress={requestPermission} title="Grant Permission" />
-      </View>
+      </SafeAreaView>
     );
   }
 

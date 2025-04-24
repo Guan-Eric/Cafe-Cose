@@ -16,7 +16,7 @@ const RunCard: React.FC<RunCardProps> = ({ run, onPress }) => {
           {run.imageUrl ? (
             <Image
               source={{ uri: run.imageUrl }}
-              className="h-[80px] w-[80px] rounded-lg"
+              className="h-[200px] w-[100%] rounded-lg"
               resizeMode="cover"
             />
           ) : null}
