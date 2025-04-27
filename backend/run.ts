@@ -1,4 +1,4 @@
-import { RSVPStatus, Run } from 'components/types';
+import { Participant, RSVPStatus, Run } from 'components/types';
 import {
   collection,
   addDoc,
@@ -9,6 +9,7 @@ import {
   arrayRemove,
   getDocs,
   deleteDoc,
+  setDoc,
 } from 'firebase/firestore';
 import { FIRESTORE_DB } from 'firebaseConfig';
 
@@ -22,7 +23,6 @@ export async function createRun(run: Partial<Run>): Promise<Run> {
       date: run.date,
       imageUrl: run.imageUrl,
       isRSVP: run.isRSVP,
-      rsvps: run.rsvps,
     });
     await updateDoc(runDocRef, { id: runDocRef.id });
     return { ...run, id: runDocRef.id } as Run;
@@ -42,7 +42,6 @@ export async function editRun(updatedRun: Run): Promise<Run> {
       date: updatedRun.date,
       imageUrl: updatedRun.imageUrl,
       isRSVP: updatedRun.isRSVP,
-      rsvps: updatedRun.rsvps,
     });
     const updatedDoc = await getDoc(runRef);
     return updatedDoc.data() as Run;
@@ -52,31 +51,12 @@ export async function editRun(updatedRun: Run): Promise<Run> {
   }
 }
 
-export async function addToRun(id: string, userId: string, choice: RSVPStatus): Promise<Run> {
+export async function editRSVPRun(id: string, userId: string, status: RSVPStatus) {
   try {
-    const runRef = doc(FIRESTORE_DB, `Runs/${id}`);
-    await updateDoc(runRef, {
-      rsvps: arrayUnion({ userId, choice }),
+    const participantsRef = doc(FIRESTORE_DB, `Runs/${id}/Participants/${userId}`);
+    await setDoc(participantsRef, {
+      status: status,
     });
-    const runDoc = await getDoc(runRef);
-    return runDoc.data() as Run;
-  } catch (error) {
-    console.error('Error adding user to run:', error);
-    throw error;
-  }
-}
-
-export async function editRSVPRun(id: string, userId: string, choice: RSVPStatus): Promise<Run> {
-  try {
-    const runRef = doc(FIRESTORE_DB, `Runs/${id}`);
-    await updateDoc(runRef, {
-      rsvps: arrayRemove(userId),
-    });
-    await updateDoc(runRef, {
-      rsvps: arrayUnion({ userId, choice }),
-    });
-    const runDoc = await getDoc(runRef);
-    return runDoc.data() as Run;
   } catch (error) {
     console.error('Error removing user from run:', error);
     throw error;
@@ -87,18 +67,18 @@ export async function getRuns(): Promise<Run[]> {
   try {
     const runCollectionRef = collection(FIRESTORE_DB, 'Runs');
     const runSnapshot = await getDocs(runCollectionRef);
-    const runs: Run[] = runSnapshot.docs.map((doc) => ({
-      id: doc.data().id,
-      title: doc.data().title,
-      message: doc.data().message,
-      date: doc.data().date.toDate(),
-      imageUrl: doc.data().imageUrl,
-      userIds: doc.data().userIds,
-      notificationMessage: doc.data().notificationMessage,
-      participants: doc.data().participants,
-      isRSVP: doc.data().isRSVP,
-      rsvps: doc.data().rsvps,
-    }));
+    const runs: Run[] = await Promise.all(
+      runSnapshot.docs.map(async (doc) => ({
+        id: doc.data().id,
+        title: doc.data().title,
+        message: doc.data().message,
+        date: doc.data().date.toDate(),
+        imageUrl: doc.data().imageUrl,
+        notificationMessage: doc.data().notificationMessage,
+        participants: await getParticipants(doc.data().id),
+        isRSVP: doc.data().isRSVP,
+      }))
+    );
     return runs;
   } catch (error) {
     console.error('Error fetching runs:', error);
@@ -112,5 +92,20 @@ export async function deleteRun(id: string) {
     deleteDoc(runDocRef);
   } catch (error) {
     console.error('Error deleting run doc', error);
+  }
+}
+
+export async function getParticipants(runId: string): Promise<Participant[]> {
+  try {
+    const participantsCollectionRef = collection(FIRESTORE_DB, `Runs/${runId}/Participants`);
+    const participantsSnapshot = await getDocs(participantsCollectionRef);
+    const participants: Participant[] = participantsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      status: doc.data().status,
+    }));
+    return participants;
+  } catch (error) {
+    console.error('Error fetching participants:', error);
+    throw error;
   }
 }

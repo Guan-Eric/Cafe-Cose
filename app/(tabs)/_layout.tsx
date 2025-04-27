@@ -23,6 +23,16 @@ function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="(menu)"
+        options={{
+          title: '',
+          tabBarIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="coffee" size={size} color={color} />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="(qr)"
         options={{
@@ -32,6 +42,16 @@ function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="(run)"
+        options={{
+          title: '',
+          tabBarIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="run" size={size} color={color} />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="(profile)"
         options={{

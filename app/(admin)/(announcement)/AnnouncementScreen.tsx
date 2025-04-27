@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
 import { getAnnouncements } from 'backend/announcement';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { Announcement } from 'components/types';
 import AnnouncementCard from 'components/cards/AnnouncementCard';
 
@@ -16,6 +16,12 @@ function AnnouncementScreen() {
   useEffect(() => {
     fetchAnnouncements();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchAnnouncements();
+    }, [])
+  );
 
   const handleAddAnnouncement = () => {
     router.push('/(admin)/(announcement)/CreateAnnouncementScreen');

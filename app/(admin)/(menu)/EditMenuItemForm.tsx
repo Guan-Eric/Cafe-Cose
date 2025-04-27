@@ -41,7 +41,7 @@ const EditMenuItemForm = () => {
   const [available, setAvailable] = useState<boolean>(menuAvailable === 'true');
   const [category, setCategory] = useState<Category>(menuCategory as Category);
   const [imageUrl, setImageUrl] = useState<string>(
-    (menuImageUrl as string)?.replace('/o/posts/', '/o/posts%2F')
+    (menuImageUrl as string)?.replace('/o/menu/', '/o/menu%2F')
   );
   const [blob, setBlob] = useState<Blob>();
   const [loading, setLoading] = useState(false);

@@ -70,7 +70,7 @@ const CreateAnnouncementScreen = () => {
     };
     try {
       const newAnnouncement = await createAnnouncement(newAnnouncementData);
-      const imageRef = ref(FIREBASE_STR, `accouncements/${newAnnouncement.id}`);
+      const imageRef = ref(FIREBASE_STR, `announcements/${newAnnouncement.id}`);
       const uploadTask = uploadBytesResumable(imageRef, blob as Blob);
 
       const downloadUrl = await new Promise((resolve, reject) => {

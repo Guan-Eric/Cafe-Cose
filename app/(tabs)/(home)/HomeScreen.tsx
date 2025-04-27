@@ -1,18 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
 import { logOut } from '../../../backend/auth';
 import LoyaltyCard from '../../../components/cards/LoyaltyCard';
-import MenuCard from '../../../components/cards/MenuCard';
 import { getUser } from 'backend/user';
 import { FIREBASE_AUTH } from 'firebaseConfig';
-import { getMenu } from 'backend/menu';
-import { MenuItem } from 'components/types';
+import { Announcement } from 'components/types';
+import AnnouncementCard from 'components/cards/AnnouncementCard';
+import { getAnnouncements } from 'backend/announcement';
 
 function HomeScreen() {
   const [stamps, setStamps] = useState(0);
-  const [menu, setMenu] = useState<MenuItem[]>([]);
+  const [announcement, setAnnouncement] = useState<Announcement[]>([]);
 
   const fetchStamps = async () => {
     try {
@@ -25,20 +25,20 @@ function HomeScreen() {
     }
   };
 
-  const fetchMenu = async () => {
-    const menuData = await getMenu();
-    setMenu(menuData);
+  const fetchAnnouncements = async () => {
+    const announcementData = await getAnnouncements();
+    setAnnouncement(announcementData);
   };
 
   useEffect(() => {
-    fetchMenu();
+    fetchAnnouncements();
     fetchStamps();
   }, []);
 
   useFocusEffect(
     useCallback(() => {
       fetchStamps();
-      fetchMenu();
+      fetchAnnouncements();
     }, [])
   );
 
@@ -67,24 +67,22 @@ function HomeScreen() {
           </View>
 
           <View className="mt-2">
-            <Text className="text-lg font-semibold text-text">Menu</Text>
+            <Text className="text-lg font-semibold text-text">Announcements</Text>
             <View className="mt-2 items-center">
-              {menu.map((menuItem) => (
-                <MenuCard
-                  key={menuItem.id}
-                  menuItem={menuItem}
+              {announcement.map((announcementItem) => (
+                <AnnouncementCard
+                  key={announcementItem.id}
+                  announcement={announcementItem}
                   onPress={() =>
                     router.push({
-                      pathname: '/(tabs)/(home)/ViewMenuItem',
+                      pathname: '/(tabs)/(home)/ViewAnnouncementScreen',
                       params: {
-                        id: menuItem.id,
-                        name: menuItem.name,
-                        description: menuItem.description,
-                        price: menuItem.price,
-                        imageUrl: menuItem.imageUrl,
-                        available: menuItem.available.toString(),
-                        category: menuItem.category,
-                        index: menuItem.index,
+                        id: announcementItem.id,
+                        message: announcementItem.message,
+                        title: announcementItem.title,
+                        createdAt: announcementItem.createdAt.toISOString(),
+                        imageUrl: announcementItem.imageUrl,
+                        notificationMessage: announcementItem.notificationMessage,
                       },
                     })
                   }
