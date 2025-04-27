@@ -30,10 +30,11 @@ export interface Announcement {
   createdAt: Date;
 }
 
-export type RSVPStatus = 'yes' | 'no' | 'maybe';
+export type RSVPStatus = 'yes' | 'no' | 'maybe' | undefined;
 
 export interface Participant {
   id: string;
+  name: string;
   status: RSVPStatus;
 }
 

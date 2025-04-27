@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, Button, Image, TouchableOpacity } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Participant, RSVPStatus, Run } from 'components/types';
-import { editRSVPRun } from 'backend/run';
+import { useState } from 'react';
+import { View, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
+import { Participant, RSVPStatus } from 'components/types';
+import { editRSVPRun, getParticipants } from 'backend/run';
 import { FIREBASE_AUTH } from 'firebaseConfig';
 
 const ViewRunScreen = () => {
-  const {
-    id,
-    runTitle,
-    runMessage,
-    runNotificationMessage,
-    runDate,
-    runImageUrl,
-    runIsRSVP,
-    runParticipants,
-  } = useLocalSearchParams();
+  const { id, runTitle, runMessage, runDate, runImageUrl, runIsRSVP, runParticipants } =
+    useLocalSearchParams();
 
-  const [RSVP, setRSVP] = useState<RSVPStatus>();
-  const participants = runParticipants ? JSON.parse(runParticipants as string) : [];
+  const [participants, setParticipants] = useState<Participant[]>(
+    runParticipants ? JSON.parse(runParticipants as string) : []
+  );
+  const [RSVP, setRSVP] = useState<RSVPStatus>(
+    participants.find((participant) => participant.id === FIREBASE_AUTH.currentUser?.uid)?.status ||
+      undefined
+  );
   const updatedImageUrl = (runImageUrl as string)?.replace('/o/runs/', '/o/runs%2F');
   const formattedRunDate = new Date(runDate as string).toLocaleString();
 
@@ -26,13 +23,17 @@ const ViewRunScreen = () => {
     return participants.filter((p: Participant) => p.status === status).length;
   };
 
-  const yesCount = getStatusCount('yes');
-  const noCount = getStatusCount('no');
-  const maybeCount = getStatusCount('maybe');
+  let yesCount = getStatusCount('yes');
+  let noCount = getStatusCount('no');
+  let maybeCount = getStatusCount('maybe');
 
-  const handleRSVP = (option: RSVPStatus) => {
+  const handleRSVP = async (option: RSVPStatus) => {
     setRSVP(option);
     editRSVPRun(id as string, FIREBASE_AUTH.currentUser?.uid as string, option);
+    setParticipants(await getParticipants(id as string));
+    yesCount = getStatusCount('yes');
+    noCount = getStatusCount('no');
+    maybeCount = getStatusCount('maybe');
   };
 
   return (
@@ -60,7 +61,7 @@ const ViewRunScreen = () => {
                 }`}>
                 <Text
                   className={` font-medium ${RSVP === 'yes' ? 'text-white' : 'text-green-600'}`}>
-                  Yes: {RSVP === 'yes' ? yesCount + 1 : yesCount}
+                  Yes: {yesCount}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -71,7 +72,7 @@ const ViewRunScreen = () => {
                 }`}>
                 <Text
                   className={` font-medium ${RSVP === 'maybe' ? 'text-white' : 'text-yellow-600'}`}>
-                  Maybe: {RSVP === 'maybe' ? maybeCount + 1 : maybeCount}
+                  Maybe: {maybeCount}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -81,7 +82,7 @@ const ViewRunScreen = () => {
                   RSVP === 'no' ? 'bg-red-600' : 'bg-red-100'
                 }`}>
                 <Text className={` font-medium ${RSVP === 'no' ? 'text-white' : 'text-red-600'}`}>
-                  No: {RSVP === 'no' ? noCount + 1 : noCount}
+                  No: {noCount}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -103,7 +104,7 @@ const ViewRunScreen = () => {
                               : 'bg-red-500'
                         }`}
                       />
-                      <Text className="text-gray-700">{participant.id}</Text>
+                      <Text className="text-gray-700">{participant.name}</Text>
                       <Text className="ml-auto text-xs text-gray-400">{participant.status}</Text>
                     </View>
                   ))}

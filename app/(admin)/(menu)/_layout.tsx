@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function HomeLayout() {
+export default function MenuLayout() {
   return (
     <Stack initialRouteName="MenuScreen">
       <Stack.Screen name="MenuScreen" options={{ headerShown: false, gestureEnabled: false }} />

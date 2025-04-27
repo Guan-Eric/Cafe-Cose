@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
 import { getRuns } from 'backend/run'; // Assuming you have a similar function to fetch runs
 import { router, useFocusEffect } from 'expo-router';

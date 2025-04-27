@@ -5,13 +5,12 @@ import {
   updateDoc,
   doc,
   getDoc,
-  arrayUnion,
-  arrayRemove,
   getDocs,
   deleteDoc,
   setDoc,
 } from 'firebase/firestore';
 import { FIRESTORE_DB } from 'firebaseConfig';
+import { getUser } from './user';
 
 export async function createRun(run: Partial<Run>): Promise<Run> {
   try {
@@ -99,10 +98,13 @@ export async function getParticipants(runId: string): Promise<Participant[]> {
   try {
     const participantsCollectionRef = collection(FIRESTORE_DB, `Runs/${runId}/Participants`);
     const participantsSnapshot = await getDocs(participantsCollectionRef);
-    const participants: Participant[] = participantsSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      status: doc.data().status,
-    }));
+    const participants: Participant[] = await Promise.all(
+      participantsSnapshot.docs.map(async (doc) => ({
+        id: doc.id,
+        name: (await getUser(doc.id))?.name as string,
+        status: doc.data().status,
+      }))
+    );
     return participants;
   } catch (error) {
     console.error('Error fetching participants:', error);

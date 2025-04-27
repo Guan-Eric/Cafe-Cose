@@ -15,14 +15,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { RSVPStatus, Run, User } from 'components/types';
+import { RSVPStatus, User } from 'components/types';
 import * as ImagePicker from 'expo-image-picker';
 import BackButton from 'components/BackButton';
-import { createRun, deleteRun, editRun } from 'backend/run';
+import { deleteRun, editRun } from 'backend/run';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
-import { format } from 'date-fns';
 
 const EditRunScreen = () => {
   const {

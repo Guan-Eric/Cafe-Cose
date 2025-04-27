@@ -1,5 +1,4 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 function TabLayout() {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text, Image, SafeAreaView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import BackButton from 'components/BackButton';

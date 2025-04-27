@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
 import MenuCard from '../../../components/cards/MenuCard';
 import { getMenu } from 'backend/menu';
 import { router, useFocusEffect } from 'expo-router';
-import BackButton from 'components/BackButton';
 import { MenuItem } from 'components/types';
 
 function MenuScreen() {

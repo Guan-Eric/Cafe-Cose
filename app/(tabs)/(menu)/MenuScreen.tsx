@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
+import { useCallback, useEffect, useState } from 'react';
+import { View, Text, SafeAreaView, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
-import { logOut } from '../../../backend/auth';
-import LoyaltyCard from '../../../components/cards/LoyaltyCard';
 import MenuCard from '../../../components/cards/MenuCard';
 import { getUser } from 'backend/user';
 import { FIREBASE_AUTH } from 'firebaseConfig';
