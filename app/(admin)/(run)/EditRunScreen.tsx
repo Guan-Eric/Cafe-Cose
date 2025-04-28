@@ -69,14 +69,13 @@ const EditRunScreen = () => {
         const response = await fetch(result.assets[0].uri);
         const blob = await response.blob();
 
-        console.log('Upload successful:', response, blob);
         setImageUrl(result.assets[0].uri);
         setBlob(blob);
       } catch (error) {
         console.error('Error uploading images:', error);
       }
     } else {
-      console.log('Image selection was canceled.');
+      console.error('Image selection was canceled.');
     }
   };
 

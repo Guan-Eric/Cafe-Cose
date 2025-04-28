@@ -9,19 +9,7 @@ import { getMenu } from 'backend/menu';
 import { MenuItem } from 'components/types';
 
 function MenuScreen() {
-  const [stamps, setStamps] = useState(0);
   const [menu, setMenu] = useState<MenuItem[]>([]);
-
-  const fetchStamps = async () => {
-    try {
-      const user = await getUser(FIREBASE_AUTH.currentUser?.uid as string);
-      if (user) {
-        setStamps(user.points % 10 || 0);
-      }
-    } catch (error) {
-      console.error('Error fetching stamps:', error);
-    }
-  };
 
   const fetchMenu = async () => {
     const menuData = await getMenu();
@@ -30,12 +18,10 @@ function MenuScreen() {
 
   useEffect(() => {
     fetchMenu();
-    fetchStamps();
   }, []);
 
   useFocusEffect(
     useCallback(() => {
-      fetchStamps();
       fetchMenu();
     }, [])
   );

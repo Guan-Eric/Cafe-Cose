@@ -4,15 +4,17 @@ import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
 import { logOut } from '../../../backend/auth';
 import LoyaltyCard from '../../../components/cards/LoyaltyCard';
-import { getUser } from 'backend/user';
+import { getUser, savePushToken } from 'backend/user';
 import { FIREBASE_AUTH } from 'firebaseConfig';
 import { Announcement } from 'components/types';
 import AnnouncementCard from 'components/cards/AnnouncementCard';
 import { getAnnouncements } from 'backend/announcement';
+import useNotifications from 'backend/notification';
 
 function HomeScreen() {
   const [stamps, setStamps] = useState(0);
   const [announcement, setAnnouncement] = useState<Announcement[]>([]);
+  const { expoPushToken } = useNotifications();
 
   const fetchStamps = async () => {
     try {
@@ -29,6 +31,13 @@ function HomeScreen() {
     const announcementData = await getAnnouncements();
     setAnnouncement(announcementData);
   };
+
+  useEffect(() => {
+    console.log(expoPushToken);
+    if (expoPushToken) {
+      savePushToken(expoPushToken);
+    }
+  }, [expoPushToken]);
 
   useEffect(() => {
     fetchAnnouncements();

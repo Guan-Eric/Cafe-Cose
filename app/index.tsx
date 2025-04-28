@@ -24,11 +24,7 @@ export default function App() {
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center bg-[#181818]">
-        <Image
-          source={{ uri: '../assets/icon.png' }}
-          className="h-32 w-32" // adjust size as needed
-          resizeMode="contain"
-        />
+        <Image source={{ uri: '../assets/logo.png' }} className="w-200 h-32" resizeMode="contain" />
       </View>
     );
   }

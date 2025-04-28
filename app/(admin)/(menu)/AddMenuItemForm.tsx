@@ -95,7 +95,6 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
         const response = await fetch(result.assets[0].uri);
         const blob = await response.blob();
 
-        console.log('Upload successful:', response, blob);
         setImageUrl(result.assets[0].uri);
         setBlob(blob);
       } catch (error) {

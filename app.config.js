@@ -2,10 +2,10 @@ import 'dotenv/config';
 export default {
   expo: {
     name: 'Cafe-Cose',
-    slug: 'Cafe-Cose',
+    slug: 'cafe-cose',
     version: '1.0.0',
     orientation: 'portrait',
-    icon: './assets/images/icon.png',
+    icon: './assets/icon.png',
     scheme: 'myapp',
     userInterfaceStyle: 'light',
     newArchEnabled: true,
@@ -14,14 +14,14 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: './assets/images/adaptive-icon.png',
-        backgroundColor: '#ffffff',
+        foregroundImage: './assets/icon.png',
+        backgroundColor: '#f7f5f1',
       },
     },
     web: {
       bundler: 'metro',
       output: 'static',
-      favicon: './assets/images/favicon.png',
+      favicon: './assets/icon.png',
     },
     plugins: [
       [
@@ -34,16 +34,17 @@ export default {
       [
         'expo-splash-screen',
         {
-          image: './assets/images/splash-icon.png',
+          image: './assets/logo.png',
           imageWidth: 200,
           resizeMode: 'contain',
-          backgroundColor: '#ffffff',
+          backgroundColor: '#f7f5f1',
         },
       ],
+      ['expo-notifications', {}],
     ],
     extra: {
       eas: {
-        projectId: '',
+        projectId: '8d4e2b65-724d-47bf-9119-393c41cc2524',
       },
       firebaseApiKey: process.env.FIREBASE_API_KEY,
       authDomain: process.env.AUTH_DOMAIN,
