@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, SafeAreaView } from 'react-native';
 import { FIREBASE_AUTH } from '../../../firebaseConfig';
 import QRCode from 'react-native-qrcode-svg';
+import BackButton from 'components/BackButton';
 
 const QRCodeScreen: React.FC = () => {
   const [userId, setUserId] = useState<string | null>(null);
@@ -28,16 +29,19 @@ const QRCodeScreen: React.FC = () => {
   }
 
   return (
-    <View className="flex-1 items-center justify-center bg-background">
-      {userId ? (
-        <>
-          <Text className="mb-4 text-xl font-bold">Your QR Code</Text>
-          <QRCode value={userId} size={200} backgroundColor="#f7f5f1" />
-        </>
-      ) : (
-        <Text className="text-xl font-bold">No user logged in</Text>
-      )}
-    </View>
+    <SafeAreaView className="flex-1">
+      <BackButton />
+      <View className="flex-1 items-center justify-center bg-background">
+        {userId ? (
+          <>
+            <Text className="mb-4 text-xl font-bold">Your QR Code</Text>
+            <QRCode value={userId} size={200} backgroundColor="#f7f5f1" />
+          </>
+        ) : (
+          <Text className="text-xl font-bold">No user logged in</Text>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 

@@ -3,7 +3,6 @@ export interface User {
   name: string;
   email: string;
   points: number;
-  qrCode: string;
   imageUrl?: string;
   announcements: boolean;
   runs: boolean;

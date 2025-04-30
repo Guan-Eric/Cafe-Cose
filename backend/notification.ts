@@ -110,20 +110,67 @@ export async function sendPushNotifications(tokens: string[], title: string, bod
   }
 }
 
-export async function notifyRunParticipants(runId: string, title: string, body: string) {
+export async function notifyAnnouncement(title: string, body: string) {
   try {
-    const participantsRef = collection(FIRESTORE_DB, 'runs', runId, 'participants');
-    const q = query(participantsRef, where('status', '==', 'yes'));
-    const participantsSnapshot = await getDocs(q);
+    const usersRef = collection(FIRESTORE_DB, `Users`);
+    const q = query(usersRef, where('announcements', '==', true));
+    const usersSnapshot = await getDocs(q);
 
-    const tokenPromises = participantsSnapshot.docs.map(async (doc) => {
-      return (await getUser(doc.id))?.tokens;
+    const tokenPromises = usersSnapshot.docs.map(async (doc) => {
+      return doc.data().tokens;
+    });
+
+    const tokens = (await Promise.all(tokenPromises)).filter((token) => !!token);
+    if (tokens.length > 0) {
+      const flatTokens = tokens.flat();
+      await sendPushNotifications(flatTokens, title, body);
+    }
+
+    return tokens.length;
+  } catch (error) {
+    console.error('Error notifying participants:', error);
+    throw error;
+  }
+}
+
+export async function notifyRun(title: string, body: string) {
+  try {
+    const usersRef = collection(FIRESTORE_DB, `Users`);
+    const q = query(usersRef, where('runs', '==', true));
+    const usersSnapshot = await getDocs(q);
+
+    const tokenPromises = usersSnapshot.docs.map(async (doc) => {
+      return doc.data().tokens;
     });
 
     const tokens = (await Promise.all(tokenPromises)).filter((token) => !!token);
 
     if (tokens.length > 0) {
-      const flatTokens = tokens.flat(); // Flatten the array in case of nested arrays
+      const flatTokens = tokens.flat();
+      await sendPushNotifications(flatTokens, title, body);
+    }
+
+    return tokens.length;
+  } catch (error) {
+    console.error('Error notifying participants:', error);
+    throw error;
+  }
+}
+
+export async function notifyRunParticipants(runId: string, title: string, body: string) {
+  try {
+    const participantsRef = collection(FIRESTORE_DB, `Runs/${runId}/Participants`);
+    const q = query(participantsRef, where('status', '==', 'yes'));
+    const participantsSnapshot = await getDocs(q);
+
+    const tokenPromises = participantsSnapshot.docs.map(async (doc) => {
+      if ((await getUser(doc.id))?.runs) return (await getUser(doc.id))?.tokens;
+    });
+
+    const tokens = (await Promise.all(tokenPromises)).filter((token) => !!token);
+
+    if (tokens.length > 0) {
+      const flatTokens = tokens.flat();
       await sendPushNotifications(flatTokens, title, body);
     }
 

@@ -10,6 +10,7 @@ import { Announcement } from 'components/types';
 import AnnouncementCard from 'components/cards/AnnouncementCard';
 import { getAnnouncements } from 'backend/announcement';
 import useNotifications from 'backend/notification';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 function HomeScreen() {
   const [stamps, setStamps] = useState(0);
@@ -57,8 +58,8 @@ function HomeScreen() {
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
           <Text className="text-2xl font-bold text-text">Home</Text>
-          <Pressable onPress={() => logOut()} className="rounded-lg bg-red-500 px-4 py-2">
-            <Text className="text-text">Logout</Text>
+          <Pressable onPress={() => logOut()}>
+            <MaterialCommunityIcons name="account" size={24} color="#ffffff" />
           </Pressable>
         </View>
 
@@ -71,7 +72,7 @@ function HomeScreen() {
           <View className="items-center">
             <LoyaltyCard
               points={stamps}
-              onPress={() => router.push({ pathname: '/(tabs)/(qr)/QRCodeScreen' })}
+              onPress={() => router.push({ pathname: '/(tabs)/(home)/QRCodeScreen' })}
             />
           </View>
 

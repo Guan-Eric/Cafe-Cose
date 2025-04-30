@@ -20,6 +20,7 @@ import BackButton from 'components/BackButton';
 import { createAnnouncement, editAnnouncement } from 'backend/announcement';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
+import { notifyAnnouncement } from 'backend/notification';
 
 const CreateAnnouncementScreen = () => {
   const [title, setTitle] = useState<string>('');
@@ -91,12 +92,44 @@ const CreateAnnouncementScreen = () => {
 
       const updatedAnnouncement = { ...newAnnouncement, imageUrl: downloadUrl as string };
       editAnnouncement(updatedAnnouncement);
-      Alert.alert('Success', 'Created announcement');
       setLoading(false);
+      await sendNotificationAlert();
       router.back();
     } catch (error) {
       console.error('Error creating announcement:', error);
       Alert.alert('Error', 'Cannot create announcement');
+    }
+  };
+
+  const sendNotificationAlert = async () => {
+    const confirmSend = await new Promise<boolean>((resolve) => {
+      Alert.alert(
+        'Send Notification',
+        'Do you want to send a notification for this announcement?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => resolve(false),
+            style: 'cancel',
+          },
+          {
+            text: 'Send',
+            onPress: () => resolve(true),
+            style: 'default',
+          },
+        ],
+        { cancelable: false }
+      );
+    });
+
+    if (confirmSend) {
+      try {
+        await notifyAnnouncement(title, notificationMessage);
+        Alert.alert('Success', 'Notification sent successfully!');
+      } catch (error) {
+        console.error('Error sending notification:', error);
+        Alert.alert('Error', 'Failed to send notification.');
+      }
     }
   };
 

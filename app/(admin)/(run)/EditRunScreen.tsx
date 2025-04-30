@@ -22,6 +22,7 @@ import { deleteRun, editRun } from 'backend/run';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
+import { notifyRun } from 'backend/notification';
 
 const EditRunScreen = () => {
   const {
@@ -132,12 +133,44 @@ const EditRunScreen = () => {
         };
         editRun(updatedRun);
       }
-      Alert.alert('Success', 'Updated run');
       setLoading(false);
+      await sendNotificationAlert();
       router.back();
     } catch (error) {
       console.error('Error creating run:', error);
       Alert.alert('Error', 'Cannot create run');
+    }
+  };
+
+  const sendNotificationAlert = async () => {
+    const confirmSend = await new Promise<boolean>((resolve) => {
+      Alert.alert(
+        'Send Notification',
+        'Do you want to send a notification for this run?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => resolve(false),
+            style: 'cancel',
+          },
+          {
+            text: 'Send',
+            onPress: () => resolve(true),
+            style: 'default',
+          },
+        ],
+        { cancelable: false }
+      );
+    });
+
+    if (confirmSend) {
+      try {
+        await notifyRun(title, notificationMessage);
+        Alert.alert('Success', 'Notification sent successfully!');
+      } catch (error) {
+        console.error('Error sending notification:', error);
+        Alert.alert('Error', 'Failed to send notification.');
+      }
     }
   };
 
