@@ -196,7 +196,7 @@ export async function scheduleRunReminder(runDate: Date, timeBeforeRun: number) 
     const notificationId = await Notifications.scheduleNotificationAsync({
       content: {
         title: `Run Reminder`,
-        body: `Your run starts in 30 minutes at ${runDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+        body: `Your run starts in ${reminderTime} minutes at ${runDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
       },
       trigger: {
         seconds: secondsUntilReminder,

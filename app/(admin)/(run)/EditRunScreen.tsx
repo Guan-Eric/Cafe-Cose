@@ -82,8 +82,8 @@ const EditRunScreen = () => {
 
   const handleUpdateRun = async () => {
     setLoading(true);
-    if (!title || !message || !notificationMessage) {
-      Alert.alert('Error', 'Please fill in all 3 input fields.');
+    if (!title) {
+      Alert.alert('Error', 'Please fill in the title field.');
       return;
     }
 
@@ -228,6 +228,7 @@ const EditRunScreen = () => {
                 <Text className="font-[Lato_400Regular] text-text">Title</Text>
                 <TextInput
                   value={title}
+                  maxLength={40}
                   onChangeText={setTitle}
                   className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                 />
@@ -236,6 +237,7 @@ const EditRunScreen = () => {
                 <Text className="font-[Lato_400Regular] text-text">Notification Message</Text>
                 <TextInput
                   value={notificationMessage}
+                  maxLength={120}
                   onChangeText={setNotificationMessage}
                   className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                 />

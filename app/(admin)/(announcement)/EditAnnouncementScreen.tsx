@@ -61,8 +61,8 @@ const EditAnnouncementScreen = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    if (!announcementTitle || !announcementMessage || !notification) {
-      Alert.alert('Error', 'Please fill in all fields.');
+    if (!announcementTitle) {
+      Alert.alert('Error', 'Please fill in the title field.');
       return;
     }
 
@@ -202,11 +202,18 @@ const EditAnnouncementScreen = () => {
                     className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                     value={announcementTitle}
                     onChangeText={setTitle}
-                    autoCapitalize="words"
-                    placeholderTextColor="gray"
+                    maxLength={40}
                   />
                 </View>
-
+                <View className="mt-3 h-[60px] w-[254px]">
+                  <Text className="font-[Lato_400Regular] text-text">Notification Message</Text>
+                  <TextInput
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    value={notification}
+                    onChangeText={setNotification}
+                    maxLength={120}
+                  />
+                </View>
                 <View className="mt-3 h-[100px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Message</Text>
                   <TextInput
@@ -215,17 +222,6 @@ const EditAnnouncementScreen = () => {
                     onChangeText={setMessage}
                     multiline
                     numberOfLines={4}
-                    placeholderTextColor="gray"
-                  />
-                </View>
-
-                <View className="mt-3 h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Notification Message</Text>
-                  <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
-                    value={notification}
-                    onChangeText={setNotification}
-                    placeholderTextColor="gray"
                   />
                 </View>
 
