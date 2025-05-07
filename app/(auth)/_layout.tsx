@@ -1,4 +1,3 @@
-import React from 'react';
 import { Stack } from 'expo-router';
 
 function LoginStackLayout() {
@@ -15,7 +14,6 @@ function LoginStackLayout() {
           headerLeft: () => null,
         }}
       />
-
       <Stack.Screen name="SignInScreen" options={{ headerShown: false, gestureEnabled: false }} />
       <Stack.Screen name="SignUpScreen" options={{ headerShown: false, gestureEnabled: false }} />
     </Stack>

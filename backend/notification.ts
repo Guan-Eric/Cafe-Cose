@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from 'react';
 import { collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { FIRESTORE_DB } from 'firebaseConfig';
 import { getUser } from './user';
-import { NotificationTriggerInput } from 'expo-notifications';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -196,12 +195,11 @@ export async function scheduleRunReminder(runDate: Date, timeBeforeRun: number) 
     const notificationId = await Notifications.scheduleNotificationAsync({
       content: {
         title: `Run Reminder`,
-        body: `Your run starts in ${reminderTime} minutes at ${runDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+        body: `Your run starts in ${timeBeforeRun} minutes at ${runDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
       },
       trigger: {
-        seconds: secondsUntilReminder,
-        repeats: false,
-      } as NotificationTriggerInput,
+        date: reminderTime,
+      } as Notifications.DateTriggerInput,
     });
     return notificationId;
   } catch (error) {

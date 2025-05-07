@@ -56,10 +56,10 @@ function HomeScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <StatusBar style="light" />
       <View className="flex-1">
-        <View className="flex-row items-center justify-between px-4 py-2">
+        <View className="flex-row items-center justify-between py-2 pl-4 pr-6">
           <Text className="text-2xl font-bold text-text">Home</Text>
-          <Pressable onPress={() => logOut()}>
-            <MaterialCommunityIcons name="account" size={24} color="#ffffff" />
+          <Pressable onPress={() => router.push({ pathname: `/(tabs)/(home)/SettingsScreen` })}>
+            <MaterialCommunityIcons name="cog" size={24} color="#1a1a1a" />
           </Pressable>
         </View>
 

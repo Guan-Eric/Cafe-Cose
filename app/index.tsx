@@ -5,7 +5,7 @@ import { FIREBASE_AUTH } from '../firebaseConfig';
 import { useEffect, useState } from 'react';
 import { getUser } from 'backend/user';
 
-export default function App() {
+function index() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -31,3 +31,5 @@ export default function App() {
 
   return null;
 }
+
+export default index;
