@@ -22,6 +22,7 @@ import { deleteRun, editRun } from 'backend/run';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
+import { notifyRun } from 'backend/notification';
 
 const EditRunScreen = () => {
   const {
@@ -69,21 +70,20 @@ const EditRunScreen = () => {
         const response = await fetch(result.assets[0].uri);
         const blob = await response.blob();
 
-        console.log('Upload successful:', response, blob);
         setImageUrl(result.assets[0].uri);
         setBlob(blob);
       } catch (error) {
         console.error('Error uploading images:', error);
       }
     } else {
-      console.log('Image selection was canceled.');
+      console.error('Image selection was canceled.');
     }
   };
 
   const handleUpdateRun = async () => {
     setLoading(true);
-    if (!title || !message || !notificationMessage) {
-      Alert.alert('Error', 'Please fill in all 3 input fields.');
+    if (!title) {
+      Alert.alert('Error', 'Please fill in the title field.');
       return;
     }
 
@@ -133,12 +133,44 @@ const EditRunScreen = () => {
         };
         editRun(updatedRun);
       }
-      Alert.alert('Success', 'Updated run');
       setLoading(false);
+      await sendNotificationAlert();
       router.back();
     } catch (error) {
       console.error('Error creating run:', error);
       Alert.alert('Error', 'Cannot create run');
+    }
+  };
+
+  const sendNotificationAlert = async () => {
+    const confirmSend = await new Promise<boolean>((resolve) => {
+      Alert.alert(
+        'Send Notification',
+        'Do you want to send a notification for this run?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => resolve(false),
+            style: 'cancel',
+          },
+          {
+            text: 'Send',
+            onPress: () => resolve(true),
+            style: 'default',
+          },
+        ],
+        { cancelable: false }
+      );
+    });
+
+    if (confirmSend) {
+      try {
+        await notifyRun(title, notificationMessage);
+        Alert.alert('Success', 'Notification sent successfully!');
+      } catch (error) {
+        console.error('Error sending notification:', error);
+        Alert.alert('Error', 'Failed to send notification.');
+      }
     }
   };
 
@@ -196,6 +228,7 @@ const EditRunScreen = () => {
                 <Text className="font-[Lato_400Regular] text-text">Title</Text>
                 <TextInput
                   value={title}
+                  maxLength={40}
                   onChangeText={setTitle}
                   className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                 />
@@ -204,6 +237,7 @@ const EditRunScreen = () => {
                 <Text className="font-[Lato_400Regular] text-text">Notification Message</Text>
                 <TextInput
                   value={notificationMessage}
+                  maxLength={120}
                   onChangeText={setNotificationMessage}
                   className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                 />

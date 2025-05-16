@@ -20,6 +20,7 @@ import BackButton from 'components/BackButton';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
 import { editAnnouncement, deleteAnnouncement } from 'backend/announcement';
+import { notifyAnnouncement } from 'backend/notification';
 
 const EditAnnouncementScreen = () => {
   const { id, title, message, notificationMessage, imageUrl, createdAt } = useLocalSearchParams();
@@ -48,21 +49,20 @@ const EditAnnouncementScreen = () => {
         const response = await fetch(result.assets[0].uri);
         const blob = await response.blob();
 
-        console.log('Upload successful:', response, blob);
         setImage(result.assets[0].uri);
         setBlob(blob);
       } catch (error) {
         console.error('Error uploading images:', error);
       }
     } else {
-      console.log('Image selection was canceled.');
+      console.error('Image selection was canceled.');
     }
   };
 
   const handleSubmit = async () => {
     setLoading(true);
-    if (!announcementTitle || !announcementMessage || !notification) {
-      Alert.alert('Error', 'Please fill in all fields.');
+    if (!announcementTitle) {
+      Alert.alert('Error', 'Please fill in the title field.');
       return;
     }
 
@@ -109,11 +109,43 @@ const EditAnnouncementScreen = () => {
         await editAnnouncement(updatedAnnouncement);
       }
       setLoading(false);
-      Alert.alert('Success', 'Announcement updated successfully!');
+      await sendNotificationAlert();
       router.back();
     } catch (error) {
       console.error('Error updating announcement:', error);
       Alert.alert('Error', 'Failed to update announcement.');
+    }
+  };
+
+  const sendNotificationAlert = async () => {
+    const confirmSend = await new Promise<boolean>((resolve) => {
+      Alert.alert(
+        'Send Notification',
+        'Do you want to send a notification for this announcement?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => resolve(false),
+            style: 'cancel',
+          },
+          {
+            text: 'Send',
+            onPress: () => resolve(true),
+            style: 'default',
+          },
+        ],
+        { cancelable: false }
+      );
+    });
+
+    if (confirmSend) {
+      try {
+        await notifyAnnouncement(announcementTitle, notification);
+        Alert.alert('Success', 'Notification sent successfully!');
+      } catch (error) {
+        console.error('Error sending notification:', error);
+        Alert.alert('Error', 'Failed to send notification.');
+      }
     }
   };
 
@@ -170,11 +202,18 @@ const EditAnnouncementScreen = () => {
                     className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                     value={announcementTitle}
                     onChangeText={setTitle}
-                    autoCapitalize="words"
-                    placeholderTextColor="gray"
+                    maxLength={40}
                   />
                 </View>
-
+                <View className="mt-3 h-[60px] w-[254px]">
+                  <Text className="font-[Lato_400Regular] text-text">Notification Message</Text>
+                  <TextInput
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    value={notification}
+                    onChangeText={setNotification}
+                    maxLength={120}
+                  />
+                </View>
                 <View className="mt-3 h-[100px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Message</Text>
                   <TextInput
@@ -183,17 +222,6 @@ const EditAnnouncementScreen = () => {
                     onChangeText={setMessage}
                     multiline
                     numberOfLines={4}
-                    placeholderTextColor="gray"
-                  />
-                </View>
-
-                <View className="mt-3 h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Notification Message</Text>
-                  <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
-                    value={notification}
-                    onChangeText={setNotification}
-                    placeholderTextColor="gray"
                   />
                 </View>
 

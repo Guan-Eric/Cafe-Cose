@@ -10,8 +10,17 @@ function HomeScreen() {
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
           <Text className="text-2xl font-bold text-text">Admin</Text>
+          <Pressable
+            className="rounded-lg bg-blue-500 px-4 py-2"
+            onPress={() =>
+              router.replace({
+                pathname: `/(tabs)/(home)/HomeScreen`,
+              })
+            }>
+            <Text className="text-lg font-semibold text-text">Client View</Text>
+          </Pressable>
           <Pressable onPress={() => logOut()} className="rounded-lg bg-red-500 px-4 py-2">
-            <Text className="text-text">Logout</Text>
+            <Text className="text-lg font-semibold text-text">Logout</Text>
           </Pressable>
         </View>
         <View className="px-4">
@@ -21,7 +30,7 @@ function HomeScreen() {
           <View className="px-4 py-2">
             <Pressable
               onPress={() => router.push('/(admin)/(home)/QRScannerScreen')}
-              className="rounded-lg bg-blue-500 px-4 py-4">
+              className="rounded-lg bg-green-500 px-4 py-4">
               <Text className="text-text">Scan QR Code</Text>
             </Pressable>
           </View>

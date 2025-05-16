@@ -33,30 +33,11 @@ function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="(qr)"
-        options={{
-          title: '',
-          tabBarIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="qrcode-scan" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="(run)"
         options={{
           title: '',
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="run" size={size} color={color} />
-          ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="(profile)"
-        options={{
-          title: '',
-          tabBarIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="account" size={size} color={color} />
           ),
         }}
       />

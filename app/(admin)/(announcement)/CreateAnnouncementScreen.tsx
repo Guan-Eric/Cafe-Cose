@@ -20,6 +20,7 @@ import BackButton from 'components/BackButton';
 import { createAnnouncement, editAnnouncement } from 'backend/announcement';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
+import { notifyAnnouncement } from 'backend/notification';
 
 const CreateAnnouncementScreen = () => {
   const [title, setTitle] = useState<string>('');
@@ -43,21 +44,20 @@ const CreateAnnouncementScreen = () => {
         const response = await fetch(result.assets[0].uri);
         const blob = await response.blob();
 
-        console.log('Upload successful:', response, blob);
         setImageUrl(result.assets[0].uri);
         setBlob(blob);
       } catch (error) {
         console.error('Error uploading images:', error);
       }
     } else {
-      console.log('Image selection was canceled.');
+      console.error('Image selection was canceled.');
     }
   };
 
   const handleCreateAnnouncement = async () => {
     setLoading(true);
-    if (!title || !message || !notificationMessage) {
-      Alert.alert('Error', 'Please fill in all 3 input fields.');
+    if (!title) {
+      Alert.alert('Error', 'Please fill in the title field.');
       return;
     }
 
@@ -92,12 +92,44 @@ const CreateAnnouncementScreen = () => {
 
       const updatedAnnouncement = { ...newAnnouncement, imageUrl: downloadUrl as string };
       editAnnouncement(updatedAnnouncement);
-      Alert.alert('Success', 'Created announcement');
       setLoading(false);
+      await sendNotificationAlert();
       router.back();
     } catch (error) {
       console.error('Error creating announcement:', error);
       Alert.alert('Error', 'Cannot create announcement');
+    }
+  };
+
+  const sendNotificationAlert = async () => {
+    const confirmSend = await new Promise<boolean>((resolve) => {
+      Alert.alert(
+        'Send Notification',
+        'Do you want to send a notification for this announcement?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => resolve(false),
+            style: 'cancel',
+          },
+          {
+            text: 'Send',
+            onPress: () => resolve(true),
+            style: 'default',
+          },
+        ],
+        { cancelable: false }
+      );
+    });
+
+    if (confirmSend) {
+      try {
+        await notifyAnnouncement(title, notificationMessage);
+        Alert.alert('Success', 'Notification sent successfully!');
+      } catch (error) {
+        console.error('Error sending notification:', error);
+        Alert.alert('Error', 'Failed to send notification.');
+      }
     }
   };
 
@@ -115,6 +147,7 @@ const CreateAnnouncementScreen = () => {
                 <Text className="font-[Lato_400Regular] text-text">Title</Text>
                 <TextInput
                   value={title}
+                  maxLength={40}
                   onChangeText={setTitle}
                   className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                 />
@@ -123,6 +156,7 @@ const CreateAnnouncementScreen = () => {
                 <Text className="font-[Lato_400Regular] text-text">Notification Message</Text>
                 <TextInput
                   value={notificationMessage}
+                  maxLength={120}
                   onChangeText={setNotificationMessage}
                   className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
                 />

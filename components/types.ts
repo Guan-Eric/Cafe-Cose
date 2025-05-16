@@ -3,11 +3,11 @@ export interface User {
   name: string;
   email: string;
   points: number;
-  qrCode: string;
-  imageUrl?: string;
+  url: string;
   announcements: boolean;
   runs: boolean;
   admin: boolean;
+  tokens: string[];
 }
 
 export interface MenuItem {
@@ -36,6 +36,7 @@ export interface Participant {
   id: string;
   name: string;
   status: RSVPStatus;
+  url: string;
 }
 
 export interface Run {

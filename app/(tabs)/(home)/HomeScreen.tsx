@@ -4,21 +4,26 @@ import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
 import { logOut } from '../../../backend/auth';
 import LoyaltyCard from '../../../components/cards/LoyaltyCard';
-import { getUser } from 'backend/user';
+import { getUser, savePushToken } from 'backend/user';
 import { FIREBASE_AUTH } from 'firebaseConfig';
-import { Announcement } from 'components/types';
+import { Announcement, User } from 'components/types';
 import AnnouncementCard from 'components/cards/AnnouncementCard';
 import { getAnnouncements } from 'backend/announcement';
+import useNotifications from 'backend/notification';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 function HomeScreen() {
+  const [user, setUser] = useState<User>();
   const [stamps, setStamps] = useState(0);
   const [announcement, setAnnouncement] = useState<Announcement[]>([]);
+  const { expoPushToken } = useNotifications();
 
   const fetchStamps = async () => {
     try {
       const user = await getUser(FIREBASE_AUTH.currentUser?.uid as string);
       if (user) {
         setStamps(user.points % 10 || 0);
+        setUser(user);
       }
     } catch (error) {
       console.error('Error fetching stamps:', error);
@@ -29,6 +34,12 @@ function HomeScreen() {
     const announcementData = await getAnnouncements();
     setAnnouncement(announcementData);
   };
+
+  useEffect(() => {
+    if (expoPushToken) {
+      savePushToken(expoPushToken);
+    }
+  }, [expoPushToken]);
 
   useEffect(() => {
     fetchAnnouncements();
@@ -46,11 +57,36 @@ function HomeScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <StatusBar style="light" />
       <View className="flex-1">
-        <View className="flex-row items-center justify-between px-4 py-2">
+        <View className="flex-row items-center justify-between py-2 pl-4 pr-6">
           <Text className="text-2xl font-bold text-text">Home</Text>
-          <Pressable onPress={() => logOut()} className="rounded-lg bg-red-500 px-4 py-2">
-            <Text className="text-text">Logout</Text>
-          </Pressable>
+          <View className="flex-row items-center">
+            {user?.admin && (
+              <Pressable
+                className="mr-2 rounded-lg bg-blue-500 px-4 py-2"
+                onPress={() =>
+                  router.replace({
+                    pathname: `/(admin)/(home)/HomeScreen`,
+                  })
+                }>
+                <Text className="text-lg font-semibold text-text">Admin</Text>
+              </Pressable>
+            )}
+
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: `/(tabs)/(home)/SettingsScreen`,
+                  params: {
+                    username: user?.name,
+                    userUrl: user?.url,
+                    userAnnouncement: user?.announcements.toString(),
+                    userRun: user?.runs.toString(),
+                  },
+                })
+              }>
+              <MaterialCommunityIcons name="cog" size={24} color="#1a1a1a" />
+            </Pressable>
+          </View>
         </View>
 
         <ScrollView className="flex-1 px-4">
@@ -62,7 +98,7 @@ function HomeScreen() {
           <View className="items-center">
             <LoyaltyCard
               points={stamps}
-              onPress={() => router.push({ pathname: '/(tabs)/(qr)/QRCodeScreen' })}
+              onPress={() => router.push({ pathname: '/(tabs)/(home)/QRCodeScreen' })}
             />
           </View>
 

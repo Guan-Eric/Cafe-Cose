@@ -4,7 +4,6 @@ import BackButton from 'components/BackButton';
 
 const ViewAnnouncementScreen = () => {
   const { id, message, title, createdAt, imageUrl } = useLocalSearchParams();
-  console.log(imageUrl);
   const updatedImageUrl = (imageUrl as string)?.replace('/o/announcements/', '/o/announcements%2F');
 
   return (
