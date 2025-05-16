@@ -9,6 +9,8 @@ import { getUser } from './user';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldShowAlert: true,
     shouldPlaySound: true,
     shouldSetBadge: true,
@@ -56,8 +58,8 @@ export async function registerForPushNotificationsAsync() {
 export default function useNotifications() {
   const [expoPushToken, setExpoPushToken] = useState<string | undefined>('');
   const [notification, setNotification] = useState<Notifications.Notification | null>(null);
-  const notificationListener = useRef<Notifications.EventSubscription>();
-  const responseListener = useRef<Notifications.EventSubscription>();
+  const notificationListener = useRef<Notifications.EventSubscription | null>(null);
+  const responseListener = useRef<Notifications.EventSubscription | null>(null);
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
@@ -189,8 +191,6 @@ export async function scheduleRunReminder(runDate: Date, timeBeforeRun: number) 
     return null;
   }
 
-  const secondsUntilReminder = Math.floor((reminderTime.getTime() - now.getTime()) / 1000);
-
   try {
     const notificationId = await Notifications.scheduleNotificationAsync({
       content: {
@@ -198,8 +198,9 @@ export async function scheduleRunReminder(runDate: Date, timeBeforeRun: number) 
         body: `Your run starts in ${timeBeforeRun} minutes at ${runDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
       },
       trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
         date: reminderTime,
-      } as Notifications.DateTriggerInput,
+      },
     });
     return notificationId;
   } catch (error) {
