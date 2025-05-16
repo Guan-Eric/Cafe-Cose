@@ -10,9 +10,7 @@ function index() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, async (user) => {
-      if (user && (await getUser(FIREBASE_AUTH.currentUser?.uid as string))?.admin) {
-        router.replace('/(admin)/(home)/HomeScreen');
-      } else if (user) {
+      if (user) {
         router.replace('/(tabs)/(home)/HomeScreen');
       } else {
         router.replace('/(auth)/WelcomeScreen');

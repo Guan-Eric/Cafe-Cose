@@ -17,6 +17,9 @@ import { editRSVPRun, getParticipants } from 'backend/run';
 import { FIREBASE_AUTH } from 'firebaseConfig';
 import { scheduleRunReminder } from 'backend/notification'; // Import the function to schedule reminders
 import ReminderModal from 'components/modals/ReminderModal';
+import { getUser } from 'backend/user';
+import BackButton from 'components/BackButton';
+import ParticipantsCard from 'components/cards/ParticipantsCard';
 
 const ViewRunScreen = () => {
   const { id, runTitle, runMessage, runDate, runImageUrl, runIsRSVP, runParticipants } =
@@ -29,12 +32,10 @@ const ViewRunScreen = () => {
     participants.find((participant) => participant.id === FIREBASE_AUTH.currentUser?.uid)?.status ||
       undefined
   );
-  const updatedImageUrl = (runImageUrl as string)?.replace('/o/runs/', '/o/runs%2F');
-  const formattedRunDate = new Date(runDate as string).toLocaleString();
-
-  const [reminderTime, setReminderTime] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const updatedImageUrl = (runImageUrl as string)?.replace('/o/runs/', '/o/runs%2F');
+  const formattedRunDate = new Date(runDate as string).toLocaleString();
   const getStatusCount = (status: RSVPStatus) => {
     return participants.filter((p: Participant) => p.status === status).length;
   };
@@ -55,8 +56,11 @@ const ViewRunScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScrollView>
-        <View className="flex-1 px-4 py-2">
+        <View className="flex-row items-center">
+          <BackButton />
           <Text className="text-2xl font-bold text-text">{runTitle}</Text>
+        </View>
+        <View className="flex-1 px-4 py-2">
           {runImageUrl ? (
             <Image
               source={{ uri: updatedImageUrl }}
@@ -82,7 +86,7 @@ const ViewRunScreen = () => {
           />
           {runIsRSVP && (
             <View>
-              {new Date(runDate as string) > new Date() && (
+              {new Date(runDate as string) > new Date() ? (
                 <>
                   <Text className="mt-2 text-lg font-semibold text-text">Will you attend?</Text>
                   <View className="mt-2 flex-row justify-between">
@@ -115,6 +119,35 @@ const ViewRunScreen = () => {
                     </TouchableOpacity>
                   </View>
                 </>
+              ) : (
+                <>
+                  <View className="mt-2 flex-row justify-between">
+                    <TouchableOpacity
+                      disabled={true}
+                      className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'yes' ? 'bg-green-600' : 'bg-green-100'}`}>
+                      <Text
+                        className={` font-medium ${RSVP === 'yes' ? 'text-white' : 'text-green-600'}`}>
+                        Yes: {yesCount}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      disabled={true}
+                      className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'maybe' ? 'bg-yellow-500' : 'bg-yellow-100'}`}>
+                      <Text
+                        className={` font-medium ${RSVP === 'maybe' ? 'text-white' : 'text-yellow-600'}`}>
+                        Maybe: {maybeCount}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      disabled={true}
+                      className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'no' ? 'bg-red-600' : 'bg-red-100'}`}>
+                      <Text
+                        className={` font-medium ${RSVP === 'no' ? 'text-white' : 'text-red-600'}`}>
+                        No: {noCount}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
               )}
 
               <View>
@@ -122,21 +155,7 @@ const ViewRunScreen = () => {
                 {participants.length > 0 ? (
                   <View className="rounded-lg bg-gray-50 p-2">
                     {participants.map((participant: Participant) => (
-                      <View
-                        key={participant.id}
-                        className="flex-row items-center border-b border-gray-100 py-1">
-                        <View
-                          className={`mr-2 h-2 w-2 rounded-full ${
-                            participant.status === 'yes'
-                              ? 'bg-green-500'
-                              : participant.status === 'maybe'
-                                ? 'bg-yellow-500'
-                                : 'bg-red-500'
-                          }`}
-                        />
-                        <Text className="text-gray-700">{participant.name}</Text>
-                        <Text className="ml-auto text-xs text-gray-400">{participant.status}</Text>
-                      </View>
+                      <ParticipantsCard key={participant.id} participant={participant} />
                     ))}
                   </View>
                 ) : (

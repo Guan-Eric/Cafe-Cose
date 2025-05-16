@@ -63,12 +63,22 @@ async function getUserPushTokens(userId: string) {
   }
 }
 
-export async function updateUserAvatar(url: string) {
+export async function updateUser(
+  name: string,
+  imageUrl: string,
+  announcementNotifications: boolean,
+  runNotifications: boolean
+) {
   try {
     const userDocRef = doc(FIRESTORE_DB, `Users/${FIREBASE_AUTH.currentUser?.uid}`);
-    updateDoc(userDocRef, { url: url });
+    updateDoc(userDocRef, {
+      name: name,
+      url: imageUrl,
+      announcements: announcementNotifications,
+      runs: runNotifications,
+    });
   } catch (error) {
-    console.error('Error updating user avatar:', error);
+    console.error('Error updating user:', error);
   }
 }
 

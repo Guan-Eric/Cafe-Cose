@@ -8,8 +8,8 @@ export default function HomeLayout() {
         name="ViewAnnouncementScreen"
         options={{ headerShown: false, gestureEnabled: false }}
       />
-      <Stack.Screen name="QRCodeScreen" options={{ headerShown: false, gestureEnabled: false }} />
-      <Stack.Screen name="SettingsScreen" options={{ headerShown: false, gestureEnabled: false }} />
+      <Stack.Screen name="QRCodeScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="SettingsScreen" options={{ headerShown: false }} />
     </Stack>
   );
 }

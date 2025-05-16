@@ -103,6 +103,7 @@ export async function getParticipants(runId: string): Promise<Participant[]> {
         id: doc.id,
         name: (await getUser(doc.id))?.name as string,
         status: doc.data().status,
+        url: (await getUser(doc.id))?.url as string,
       }))
     );
     return participants;

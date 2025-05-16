@@ -3,7 +3,7 @@ export interface User {
   name: string;
   email: string;
   points: number;
-  imageUrl?: string;
+  url: string;
   announcements: boolean;
   runs: boolean;
   admin: boolean;
@@ -36,6 +36,7 @@ export interface Participant {
   id: string;
   name: string;
   status: RSVPStatus;
+  url: string;
 }
 
 export interface Run {
