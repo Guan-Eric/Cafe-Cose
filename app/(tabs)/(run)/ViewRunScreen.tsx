@@ -35,7 +35,14 @@ const ViewRunScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const updatedImageUrl = (runImageUrl as string)?.replace('/o/runs/', '/o/runs%2F');
-  const formattedRunDate = new Date(runDate as string).toLocaleString();
+  const formattedRunDate =
+    new Date(runDate as string).toLocaleDateString([], {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }) +
+    ' at ' +
+    new Date(runDate as string).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const getStatusCount = (status: RSVPStatus) => {
     return participants.filter((p: Participant) => p.status === status).length;
   };

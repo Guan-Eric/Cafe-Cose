@@ -36,7 +36,7 @@ function MenuScreen() {
 
         <ScrollView className="flex-1 px-4">
           <View className="mt-2">
-            <View className="mt-2 items-center">
+            <View className="mt-2 flex-row flex-wrap justify-start justify-between">
               {menu.map((menuItem) => (
                 <MenuCard
                   key={menuItem.id}
