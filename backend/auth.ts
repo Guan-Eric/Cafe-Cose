@@ -1,6 +1,7 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { addUser } from './user';
+import { Alert } from 'react-native';
 
 export async function logIn(email: string, password: string): Promise<boolean> {
   try {
@@ -34,5 +35,22 @@ export async function register(email: string, password: string, name: string): P
 }
 
 export function logOut() {
-  FIREBASE_AUTH.signOut();
+  Alert.alert(
+    'Confirm Logout',
+    'Are you sure you want to log out?',
+    [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => {
+          FIREBASE_AUTH.signOut();
+        },
+        style: 'destructive',
+      },
+    ],
+    { cancelable: false }
+  );
 }

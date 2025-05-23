@@ -21,7 +21,7 @@ function index() {
 
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center bg-[#181818]">
+      <View className="flex-1 items-center justify-center bg-background">
         <Image source={{ uri: '../assets/logo.png' }} className="w-200 h-32" resizeMode="contain" />
       </View>
     );
