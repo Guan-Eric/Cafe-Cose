@@ -25,7 +25,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ menuItem, onPress }) => {
             </Text>
           </View>
           <Text className="text-base font-[Lato_400Regular] text-primary">
-            ${menuItem.price.toFixed(2)}
+            ${menuItem?.price?.toFixed(2)}
           </Text>
         </View>
       </View>

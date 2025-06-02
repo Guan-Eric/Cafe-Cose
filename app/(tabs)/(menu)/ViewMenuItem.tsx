@@ -21,7 +21,7 @@ const ViewMenuItem = () => {
           />
         ) : null}
         <Text className="mt-4 text-2xl font-semibold text-primary">
-          ${parseFloat(price as string).toFixed(2)}
+          ${parseFloat(price as string)?.toFixed(2)}
         </Text>
         <Text className="mt-2 text-2xl font-semibold text-text">{category}</Text>
         <Text className="mt-2 text-lg text-text/70">{description}</Text>

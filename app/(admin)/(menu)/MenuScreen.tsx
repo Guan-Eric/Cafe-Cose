@@ -51,7 +51,7 @@ function MenuScreen() {
                         menuDescription: menuItem.description,
                         menuPrice: menuItem.price,
                         menuImageUrl: menuItem.imageUrl,
-                        menuAvailable: menuItem.available.toString(),
+                        menuAvailable: menuItem.available?.toString(),
                         menuCategory: menuItem.category,
                         index: menuItem.index,
                       },

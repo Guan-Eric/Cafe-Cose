@@ -51,9 +51,9 @@ function RunScreen() {
                         runTitle: run.title,
                         runMessage: run.message,
                         runNotificationMessage: run.notificationMessage,
-                        runDate: run.date.toISOString(),
+                        runDate: run.date?.toISOString(),
                         runImageUrl: run.imageUrl,
-                        runIsRSVP: run.isRSVP.toString(),
+                        runIsRSVP: run.isRSVP?.toString(),
                         runParticipants: JSON.stringify(run.participants || []),
                       },
                     })

@@ -79,8 +79,8 @@ function HomeScreen() {
                   params: {
                     username: user?.name,
                     userUrl: user?.url,
-                    userAnnouncement: user?.announcements.toString(),
-                    userRun: user?.runs.toString(),
+                    userAnnouncement: user?.announcements?.toString(),
+                    userRun: user?.runs?.toString(),
                   },
                 })
               }>
@@ -116,7 +116,7 @@ function HomeScreen() {
                         id: announcementItem.id,
                         message: announcementItem.message,
                         title: announcementItem.title,
-                        createdAt: announcementItem.createdAt.toISOString(),
+                        createdAt: announcementItem.createdAt?.toISOString(),
                         imageUrl: announcementItem.imageUrl,
                         notificationMessage: announcementItem.notificationMessage,
                       },

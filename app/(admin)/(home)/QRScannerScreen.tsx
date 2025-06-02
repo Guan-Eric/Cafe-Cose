@@ -10,23 +10,29 @@ function QRScannerScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState('');
+  const [currentPoints, setCurrentPoints] = useState(0);
+  const [stampCount, setStampCount] = useState(1);
 
   const handleBarCodeScanned = async ({ type, data }: { type: string; data: string }) => {
+    const user = (await getUser(data)) as User;
     setScanned(true);
     setUserId(data);
-    setUserName(((await getUser(data)) as User).name);
+    setCurrentPoints(user.points);
+    setUserName(user.name);
     setModalVisible(true);
   };
 
   const handleGiveStamp = () => {
-    incrementStamp(userId);
+    incrementStamp(userId, stampCount);
     setModalVisible(false);
     setScanned(false);
+    setStampCount(1);
   };
 
   const handleCancel = () => {
     setModalVisible(false);
     setScanned(false);
+    setStampCount(1);
   };
 
   if (!permission) {
@@ -66,6 +72,26 @@ function QRScannerScreen() {
           <View style={{ width: 300, padding: 20, backgroundColor: 'white', borderRadius: 10 }}>
             <Text style={{ fontSize: 18, marginBottom: 10 }}>Give Stamp to {userName}?</Text>
             <Text style={{ marginBottom: 20 }}>Do you want to give a stamp to this user?</Text>
+            {currentPoints + stampCount >= 9 ? (
+              <Text style={{ marginBottom: 10, fontWeight: 'bold', color: 'green' }}>
+                🎉 This stamp will give {userName} a free drink!
+              </Text>
+            ) : null}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 10,
+              }}>
+              <Pressable onPress={() => setStampCount((prev) => Math.max(1, prev - 1))}>
+                <Text style={{ fontSize: 20, paddingHorizontal: 10 }}>−</Text>
+              </Pressable>
+              <Text style={{ fontSize: 20 }}>{stampCount}</Text>
+              <Pressable onPress={() => setStampCount((prev) => prev + 1)}>
+                <Text style={{ fontSize: 20, paddingHorizontal: 10 }}>+</Text>
+              </Pressable>
+            </View>
             <Pressable
               onPress={handleGiveStamp}
               style={{ backgroundColor: '#3490de', padding: 10, borderRadius: 5 }}>

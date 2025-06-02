@@ -102,7 +102,7 @@ export async function deleteAccount() {
   }
 }
 
-export async function incrementStamp(userId: string) {
+export async function incrementStamp(userId: string, stampCount: number) {
   try {
     const userDocRef = doc(FIRESTORE_DB, `Users/${userId}`);
     const userDocSnap = await getDoc(userDocRef);
@@ -110,7 +110,7 @@ export async function incrementStamp(userId: string) {
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
       const currentStamps = userData.points ?? 0;
-      await updateDoc(userDocRef, { points: currentStamps + 1 });
+      await updateDoc(userDocRef, { points: currentStamps + stampCount });
     } else {
       console.error('User document does not exist');
     }
