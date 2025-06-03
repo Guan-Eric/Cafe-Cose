@@ -129,6 +129,7 @@ const EditMenuItemForm = () => {
     } catch (error) {
       console.error('Error updating menu item:', error);
       Alert.alert('Error', 'Failed to update menu item.');
+      setLoading(false);
     }
   };
 
@@ -254,7 +255,8 @@ const EditMenuItemForm = () => {
               </View>
               <Pressable
                 onPress={handleSubmit}
-                className="h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
+                disabled={loading || !(description && name && price)}
+                className={`h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading || !(description && name && price) ? 'bg-gray-400' : 'bg-primary'}`}>
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (
@@ -263,7 +265,8 @@ const EditMenuItemForm = () => {
               </Pressable>
               <Pressable
                 onPress={handleDelete}
-                className="mb-4 mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-red-500">
+                disabled={loading}
+                className={`mb-4 mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading ? 'bg-gray-400' : 'bg-red-500'}`}>
                 <Text className="font-bold text-white">Delete Item</Text>
               </Pressable>
             </View>

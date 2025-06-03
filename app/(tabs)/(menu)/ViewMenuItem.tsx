@@ -4,7 +4,7 @@ import BackButton from 'components/BackButton';
 
 const ViewMenuItem = () => {
   const { id, name, description, price, imageUrl, category } = useLocalSearchParams();
-  const fixedImageUrl = (imageUrl as string)?.replace('/o/posts/', '/o/posts%2F');
+  const fixedImageUrl = (imageUrl as string)?.replace('/o/menu/', '/o/menu%2F');
 
   return (
     <SafeAreaView className="flex-1 bg-background p-6">

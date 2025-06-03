@@ -20,7 +20,7 @@ export async function createRun(run: Partial<Run>): Promise<Run> {
       message: run.message,
       notificationMessage: run.notificationMessage,
       date: run.date,
-      imageUrl: run.imageUrl,
+      imageUrl: run.imageUrl || '',
       isRSVP: run.isRSVP,
     });
     await updateDoc(runDocRef, { id: runDocRef.id });

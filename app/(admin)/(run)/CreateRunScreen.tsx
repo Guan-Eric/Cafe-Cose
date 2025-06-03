@@ -63,6 +63,7 @@ const CreateRunScreen = () => {
     setLoading(true);
     if (!title) {
       Alert.alert('Error', 'Please fill in the title field.');
+      setLoading(false);
       return;
     }
 
@@ -96,7 +97,7 @@ const CreateRunScreen = () => {
         );
       });
 
-      const updatedRun = { ...newRun, imageUrl: downloadUrl as string };
+      const updatedRun = { ...newRun, imageUrl: (downloadUrl as string) || '' };
       editRun(updatedRun);
       setLoading(false);
       await sendNotificationAlert();
@@ -104,6 +105,7 @@ const CreateRunScreen = () => {
     } catch (error) {
       console.error('Error creating run:', error);
       Alert.alert('Error', 'Cannot create run');
+      setLoading(false);
     }
   };
 
@@ -219,7 +221,8 @@ const CreateRunScreen = () => {
               )}
               <Pressable
                 onPress={handleCreateRun}
-                className="mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
+                disabled={loading}
+                className={`mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading ? 'bg-gray-400' : 'bg-primary'}`}>
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (

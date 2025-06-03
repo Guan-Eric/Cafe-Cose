@@ -76,7 +76,6 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
     } catch (error) {
       console.error('Error adding menu item:', error);
       Alert.alert('Error', 'Failed to add menu item.');
-    } finally {
       setLoading(false);
     }
   };
@@ -194,8 +193,8 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
 
               <Pressable
                 onPress={handleSubmit}
-                disabled={loading || !(description && name && price && imageUrl)}
-                className={`h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading || !(description && name && price && imageUrl) ? 'bg-gray-400' : 'bg-primary'}`}>
+                disabled={loading || !(description && name && price)}
+                className={`h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading || !(description && name && price) ? 'bg-gray-400' : 'bg-primary'}`}>
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (

@@ -12,7 +12,7 @@ export async function createAnnouncement(
       message: announcement.message,
       notificationMessage: announcement.notificationMessage,
       createdAt: new Date(),
-      imageUrl: announcement.imageUrl,
+      imageUrl: announcement.imageUrl || '',
     });
     await updateDoc(announcementDocRef, { id: announcementDocRef.id });
     return { ...announcement, id: announcementDocRef.id } as Announcement;

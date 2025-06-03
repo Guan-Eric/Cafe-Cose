@@ -52,7 +52,7 @@ export async function addMenuItem(menuItem: Partial<MenuItem>): Promise<MenuItem
       name: menuItem.name,
       description: menuItem.description,
       price: menuItem.price,
-      imageUrl: menuItem.imageUrl,
+      imageUrl: menuItem.imageUrl || '',
       available: menuItem.available,
       category: menuItem.category,
       index: await calculateIndex(),

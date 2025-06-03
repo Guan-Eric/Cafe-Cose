@@ -84,6 +84,7 @@ const EditRunScreen = () => {
     setLoading(true);
     if (!title) {
       Alert.alert('Error', 'Please fill in the title field.');
+      setLoading(false);
       return;
     }
 
@@ -139,6 +140,7 @@ const EditRunScreen = () => {
     } catch (error) {
       console.error('Error creating run:', error);
       Alert.alert('Error', 'Cannot create run');
+      setLoading(false);
     }
   };
 
@@ -288,7 +290,8 @@ const EditRunScreen = () => {
               )}
               <Pressable
                 onPress={handleUpdateRun}
-                className="mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
+                disabled={loading}
+                className={`mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading ? 'bg-gray-400' : 'bg-primary'}`}>
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (
@@ -297,7 +300,8 @@ const EditRunScreen = () => {
               </Pressable>
               <Pressable
                 onPress={handleDelete}
-                className="mb-4 mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-red-500">
+                disabled={loading}
+                className={`mb-4 mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading ? 'bg-gray-400' : 'bg-red-500'}`}>
                 <Text className="font-bold text-white">Delete Item</Text>
               </Pressable>
             </View>
