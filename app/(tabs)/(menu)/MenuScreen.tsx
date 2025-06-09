@@ -7,9 +7,11 @@ import { getUser } from 'backend/user';
 import { FIREBASE_AUTH } from 'firebaseConfig';
 import { getMenu } from 'backend/menu';
 import { MenuItem } from 'components/types';
+import CardLoader from 'components/loaders/CardLoader';
 
 function MenuScreen() {
   const [menu, setMenu] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchMenu = async () => {
     const menuData = await getMenu();
@@ -17,7 +19,9 @@ function MenuScreen() {
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchMenu();
+    setLoading(false);
   }, []);
 
   useFocusEffect(
@@ -37,27 +41,40 @@ function MenuScreen() {
         <ScrollView className="flex-1 px-4">
           <View className="mt-2">
             <View className="mt-2 flex-row flex-wrap justify-start justify-between">
-              {menu.map((menuItem) => (
-                <MenuCard
-                  key={menuItem.id}
-                  menuItem={menuItem}
-                  onPress={() =>
-                    router.push({
-                      pathname: '/(tabs)/(menu)/ViewMenuItem',
-                      params: {
-                        id: menuItem.id,
-                        name: menuItem.name,
-                        description: menuItem.description,
-                        price: menuItem.price,
-                        imageUrl: menuItem.imageUrl,
-                        available: menuItem.available?.toString(),
-                        category: menuItem.category,
-                        index: menuItem.index,
-                      },
-                    })
-                  }
-                />
-              ))}
+              {!loading && menu.length > 0 ? (
+                menu.map((menuItem) => (
+                  <MenuCard
+                    key={menuItem.id}
+                    menuItem={menuItem}
+                    onPress={() =>
+                      router.push({
+                        pathname: '/(tabs)/(menu)/ViewMenuItem',
+                        params: {
+                          id: menuItem.id,
+                          name: menuItem.name,
+                          description: menuItem.description,
+                          price: menuItem.price,
+                          imageUrl: menuItem.imageUrl,
+                          available: menuItem.available?.toString(),
+                          category: menuItem.category,
+                          index: menuItem.index,
+                        },
+                      })
+                    }
+                  />
+                ))
+              ) : (
+                <View className="mx-2 flex-row flex-wrap justify-between gap-6">
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                </View>
+              )}
             </View>
           </View>
         </ScrollView>

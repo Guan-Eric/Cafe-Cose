@@ -11,10 +11,10 @@ interface MenuCardProps {
 const MenuCard: React.FC<MenuCardProps> = ({ menuItem, onPress }) => {
   return (
     <Pressable onPress={onPress}>
-      <View className="m-4 rounded-2xl bg-white p-4 shadow-sm">
+      <View className="m-2 rounded-2xl bg-white p-4 shadow-sm">
         <Image
           source={{ uri: menuItem.imageUrl }}
-          className={`h-[120px] w-[120px] rounded-lg`}
+          className={`h-[130px] w-[130px] rounded-lg`}
           resizeMode="cover"
         />
         <View className="justify-between">

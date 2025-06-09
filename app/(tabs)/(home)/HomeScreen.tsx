@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Pressable, Dimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
 import { logOut } from '../../../backend/auth';
@@ -11,11 +11,13 @@ import AnnouncementCard from 'components/cards/AnnouncementCard';
 import { getAnnouncements } from 'backend/announcement';
 import useNotifications from 'backend/notification';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import CardLoader from 'components/loaders/CardLoader';
 
 function HomeScreen() {
   const [user, setUser] = useState<User>();
   const [stamps, setStamps] = useState(0);
   const [announcement, setAnnouncement] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const { expoPushToken } = useNotifications();
 
   const fetchStamps = async () => {
@@ -42,8 +44,10 @@ function HomeScreen() {
   }, [expoPushToken]);
 
   useEffect(() => {
+    setLoading(true);
     fetchAnnouncements();
     fetchStamps();
+    setLoading(false);
   }, []);
 
   useFocusEffect(
@@ -105,25 +109,32 @@ function HomeScreen() {
           <View className="mt-2">
             <Text className="text-lg font-semibold text-text">Announcements</Text>
             <View className="mt-2 items-center">
-              {announcement.map((announcementItem) => (
-                <AnnouncementCard
-                  key={announcementItem.id}
-                  announcement={announcementItem}
-                  onPress={() =>
-                    router.push({
-                      pathname: '/(tabs)/(home)/ViewAnnouncementScreen',
-                      params: {
-                        id: announcementItem.id,
-                        message: announcementItem.message,
-                        title: announcementItem.title,
-                        createdAt: announcementItem.createdAt?.toISOString(),
-                        imageUrl: announcementItem.imageUrl,
-                        notificationMessage: announcementItem.notificationMessage,
-                      },
-                    })
-                  }
-                />
-              ))}
+              {loading ? (
+                <View className="gap-4">
+                  <CardLoader width={Dimensions.get('window').width * 0.9} height={200} />
+                  <CardLoader width={Dimensions.get('window').width * 0.9} height={200} />
+                </View>
+              ) : (
+                announcement.map((announcementItem) => (
+                  <AnnouncementCard
+                    key={announcementItem.id}
+                    announcement={announcementItem}
+                    onPress={() =>
+                      router.push({
+                        pathname: '/(tabs)/(home)/ViewAnnouncementScreen',
+                        params: {
+                          id: announcementItem.id,
+                          message: announcementItem.message,
+                          title: announcementItem.title,
+                          createdAt: announcementItem.createdAt?.toISOString(),
+                          imageUrl: announcementItem.imageUrl,
+                          notificationMessage: announcementItem.notificationMessage,
+                        },
+                      })
+                    }
+                  />
+                ))
+              )}
             </View>
           </View>
         </ScrollView>

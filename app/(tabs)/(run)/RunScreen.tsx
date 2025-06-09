@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Pressable, Dimensions } from 'react-native';
 import { getRuns } from 'backend/run'; // Assuming you have a similar function to fetch runs
 import { router, useFocusEffect } from 'expo-router';
 import { Run } from 'components/types';
 import RunCard from 'components/cards/RunCard';
+import CardLoader from 'components/loaders/CardLoader';
 
 function RunScreen() {
   const [runs, setRuns] = useState<Run[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchRuns = async () => {
     const data = await getRuns();
@@ -14,7 +16,9 @@ function RunScreen() {
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchRuns();
+    setLoading(false);
   }, []);
 
   useFocusEffect(
@@ -35,7 +39,13 @@ function RunScreen() {
         </View>
         <ScrollView className="flex-1 px-4">
           <View className="mt-2 items-center">
-            {runs.length > 0 ? (
+            {loading ? (
+              <View className="gap-4">
+                <CardLoader width={Dimensions.get('window').width * 0.9} height={200} />
+                <CardLoader width={Dimensions.get('window').width * 0.9} height={200} />
+                <CardLoader width={Dimensions.get('window').width * 0.9} height={200} />
+              </View>
+            ) : (
               runs.map((run) => (
                 <RunCard
                   key={run.id}
@@ -57,8 +67,6 @@ function RunScreen() {
                   }
                 />
               ))
-            ) : (
-              <Text className="text-text">No runs available.</Text>
             )}
           </View>
         </ScrollView>
