@@ -48,19 +48,24 @@ function SignUpScreen() {
   };
 
   const signUp = async () => {
-    setLoading(true);
-    setEmailError('');
-    if (!validateEmail(email)) {
-      setEmailError('Please enter a valid email.');
-      setLoading(false);
-      return;
-    }
-    if (!validatePassword(password, confirmPassword)) {
-      setPasswordErrorModalVisible(true);
-      setLoading(false);
-      return;
-    }
-    if (await register(email, password, name)) {
+    try {
+      setLoading(true);
+      setEmailError('');
+      if (!validateEmail(email)) {
+        setEmailError('Please enter a valid email.');
+        setLoading(false);
+        return;
+      }
+      if (!validatePassword(password, confirmPassword)) {
+        setPasswordErrorModalVisible(true);
+        setLoading(false);
+        return;
+      }
+      if (await register(email, password, name)) {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
       setLoading(false);
     }
   };

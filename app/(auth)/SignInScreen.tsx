@@ -27,14 +27,19 @@ function SignInScreen() {
   };
 
   const signIn = async () => {
-    setLoading(true);
-    setEmailError('');
-    if (!validateEmail(email)) {
-      setEmailError('Please enter a valid email.');
+    try {
+      setLoading(true);
+      setEmailError('');
+      if (!validateEmail(email)) {
+        setEmailError('Please enter a valid email.');
+        setLoading(false);
+        return;
+      }
+      if (await logIn(email, password)) setLoading(false);
+    } catch (error) {
+      console.error(error);
       setLoading(false);
-      return;
     }
-    if (await logIn(email, password)) setLoading(false);
   };
 
   return (

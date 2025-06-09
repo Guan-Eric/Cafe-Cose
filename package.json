@@ -21,10 +21,10 @@
     "@react-native-picker/picker": "2.11.0",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
-    "expo": "53.0.10",
-    "expo-barcode-scanner": "^13.0.1",
+    "expo": "53.0.11",
     "expo-camera": "~16.1.7",
     "expo-constants": "~17.1.5",
+    "expo-dev-client": "~5.2.0",
     "expo-device": "~7.1.4",
     "expo-image-picker": "~16.1.4",
     "expo-linking": "~7.1.5",
@@ -32,6 +32,7 @@
     "expo-router": "~5.0.7",
     "expo-splash-screen": "~0.30.9",
     "expo-status-bar": "~2.2.3",
+    "expo-updates": "~0.28.14",
     "firebase": "^11.6.0",
     "fix": "^0.0.6",
     "nativewind": "latest",
@@ -42,9 +43,7 @@
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
-    "react-native-svg": "15.11.2",
-    "expo-dev-client": "~5.2.0",
-    "expo-updates": "~0.28.14"
+    "react-native-svg": "15.11.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
