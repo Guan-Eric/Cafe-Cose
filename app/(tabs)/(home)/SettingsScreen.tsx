@@ -8,6 +8,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { updateUser } from 'backend/user';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_APP, FIREBASE_AUTH, FIREBASE_STR } from 'firebaseConfig';
+import { requestPermissionsAsync } from 'expo-notifications';
 
 function SettingsScreen() {
   const { username, userUrl, userAnnouncement, userRun } = useLocalSearchParams();
@@ -19,6 +20,28 @@ function SettingsScreen() {
   const [imageUrl, setImageUrl] = useState<string>(
     (userUrl as string)?.replace('/o/profile/', '/o/profile%2F')
   );
+
+  const toggleAnnouncementNotifications = async (value: boolean) => {
+    setAnnouncementNotifications(value);
+    if (value) {
+      const { status } = await requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission not granted', 'You will not receive notifications.');
+        setAnnouncementNotifications(false);
+      }
+    }
+  };
+
+  const toggleRunNotifications = async (value: boolean) => {
+    setRunNotifications(value);
+    if (value) {
+      const { status } = await requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission not granted', 'You will not receive notifications.');
+        setRunNotifications(false);
+      }
+    }
+  };
 
   const handleImageUpload = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -106,7 +129,7 @@ function SettingsScreen() {
               <Text>Announcement Notifications</Text>
               <Switch
                 value={announcementNotifications}
-                onValueChange={setAnnouncementNotifications}
+                onValueChange={toggleAnnouncementNotifications}
                 trackColor={{ false: '#767577', true: '#4CAF50' }}
               />
             </View>
@@ -115,7 +138,7 @@ function SettingsScreen() {
               <Text>Run Notifications</Text>
               <Switch
                 value={runNotifications}
-                onValueChange={setRunNotifications}
+                onValueChange={toggleRunNotifications}
                 trackColor={{ false: '#767577', true: '#4CAF50' }}
               />
             </View>
