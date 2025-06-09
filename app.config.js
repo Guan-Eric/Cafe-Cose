@@ -10,7 +10,13 @@ export default {
     userInterfaceStyle: 'light',
     newArchEnabled: true,
     ios: {
+      bundleIdentifier: 'com.cafe.cose',
       supportsTablet: true,
+      infoPlist: {
+        ITSAppUsesNonExemptEncryption: false,
+        NSPhotoLibraryUsageDescription:
+          'We need access to your photos to allow you to upload your profile picture.',
+      },
     },
     android: {
       adaptiveIcon: {
@@ -55,6 +61,12 @@ export default {
       measurementId: process.env.MEASUREMENT_ID,
     },
     owner: 'guan-eric',
+    updates: {
+      url: 'https://u.expo.dev/8d4e2b65-724d-47bf-9119-393c41cc2524',
+    },
+    runtimeVersion: {
+      policy: 'appVersion',
+    },
     experiments: {
       typedRoutes: true,
     },

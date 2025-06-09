@@ -1,0 +1,56 @@
+{
+  "cli": {
+    "version": ">= 16.3.3",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "environment": "development",
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "FIREBASE_API_KEY": "@FIREBASE_API_KEY",
+        "AUTH_DOMAIN": "@AUTH_DOMAIN",
+        "PROJECT_ID": "@PROJECT_ID",
+        "STORAGE_BUCKET": "@STORAGE_BUCKET",
+        "MESSAGING_SENDER_ID": "@MESSAGING_SENDER_ID",
+        "APP_ID": "@APP_ID",
+        "MEASUREMENT_ID": "@MEASUREMENT_ID"
+      },
+      "channel": "development"
+    },
+    "preview": {
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "FIREBASE_API_KEY": "@FIREBASE_API_KEY",
+        "AUTH_DOMAIN": "@AUTH_DOMAIN",
+        "PROJECT_ID": "@PROJECT_ID",
+        "STORAGE_BUCKET": "@STORAGE_BUCKET",
+        "MESSAGING_SENDER_ID": "@MESSAGING_SENDER_ID",
+        "APP_ID": "@APP_ID",
+        "MEASUREMENT_ID": "@MEASUREMENT_ID"
+      },
+      "channel": "preview"
+    },
+    "production": {
+      "environment": "production",
+      "env": {
+        "FIREBASE_API_KEY": "@FIREBASE_API_KEY",
+        "AUTH_DOMAIN": "@AUTH_DOMAIN",
+        "PROJECT_ID": "@PROJECT_ID",
+        "STORAGE_BUCKET": "@STORAGE_BUCKET",
+        "MESSAGING_SENDER_ID": "@MESSAGING_SENDER_ID",
+        "APP_ID": "@APP_ID",
+        "MEASUREMENT_ID": "@MEASUREMENT_ID"
+      },
+      "channel": "production",
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
