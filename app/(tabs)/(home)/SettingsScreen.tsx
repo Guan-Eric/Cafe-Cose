@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, Switch, TextInput, Image, Pressable, Alert } from 'react-native';
+import { useState } from 'react';
+import { Text, View, Switch, TextInput, Image, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BackButton from '../../../components/BackButton';
 import * as ImagePicker from 'expo-image-picker';
@@ -7,7 +7,7 @@ import { logOut } from 'backend/auth';
 import { router, useLocalSearchParams } from 'expo-router';
 import { updateUser } from 'backend/user';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { FIREBASE_APP, FIREBASE_AUTH, FIREBASE_STR } from 'firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_STR } from 'firebaseConfig';
 import { requestPermissionsAsync } from 'expo-notifications';
 
 function SettingsScreen() {
@@ -120,8 +120,6 @@ function SettingsScreen() {
               />
             </View>
           </View>
-
-          {/* Notification Settings Section */}
           <View className="m-2 w-[90%] rounded-2xl bg-white p-5 shadow-sm">
             <Text className="mb-4 text-lg font-bold">Notifications</Text>
 
@@ -144,7 +142,6 @@ function SettingsScreen() {
             </View>
           </View>
         </View>
-        {/* Save Button */}
         <Pressable
           className="m-2 items-center rounded-lg bg-blue-500 p-4"
           onPress={() => {

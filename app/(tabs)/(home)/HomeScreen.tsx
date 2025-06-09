@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, ScrollView, Pressable, Dimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
-import { logOut } from '../../../backend/auth';
 import LoyaltyCard from '../../../components/cards/LoyaltyCard';
 import { getUser, savePushToken } from 'backend/user';
 import { FIREBASE_AUTH } from 'firebaseConfig';
