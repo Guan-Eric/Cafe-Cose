@@ -5,10 +5,11 @@ import BackButton from '../../../components/BackButton';
 import * as ImagePicker from 'expo-image-picker';
 import { logOut } from 'backend/auth';
 import { router, useLocalSearchParams } from 'expo-router';
-import { updateUser } from 'backend/user';
+import { savePushToken, updateUser } from 'backend/user';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_AUTH, FIREBASE_STR } from 'firebaseConfig';
 import { requestPermissionsAsync } from 'expo-notifications';
+import { registerForPushNotificationsAsync } from 'backend/notification';
 
 function SettingsScreen() {
   const { username, userUrl, userAnnouncement, userRun } = useLocalSearchParams();
@@ -24,10 +25,12 @@ function SettingsScreen() {
   const toggleAnnouncementNotifications = async (value: boolean) => {
     setAnnouncementNotifications(value);
     if (value) {
-      const { status } = await requestPermissionsAsync();
-      if (status !== 'granted') {
+      const token = await registerForPushNotificationsAsync();
+      if (!token) {
         Alert.alert('Permission not granted', 'You will not receive notifications.');
         setAnnouncementNotifications(false);
+      } else {
+        savePushToken(token);
       }
     }
   };
@@ -35,10 +38,11 @@ function SettingsScreen() {
   const toggleRunNotifications = async (value: boolean) => {
     setRunNotifications(value);
     if (value) {
-      const { status } = await requestPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Permission not granted', 'You will not receive notifications.');
+      const token = await registerForPushNotificationsAsync();
+      if (!token) {
         setRunNotifications(false);
+      } else {
+        savePushToken(token);
       }
     }
   };

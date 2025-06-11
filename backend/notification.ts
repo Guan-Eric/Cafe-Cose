@@ -1,7 +1,7 @@
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
-import { Platform } from 'react-native';
+import { Alert, Linking, Platform } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { collection, query, where, getDocs, getDoc } from 'firebase/firestore';
 import { FIRESTORE_DB } from 'firebaseConfig';
@@ -39,7 +39,14 @@ export async function registerForPushNotificationsAsync() {
     }
 
     if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!');
+      Alert.alert(
+        'Notifications Disabled',
+        'You’ve turned off notifications. Please enable them in settings to receive updates.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Open Settings', onPress: () => Linking.openSettings() },
+        ]
+      );
       return;
     }
 
