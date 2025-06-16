@@ -1,22 +1,34 @@
 import { useCallback, useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView, Pressable, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  Pressable,
+  Dimensions,
+  FlatList,
+} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
 import LoyaltyCard from '../../../components/cards/LoyaltyCard';
 import { getUser, savePushToken } from 'backend/user';
 import { FIREBASE_AUTH } from 'firebaseConfig';
-import { Announcement, User } from 'components/types';
+import { Announcement, Category, MenuItem, User } from 'components/types';
 import AnnouncementCard from 'components/cards/AnnouncementCard';
 import { getAnnouncements } from 'backend/announcement';
 import useNotifications from 'backend/notification';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CardLoader from 'components/loaders/CardLoader';
+import { getMenu } from 'backend/menu';
+import MenuCard from 'components/cards/MenuCard';
 
 function HomeScreen() {
   const [user, setUser] = useState<User>();
   const [stamps, setStamps] = useState(0);
-  const [announcement, setAnnouncement] = useState<Announcement[]>([]);
+  const [menu, setMenu] = useState<MenuItem[]>([]);
+  const [filteredMenu, setFilteredMenu] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
   const { expoPushToken } = useNotifications();
 
   const fetchStamps = async () => {
@@ -30,10 +42,24 @@ function HomeScreen() {
       console.error('Error fetching stamps:', error);
     }
   };
+  const fetchMenuFiltered = async () => {
+    const menuData = await getMenu();
+    setMenu(menuData);
+    setFilteredMenu(menuData);
+  };
+  const fetchMenu = async () => {
+    const menuData = await getMenu();
+    setMenu(menuData);
+  };
 
-  const fetchAnnouncements = async () => {
-    const announcementData = await getAnnouncements();
-    setAnnouncement(announcementData);
+  const filterMenu = (category: Category | 'All') => {
+    setSelectedCategory(category);
+    if (category === 'All') {
+      setFilteredMenu(menu);
+    } else {
+      const filtered = menu.filter((item) => item.category === category);
+      setFilteredMenu(filtered);
+    }
   };
 
   useEffect(() => {
@@ -43,16 +69,24 @@ function HomeScreen() {
   }, [expoPushToken]);
 
   useEffect(() => {
-    setLoading(true);
-    fetchAnnouncements();
-    fetchStamps();
-    setLoading(false);
+    let showLoading = setTimeout(() => setLoading(true), 200);
+
+    const loadData = async () => {
+      await fetchMenuFiltered();
+      await fetchStamps();
+      clearTimeout(showLoading);
+      setLoading(false);
+    };
+
+    loadData();
+
+    return () => clearTimeout(showLoading);
   }, []);
 
   useFocusEffect(
     useCallback(() => {
       fetchStamps();
-      fetchAnnouncements();
+      fetchMenu();
     }, [])
   );
 
@@ -61,7 +95,7 @@ function HomeScreen() {
       <StatusBar style="light" />
       <View className="flex-1">
         <View className="flex-row items-center justify-between py-2 pl-4 pr-6">
-          <Text className="text-2xl font-bold text-text">Home</Text>
+          <Text className="pl-2 text-2xl font-bold text-text">Home</Text>
           <View className="flex-row items-center">
             {user?.admin && (
               <Pressable
@@ -94,8 +128,8 @@ function HomeScreen() {
 
         <ScrollView className="flex-1 px-4">
           <View className="py-4">
-            <Text className="text-xl font-semibold text-text">Welcome to Café Cosé</Text>
-            <Text className="mt-2 text-gray-400">Pointe-Saint-Charles</Text>
+            <Text className="pl-2 text-xl font-semibold text-text">Welcome to Café Cosé</Text>
+            <Text className="mt-2 pl-2 text-gray-400">Pointe-Saint-Charles</Text>
           </View>
 
           <View className="items-center">
@@ -106,33 +140,53 @@ function HomeScreen() {
           </View>
 
           <View className="mt-2">
-            <Text className="text-lg font-semibold text-text">Announcements</Text>
-            <View className="mt-2 items-center">
-              {loading ? (
-                <View className="gap-4">
-                  <CardLoader width={Dimensions.get('window').width * 0.9} height={200} />
-                  <CardLoader width={Dimensions.get('window').width * 0.9} height={200} />
-                </View>
-              ) : (
-                announcement.map((announcementItem) => (
-                  <AnnouncementCard
-                    key={announcementItem.id}
-                    announcement={announcementItem}
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={['All', ...Object.values(Category)]}
+              renderItem={({ item }) => (
+                <Pressable
+                  className={`ml-2 rounded-lg p-2 ${item === selectedCategory ? 'bg-primary' : 'bg-gray-400'}`}
+                  onPress={() => filterMenu(item as Category)}>
+                  <Text className="text-white">{item}</Text>
+                </Pressable>
+              )}
+              keyExtractor={(item) => item}
+            />
+            <View className="mt-2 flex-row flex-wrap justify-start justify-between">
+              {!loading && filteredMenu.length > 0 ? (
+                filteredMenu.map((menuItem) => (
+                  <MenuCard
+                    key={menuItem.id}
+                    menuItem={menuItem}
                     onPress={() =>
                       router.push({
-                        pathname: '/(tabs)/(home)/ViewAnnouncementScreen',
+                        pathname: '/(tabs)/(home)/ViewMenuItem',
                         params: {
-                          id: announcementItem.id,
-                          message: announcementItem.message,
-                          title: announcementItem.title,
-                          createdAt: announcementItem.createdAt?.toISOString(),
-                          imageUrl: announcementItem.imageUrl,
-                          notificationMessage: announcementItem.notificationMessage,
+                          id: menuItem.id,
+                          name: menuItem.name,
+                          description: menuItem.description,
+                          price: menuItem.price,
+                          imageUrl: menuItem.imageUrl,
+                          available: menuItem.available?.toString(),
+                          category: menuItem.category,
+                          index: menuItem.index,
                         },
                       })
                     }
                   />
                 ))
+              ) : (
+                <View className="m-2 flex-row flex-wrap justify-between gap-6">
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                </View>
               )}
             </View>
           </View>

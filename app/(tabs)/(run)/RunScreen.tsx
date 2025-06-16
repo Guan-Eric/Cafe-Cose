@@ -15,10 +15,23 @@ function RunScreen() {
     setRuns(data);
   };
 
-  useEffect(() => {
-    setLoading(true);
-    fetchRuns();
+  const sleep = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setLoading(false);
+  };
+
+  useEffect(() => {
+    let showLoading = setTimeout(() => setLoading(true), 200);
+
+    const loadData = async () => {
+      await fetchRuns();
+      clearTimeout(showLoading);
+      setLoading(false);
+    };
+
+    loadData();
+
+    return () => clearTimeout(showLoading);
   }, []);
 
   useFocusEffect(
@@ -35,7 +48,7 @@ function RunScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
-          <Text className="text-2xl font-bold text-text">Runs</Text>
+          <Text className="pl-2 text-2xl font-bold text-text">Runs</Text>
         </View>
         <ScrollView className="flex-1 px-4">
           <View className="mt-2 items-center">
