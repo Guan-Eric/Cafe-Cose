@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import CustomNavBar from 'components/CustomeNavBar';
 
 function TabLayout() {
   return (
@@ -12,11 +13,12 @@ function TabLayout() {
         tabBarStyle: {
           backgroundColor: '#ffffff',
         },
-      }}>
+      }}
+      tabBar={(props) => <CustomNavBar {...props} />}>
       <Tabs.Screen
         name="(home)"
         options={{
-          title: '',
+          title: 'Home',
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="home-variant" size={size} color={color} />
           ),
@@ -25,7 +27,7 @@ function TabLayout() {
       <Tabs.Screen
         name="(run)"
         options={{
-          title: '',
+          title: 'Run',
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="run" size={size} color={color} />
           ),
@@ -34,7 +36,7 @@ function TabLayout() {
       <Tabs.Screen
         name="(announcement)"
         options={{
-          title: '',
+          title: 'Announcement',
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="bell" size={size} color={color} />
           ),

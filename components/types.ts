@@ -58,3 +58,11 @@ export enum Category {
   Food = 'Food',
   Pastry = 'Pastry',
 }
+
+export interface Promotion {
+  id: string;
+  title: string;
+  message: string;
+  imageUrl?: string;
+  createdAt: string;
+}

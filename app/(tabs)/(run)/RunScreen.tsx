@@ -40,15 +40,11 @@ function RunScreen() {
     }, [])
   );
 
-  const handleAddRun = () => {
-    router.push('/(admin)/(run)/CreateRunScreen');
-  };
-
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
-          <Text className="pl-2 text-2xl font-bold text-text">Runs</Text>
+          <Text className="pl-2 text-2xl font-bold text-text">Café Cosé Run Club</Text>
         </View>
         <ScrollView className="flex-1 px-4">
           <View className="mt-2 items-center">
