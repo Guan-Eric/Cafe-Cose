@@ -5,7 +5,7 @@ export default function HomeLayout() {
     <Stack initialRouteName="HomeScreen">
       <Stack.Screen name="HomeScreen" options={{ headerShown: false, gestureEnabled: false }} />
       <Stack.Screen name="ViewMenuItem" options={{ headerShown: false }} />
-      <Stack.Screen name="QRCodeScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="QRCodeScreen" options={{ headerShown: false, presentation: 'modal' }} />
       <Stack.Screen name="SettingsScreen" options={{ headerShown: false }} />
     </Stack>
   );
