@@ -11,17 +11,17 @@ const slides = [
   {
     title: 'Welcome to Café Cosé',
     description: 'Earn stamps with every coffee you buy.',
-    image: require('../../assets/logo.png'),
+    image: require('../assets/logo.png'),
   },
   {
     title: 'Join our Run Club',
     description: 'Stay active and enjoy your runs with us.',
-    image: require('../../assets/logo.png'),
+    image: require('../assets/logo.png'),
   },
   {
     title: 'Get Exclusive Offers',
     description: 'Be the first to know about new deals or drinks.',
-    image: require('../../assets/logo.png'),
+    image: require('../assets/logo.png'),
   },
 ];
 

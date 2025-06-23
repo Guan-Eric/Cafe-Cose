@@ -16,5 +16,6 @@ export async function getLatestPromotion(): Promise<Promotion | null> {
     }
   } catch (error) {
     console.error(error);
+    return null;
   }
 }

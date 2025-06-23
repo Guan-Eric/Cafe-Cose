@@ -64,5 +64,5 @@ export interface Promotion {
   title: string;
   message: string;
   imageUrl?: string;
-  createdAt: string;
+  createdAt: Date;
 }

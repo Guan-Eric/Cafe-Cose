@@ -1,19 +1,66 @@
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import Animated, { FadeIn, FadeOut, LinearTransition } from 'react-native-reanimated';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  LinearTransition,
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 import MaterialCommunityIcons from '@expo/vector-icons/build/MaterialCommunityIcons';
+import { useEffect, useState } from 'react';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-const PRIMARY_COLOR = '#762e1f';
-const SECONDARY_COLOR = '#f8f9fa';
+const PRIMARY_COLOR = '#f8f9fa';
+const SECONDARY_COLOR = '#762e1f';
+const UNSELECTED_COLOR = '#e5e5e5';
 
 const CustomNavBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
+  const [tabLayouts, setTabLayouts] = useState<{ [key: number]: { x: number; width: number } }>({});
+  const indicatorPosition = useSharedValue(0);
+  const indicatorWidth = useSharedValue(15);
+
+  // Filter out unwanted routes and get visible routes
+  const visibleRoutes = state.routes.filter(
+    (route) => !['_sitemap', '+not-found'].includes(route.name)
+  );
+  const focusedIndex = visibleRoutes.findIndex((_, index) => {
+    const originalIndex = state.routes.findIndex((route) => route.key === visibleRoutes[index].key);
+    return originalIndex === state.index;
+  });
+
+  useEffect(() => {
+    if (tabLayouts[focusedIndex]) {
+      const { x, width } = tabLayouts[focusedIndex];
+      // Center the indicator within the tab
+      const indicatorX = x + width / 2 - 7.5; // 7.5 is half of indicator width (15/2)
+
+      indicatorPosition.value = withSpring(indicatorX, {
+        damping: 20,
+        stiffness: 300,
+      });
+    }
+  }, [focusedIndex, tabLayouts]);
+
+  const handleTabLayout = (index: number, event: any) => {
+    const { x, width } = event.nativeEvent.layout;
+    setTabLayouts((prev) => ({
+      ...prev,
+      [index]: { x, width },
+    }));
+  };
+
+  const animatedIndicatorStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: indicatorPosition.value }],
+    };
+  });
+
   return (
     <View style={styles.container}>
-      {state.routes.map((route, index) => {
-        if (['_sitemap', '+not-found'].includes(route.name)) return null;
-
+      {visibleRoutes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
           options.tabBarLabel !== undefined
@@ -22,7 +69,7 @@ const CustomNavBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
               ? options.title
               : route.name;
 
-        const isFocused = state.index === index;
+        const isFocused = index === focusedIndex;
 
         const onPress = () => {
           const event = navigation.emit({
@@ -41,22 +88,13 @@ const CustomNavBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
             layout={LinearTransition.springify().mass(0.5)}
             key={route.key}
             onPress={onPress}
-            style={[
-              styles.tabItem,
-              { backgroundColor: isFocused ? SECONDARY_COLOR : 'transparent' },
-            ]}>
-            {getIconByRouteName(route.name, isFocused ? PRIMARY_COLOR : SECONDARY_COLOR)}
-            {isFocused && (
-              <Animated.Text
-                entering={FadeIn.duration(200)}
-                exiting={FadeOut.duration(200)}
-                style={styles.text}>
-                {label as string}
-              </Animated.Text>
-            )}
+            onLayout={(event) => handleTabLayout(index, event)}
+            style={[styles.tabItem]}>
+            {getIconByRouteName(route.name, isFocused ? SECONDARY_COLOR : UNSELECTED_COLOR)}
           </AnimatedTouchableOpacity>
         );
       })}
+      <Animated.View style={[styles.indicator, animatedIndicatorStyle]} />
     </View>
   );
 
@@ -77,17 +115,17 @@ const CustomNavBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     backgroundColor: PRIMARY_COLOR,
-    width: '90%',
+    width: '100%',
     alignSelf: 'center',
-    bottom: 40,
-    borderRadius: 30,
+    bottom: 0,
+    borderRadius: 40,
     paddingHorizontal: 12,
     paddingVertical: 15,
+    paddingBottom: 50,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
@@ -100,6 +138,15 @@ const styles = StyleSheet.create({
     height: 36,
     paddingHorizontal: 13,
     borderRadius: 30,
+  },
+  indicator: {
+    position: 'absolute',
+    bottom: 45,
+    left: 2.5,
+    height: 4,
+    width: 10,
+    backgroundColor: SECONDARY_COLOR,
+    borderRadius: 2,
   },
   text: {
     color: PRIMARY_COLOR,

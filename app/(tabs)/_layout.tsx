@@ -22,6 +22,7 @@ function TabLayout() {
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="home-variant" size={size} color={color} />
           ),
+          animation: 'shift',
         }}
       />
       <Tabs.Screen
@@ -31,6 +32,7 @@ function TabLayout() {
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="run" size={size} color={color} />
           ),
+          animation: 'shift',
         }}
       />
       <Tabs.Screen
@@ -40,6 +42,7 @@ function TabLayout() {
           tabBarIcon: ({ size, color }) => (
             <MaterialCommunityIcons name="bell" size={size} color={color} />
           ),
+          animation: 'shift',
         }}
       />
     </Tabs>

@@ -23,8 +23,8 @@ function Index() {
     const hasOnboarded = await AsyncStorage.getItem('hasOnboarded');
 
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      if (true) {
-        router.replace('/(auth)/OnboardingScreen');
+      if (!hasOnboarded) {
+        router.replace('/OnboardingScreen');
       } else if (user) {
         if (promo?.id && promo.id !== lastSeenPromoId) {
           router.push({
