@@ -9,33 +9,18 @@ import { Promotion } from 'components/types';
 
 function Index() {
   const [loading, setLoading] = useState(true);
-  const [promo, setPromo] = useState<Promotion | null>();
-  const [lastSeenPromoId, setLastSeenPromoId] = useState('');
-
-  const checkPromo = async () => {
-    const latestPromo = await getLatestPromotion();
-    setPromo(latestPromo);
-    const storedPromoId = await AsyncStorage.getItem('lastSeenPromoId');
-    setLastSeenPromoId(storedPromoId || '');
-  };
 
   const checkFirstLaunch = async () => {
     const hasOnboarded = await AsyncStorage.getItem('hasOnboarded');
+    const latestPromo = await getLatestPromotion();
+    const storedPromoId = await AsyncStorage.getItem('lastSeenPromoId');
 
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
       if (!hasOnboarded) {
         router.replace('/OnboardingScreen');
       } else if (user) {
-        if (promo?.id && promo.id !== lastSeenPromoId) {
-          router.push({
-            pathname: '/PromotionScreen',
-            params: {
-              id: promo.id,
-              title: promo.title,
-              message: promo.message,
-              imageUrl: promo.imageUrl,
-            },
-          });
+        if (latestPromo?.id !== storedPromoId) {
+          router.push('/PromotionScreen');
         } else {
           router.replace('/(tabs)/(home)/HomeScreen');
         }
@@ -48,7 +33,6 @@ function Index() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await checkPromo();
       await checkFirstLaunch();
     };
     fetchData();

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import { Promotion } from 'components/types';
-import AnnouncementCard from 'components/cards/AnnouncementCard';
 import { getLatestPromotion } from 'backend/promotion';
 import PromotionComponent from 'components/PromotionComponent';
 
@@ -24,20 +23,27 @@ function PromotionScreen() {
     }, [])
   );
 
-  const handleCreatePromotion = async () => {
-    router.push('/(admin)/(promotion)/CreatePromotionScreen');
-  };
-
   const handleEditPromotion = async () => {
-    router.push('/(admin)/(promotion)/EditPromotionScreen');
+    router.push({
+      pathname: '/(admin)/(promotion)/EditPromotionScreen',
+      params: {
+        id: promotion?.id,
+        title: promotion?.title,
+        message: promotion?.message,
+        notificationMessage: promotion?.notificationMessage,
+        createdAt: promotion?.createdAt?.toString(),
+        imageUrl: promotion?.imageUrl,
+      },
+    });
   };
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <PromotionComponent
         id={promotion?.id || ''}
         title={promotion?.title || ''}
         message={promotion?.message || ''}
+        imageUrl={promotion?.imageUrl || ''}
         buttonTitle="Edit"
         handleDismiss={handleEditPromotion}
       />

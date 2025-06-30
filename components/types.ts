@@ -63,6 +63,7 @@ export interface Promotion {
   id: string;
   title: string;
   message: string;
+  notificationMessage: string;
   imageUrl?: string;
   createdAt: Date;
 }

@@ -58,7 +58,7 @@ const EditRunScreen = () => {
 
   const handleImageUpload = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsMultipleSelection: false,
       aspect: [1, 1],
       allowsEditing: true,

@@ -1,6 +1,5 @@
-import { View, Text, Image, Pressable } from 'react-native';
-import { useLocalSearchParams, router } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, Image, Pressable, Dimensions } from 'react-native';
+import { router } from 'expo-router';
 
 interface PromotionComponentProps {
   id: string;
@@ -8,7 +7,7 @@ interface PromotionComponentProps {
   message: string;
   imageUrl?: string;
   buttonTitle: string;
-  handleDismiss: () => {};
+  handleDismiss: () => void;
 }
 
 export default function PromotionComponent({
@@ -19,17 +18,33 @@ export default function PromotionComponent({
   buttonTitle,
   handleDismiss,
 }: PromotionComponentProps) {
-  return (
-    <View className="flex-1 items-center justify-center bg-background p-6">
-      {imageUrl && (
-        <Image source={{ uri: imageUrl as string }} className="mb-4 h-64 w-full rounded-xl" />
-      )}
-      <Text className="text-2xl font-bold text-text">{title}</Text>
-      <Text className="mt-2 text-center text-base text-text">{message}</Text>
+  const handleCreatePromotion = () => {
+    router.push('/(admin)/(promotion)/CreatePromotionScreen');
+  };
 
-      <Pressable onPress={handleDismiss} className="mt-8 rounded-xl bg-primary px-6 py-3">
-        <Text className="text-lg font-semibold text-white">{buttonTitle}</Text>
-      </Pressable>
+  const { width, height } = Dimensions.get('window');
+
+  return (
+    <View className="relative flex-1 justify-around bg-background">
+      {imageUrl && (
+        <Image source={{ uri: imageUrl }} resizeMode="cover" style={{ width, height: width }} />
+      )}
+      <View className="absolute bottom-0 w-full px-6 pb-12">
+        <Text className="mb-1 text-3xl font-bold text-primary">{title}</Text>
+        <Text className="text-bold mt-2 text-text">{message}</Text>
+        <View className="mt-6 flex-row gap-4">
+          <Pressable onPress={handleDismiss} className="rounded-full bg-primary px-6 py-3 shadow">
+            <Text className="text-lg font-semibold text-white">{buttonTitle}</Text>
+          </Pressable>
+          {buttonTitle === 'Edit' && (
+            <Pressable
+              onPress={handleCreatePromotion}
+              className="bg-muted rounded-full border border-primary px-6 py-3">
+              <Text className="text-lg font-semibold text-primary">Create Promotion</Text>
+            </Pressable>
+          )}
+        </View>
+      </View>
     </View>
   );
 }

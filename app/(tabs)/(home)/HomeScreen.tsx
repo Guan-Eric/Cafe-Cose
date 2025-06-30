@@ -21,6 +21,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CardLoader from 'components/loaders/CardLoader';
 import { getMenu } from 'backend/menu';
 import MenuCard from 'components/cards/MenuCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function HomeScreen() {
   const [user, setUser] = useState<User>();
@@ -92,41 +93,39 @@ function HomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <StatusBar style="light" />
       <View className="flex-1">
-        <View className="flex-row items-center justify-between py-2 pl-4 pr-6">
-          <Text className="pl-2 text-2xl font-bold text-text">Home</Text>
-          <View className="flex-row items-center">
-            {user?.admin && (
+        <ScrollView className="flex-1 px-4">
+          <View className="flex-row items-center justify-between pr-2">
+            <Text className="pl-2 text-2xl font-bold text-text">Home</Text>
+            <View className="flex-row items-center">
+              {user?.admin && (
+                <Pressable
+                  className="mr-2 rounded-lg bg-blue-500 px-4 py-2"
+                  onPress={() =>
+                    router.replace({
+                      pathname: `/(admin)/(home)/HomeScreen`,
+                    })
+                  }>
+                  <Text className="text-lg font-semibold text-text">Admin</Text>
+                </Pressable>
+              )}
+
               <Pressable
-                className="mr-2 rounded-lg bg-blue-500 px-4 py-2"
                 onPress={() =>
-                  router.replace({
-                    pathname: `/(admin)/(home)/HomeScreen`,
+                  router.push({
+                    pathname: `/(tabs)/(home)/SettingsScreen`,
+                    params: {
+                      username: user?.name,
+                      userUrl: user?.url,
+                      userAnnouncement: user?.announcements?.toString(),
+                      userRun: user?.runs?.toString(),
+                    },
                   })
                 }>
-                <Text className="text-lg font-semibold text-text">Admin</Text>
+                <MaterialCommunityIcons name="cog" size={24} color="#1a1a1a" />
               </Pressable>
-            )}
-
-            <Pressable
-              onPress={() =>
-                router.push({
-                  pathname: `/(tabs)/(home)/SettingsScreen`,
-                  params: {
-                    username: user?.name,
-                    userUrl: user?.url,
-                    userAnnouncement: user?.announcements?.toString(),
-                    userRun: user?.runs?.toString(),
-                  },
-                })
-              }>
-              <MaterialCommunityIcons name="cog" size={24} color="#1a1a1a" />
-            </Pressable>
+            </View>
           </View>
-        </View>
-
-        <ScrollView className="flex-1 px-4">
           <View className="py-4">
             <Text className="pl-2 text-xl font-semibold text-text">Welcome to Café Cosé</Text>
             <Text className="mt-2 pl-2 text-gray-400">Pointe-Saint-Charles</Text>

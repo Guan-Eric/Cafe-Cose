@@ -136,7 +136,30 @@ export async function notifyAnnouncement(title: string, body: string) {
 
     return tokens.length;
   } catch (error) {
-    console.error('Error notifying participants:', error);
+    console.error('Error notifying users:', error);
+    throw error;
+  }
+}
+
+export async function notifyPromotion(title: string, body: string) {
+  try {
+    const usersRef = collection(FIRESTORE_DB, `Users`);
+    const q = query(usersRef, where('announcements', '==', true));
+    const usersSnapshot = await getDocs(q);
+
+    const tokenPromises = usersSnapshot.docs.map(async (doc) => {
+      return doc.data().tokens;
+    });
+
+    const tokens = (await Promise.all(tokenPromises)).filter((token) => !!token);
+    if (tokens.length > 0) {
+      const flatTokens = tokens.flat();
+      await sendPushNotifications(flatTokens, title, body);
+    }
+
+    return tokens.length;
+  } catch (error) {
+    console.error('Error notifying users:', error);
     throw error;
   }
 }

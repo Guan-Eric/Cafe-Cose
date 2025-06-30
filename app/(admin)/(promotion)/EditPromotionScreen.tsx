@@ -18,27 +18,27 @@ import { router, useLocalSearchParams } from 'expo-router';
 import BackButton from 'components/BackButton';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
-import { editAnnouncement, deleteAnnouncement } from 'backend/announcement';
 import { notifyAnnouncement } from 'backend/notification';
+import { deletePromotion, editPromotion } from 'backend/promotion';
 
 const EditAnnouncementScreen = () => {
   const { id, title, message, notificationMessage, imageUrl, createdAt } = useLocalSearchParams();
 
-  const [announcementTitle, setTitle] = useState<string>(title as string);
-  const [announcementMessage, setMessage] = useState<string>(message as string);
+  const [promotionTitle, setTitle] = useState<string>(title as string);
+  const [promotionMessage, setMessage] = useState<string>(message as string);
   const [notification, setNotification] = useState<string>(notificationMessage as string);
   const [image, setImage] = useState<string>(
-    (imageUrl as string)?.replace('/o/announcements/', '/o/announcements%2F')
+    (imageUrl as string)?.replace('/o/promotions/', '/o/promotions%2F')
   );
-  const [announcementDate, setAnnouncementDate] = useState<Date>(new Date(createdAt as string));
+  const [promotionDate, setPromotionDate] = useState<Date>(new Date(createdAt as string));
   const [blob, setBlob] = useState<Blob>();
   const [loading, setLoading] = useState(false);
 
   const handleImageUpload = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsMultipleSelection: false,
-      aspect: [1, 1],
+      aspect: [16, 9],
       allowsEditing: true,
       quality: 0.5,
     });
@@ -60,14 +60,14 @@ const EditAnnouncementScreen = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    if (!announcementTitle) {
+    if (!promotionTitle) {
       Alert.alert('Error', 'Please fill in the title field.');
       return;
     }
 
     try {
       if (blob) {
-        const imageRef = ref(FIREBASE_STR, `announcements/${id}`);
+        const imageRef = ref(FIREBASE_STR, `promotions/${id}`);
         const uploadTask = uploadBytesResumable(imageRef, blob as Blob);
 
         const downloadUrl = await new Promise((resolve, reject) => {
@@ -87,25 +87,25 @@ const EditAnnouncementScreen = () => {
           );
         });
 
-        const updatedAnnouncement = {
+        const updatedPromotion = {
           id: id as string,
-          title: announcementTitle,
-          message: announcementMessage,
+          title: promotionTitle,
+          message: promotionMessage,
           notificationMessage: notification,
           imageUrl: downloadUrl as string,
-          createdAt: announcementDate,
+          createdAt: promotionDate,
         };
-        await editAnnouncement(updatedAnnouncement);
+        await editPromotion(updatedPromotion);
       } else {
         const updatedAnnouncement = {
           id: id as string,
-          title: announcementTitle,
-          message: announcementMessage,
+          title: promotionTitle,
+          message: promotionMessage,
           notificationMessage: notification,
           imageUrl: image,
-          createdAt: announcementDate,
+          createdAt: promotionDate,
         };
-        await editAnnouncement(updatedAnnouncement);
+        await editPromotion(updatedAnnouncement);
       }
       setLoading(false);
       await sendNotificationAlert();
@@ -139,7 +139,7 @@ const EditAnnouncementScreen = () => {
 
     if (confirmSend) {
       try {
-        await notifyAnnouncement(announcementTitle, notification);
+        await notifyAnnouncement(promotionTitle, notification);
         Alert.alert('Success', 'Notification sent successfully!');
       } catch (error) {
         console.error('Error sending notification:', error);
@@ -171,7 +171,7 @@ const EditAnnouncementScreen = () => {
 
     if (confirmDelete) {
       try {
-        await deleteAnnouncement(id as string);
+        await deletePromotion(id as string);
         Alert.alert('Success', 'Announcement deleted successfully!');
       } catch (error) {
         console.error('Error deleting announcement:', error);
@@ -199,7 +199,7 @@ const EditAnnouncementScreen = () => {
                   <Text className="font-[Lato_400Regular] text-text">Title</Text>
                   <TextInput
                     className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
-                    value={announcementTitle}
+                    value={promotionTitle}
                     onChangeText={setTitle}
                     maxLength={40}
                   />
@@ -217,7 +217,7 @@ const EditAnnouncementScreen = () => {
                   <Text className="font-[Lato_400Regular] text-text">Message</Text>
                   <TextInput
                     className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
-                    value={announcementMessage}
+                    value={promotionMessage}
                     onChangeText={setMessage}
                     multiline
                     numberOfLines={4}

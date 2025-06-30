@@ -14,15 +14,15 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
-import { Announcement, Promotion } from 'components/types';
+import { Promotion } from 'components/types';
 import * as ImagePicker from 'expo-image-picker';
 import BackButton from 'components/BackButton';
-import { createAnnouncement, editAnnouncement } from 'backend/announcement';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
-import { notifyAnnouncement } from 'backend/notification';
+import { notifyPromotion } from 'backend/notification';
+import { createPromotion, editPromotion } from 'backend/promotion';
 
-const CreateAnnouncementScreen = () => {
+const CreatePromotionScreen = () => {
   const [title, setTitle] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [notificationMessage, setNotificationMessage] = useState<string>('');
@@ -32,11 +32,11 @@ const CreateAnnouncementScreen = () => {
 
   const handleImageUpload = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       allowsMultipleSelection: false,
       aspect: [1, 1],
       allowsEditing: true,
-      quality: 0.5,
+      quality: 1,
     });
 
     if (!result.canceled) {
@@ -54,22 +54,23 @@ const CreateAnnouncementScreen = () => {
     }
   };
 
-  const handleCreateAnnouncement = async () => {
+  const handleCreatePromotion = async () => {
     setLoading(true);
     if (!title) {
       Alert.alert('Error', 'Please fill in the title field.');
       return;
     }
 
-    const newAnnouncementData: Partial<Promotion> = {
+    const newPromotionData: Partial<Promotion> = {
       title,
       message,
+      notificationMessage,
       createdAt: new Date(),
       imageUrl,
     };
     try {
-      const newAnnouncement = await createAnnouncement(newAnnouncementData);
-      const imageRef = ref(FIREBASE_STR, `promotions/${newAnnouncement.id}`);
+      const newPromotion = await createPromotion(newPromotionData);
+      const imageRef = ref(FIREBASE_STR, `promotions/${newPromotion.id}`);
       const uploadTask = uploadBytesResumable(imageRef, blob as Blob);
 
       const downloadUrl = await new Promise((resolve, reject) => {
@@ -89,14 +90,14 @@ const CreateAnnouncementScreen = () => {
         );
       });
 
-      const updatedAnnouncement = { ...newAnnouncement, imageUrl: downloadUrl as string };
-      editAnnouncement(updatedAnnouncement);
+      const updatedPromotion = { ...newPromotion, imageUrl: downloadUrl as string };
+      editPromotion(updatedPromotion);
       setLoading(false);
       await sendNotificationAlert();
       router.back();
     } catch (error) {
-      console.error('Error creating announcement:', error);
-      Alert.alert('Error', 'Cannot create announcement');
+      console.error('Error creating Promotion:', error);
+      Alert.alert('Error', 'Cannot create Promotion');
     }
   };
 
@@ -104,7 +105,7 @@ const CreateAnnouncementScreen = () => {
     const confirmSend = await new Promise<boolean>((resolve) => {
       Alert.alert(
         'Send Notification',
-        'Do you want to send a notification for this announcement?',
+        'Do you want to send a notification for this Promotion?',
         [
           {
             text: 'Cancel',
@@ -123,7 +124,7 @@ const CreateAnnouncementScreen = () => {
 
     if (confirmSend) {
       try {
-        await notifyAnnouncement(title, notificationMessage);
+        await notifyPromotion(title, notificationMessage);
         Alert.alert('Success', 'Notification sent successfully!');
       } catch (error) {
         console.error('Error sending notification:', error);
@@ -139,7 +140,7 @@ const CreateAnnouncementScreen = () => {
           <ScrollView>
             <View className="flex-row items-center">
               <BackButton />
-              <Text className="text-2xl font-bold text-text">Create Announcement</Text>
+              <Text className="text-2xl font-bold text-text">Create Promotion</Text>
             </View>
             <View className="flex-1 items-center justify-center">
               <View className="h-[60px] w-[254px]">
@@ -188,12 +189,12 @@ const CreateAnnouncementScreen = () => {
                 </Pressable>
               )}
               <Pressable
-                onPress={handleCreateAnnouncement}
+                onPress={handleCreatePromotion}
                 className="mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (
-                  <Text className="font-[Lato_400Regular] text-white">Create Announcement</Text>
+                  <Text className="font-[Lato_400Regular] text-white">Create Promotion</Text>
                 )}
               </Pressable>
             </View>
@@ -204,4 +205,4 @@ const CreateAnnouncementScreen = () => {
   );
 };
 
-export default CreateAnnouncementScreen;
+export default CreatePromotionScreen;
