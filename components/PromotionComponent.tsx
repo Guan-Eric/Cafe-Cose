@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, Dimensions } from 'react-native';
+import { View, Text, Image, Pressable, Dimensions, ImageBackground } from 'react-native';
 import { router } from 'expo-router';
 
 interface PromotionComponentProps {
@@ -25,17 +25,18 @@ export default function PromotionComponent({
   const { width, height } = Dimensions.get('window');
 
   return (
-    <View className="relative flex-1 justify-around bg-background">
+    <View className="flex-1 justify-between bg-background">
       {imageUrl && (
-        <Image source={{ uri: imageUrl }} resizeMode="cover" style={{ width, height: width }} />
+        <ImageBackground
+          source={{ uri: imageUrl }}
+          resizeMode="cover"
+          className="h-[85%] w-full "
+        />
       )}
-      <View className="absolute bottom-0 w-full px-6 pb-12">
-        <Text className="mb-1 text-3xl font-bold text-primary">{title}</Text>
-        <Text className="text-bold mt-2 text-text">{message}</Text>
-        <View className="mt-6 flex-row gap-4">
-          <Pressable onPress={handleDismiss} className="rounded-full bg-primary px-6 py-3 shadow">
-            <Text className="text-lg font-semibold text-white">{buttonTitle}</Text>
-          </Pressable>
+      <View className="w-full px-6 pb-12">
+        <Text className="text-bold mb-1 mt-2 text-text">{title}</Text>
+        <Text className="text-3xl font-bold text-primary">{message}</Text>
+        <View className="mt-6 flex-row gap-4 self-end">
           {buttonTitle === 'Edit' && (
             <Pressable
               onPress={handleCreatePromotion}
@@ -43,6 +44,9 @@ export default function PromotionComponent({
               <Text className="text-lg font-semibold text-primary">Create Promotion</Text>
             </Pressable>
           )}
+          <Pressable onPress={handleDismiss} className="rounded-full bg-primary px-6 py-3 shadow">
+            <Text className="text-lg font-semibold text-white">{buttonTitle}</Text>
+          </Pressable>
         </View>
       </View>
     </View>

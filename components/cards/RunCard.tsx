@@ -9,25 +9,28 @@ interface RunCardProps {
 }
 
 const RunCard: React.FC<RunCardProps> = ({ run, onPress }) => {
+  const date = new Date(run.date);
+  const formattedDate = date.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  });
+
   return (
-    <Pressable onPress={onPress}>
-      <View className="m-2 w-[95%] flex-row rounded-2xl bg-white p-4 shadow-sm">
-        <View className="flex-1">
-          {run.imageUrl ? (
-            <Image
-              source={{ uri: run.imageUrl }}
-              className="h-[200px] w-[100%] rounded-lg"
-              resizeMode="cover"
-            />
-          ) : null}
-          <Text className="text-lg font-[Lato_400Regular] text-text">{run.title}</Text>
-          <Text
-            className="text-sm font-[Lato_400Regular] text-text/60"
-            numberOfLines={1}
-            ellipsizeMode="tail">
-            {run.message}
-          </Text>
+    <Pressable onPress={onPress} className="w-[95%] self-center rounded-2xl bg-white p-4 shadow-sm">
+      <View className="flex-row items-center justify-between">
+        <View className="justify-between">
+          <Text className="mb-1 text-lg font-bold text-text">{formattedDate}</Text>
+          <Text className="text-base text-text">{run.message}</Text>
         </View>
+        <Pressable onPress={onPress} className="rounded-full px-4 py-2">
+          <Text className="font-semibold text-primary underline">
+            {run.date > new Date() ? 'Join Run' : 'View Run'}
+          </Text>
+        </Pressable>
       </View>
     </Pressable>
   );
