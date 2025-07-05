@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, Image, Animated } from 'react-native';
 import { MenuItem } from 'components/types';
 import useButtonAnimation from 'components/useButtonAnimation';
+import MenuCardImage from 'components/MenuCardImage';
 
 interface MenuCardProps {
   menuItem: MenuItem;
@@ -15,11 +16,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ menuItem, onPress }) => {
       <Animated.View
         className="m-2 rounded-2xl bg-white p-4 shadow-sm"
         style={{ transform: [{ scale: scaleValue }] }}>
-        <Image
-          source={{ uri: menuItem.imageUrl }}
-          className={`h-[130px] w-[130px] rounded-lg`}
-          resizeMode="cover"
-        />
+        <MenuCardImage url={menuItem.imageUrl} />
         <View className="justify-between">
           <View>
             <Text className="text-lg font-[Lato_400Regular] text-text">{menuItem.name}</Text>

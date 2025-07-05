@@ -1,5 +1,16 @@
 import { useState } from 'react';
-import { Text, View, Switch, TextInput, Image, Pressable, Alert } from 'react-native';
+import {
+  Text,
+  View,
+  Switch,
+  TextInput,
+  Image,
+  Pressable,
+  Alert,
+  TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BackButton from '../../../components/BackButton';
 import * as ImagePicker from 'expo-image-picker';
@@ -98,70 +109,70 @@ function SettingsScreen() {
     }
   };
   return (
-    <View className="flex-1 bg-background">
-      <SafeAreaView>
-        <View className="flex-row items-center ">
-          <BackButton />
-          <Text className="text-2xl font-bold text-text">Settings</Text>
-        </View>
-        <View className="items-center">
-          <View className="m-2 w-[90%] rounded-2xl bg-white p-5 shadow-sm">
-            <Text className="mb-4 text-lg font-bold">Profile</Text>
-
-            <View className="mb-4 items-center">
-              <Pressable onPress={handleImageUpload}>
-                <Image source={{ uri: imageUrl }} className="mb-2 h-24 w-24 rounded-full" />
-                <Text className="text-center text-blue-500">Change Photo</Text>
-              </Pressable>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View className="flex-1 bg-background">
+        <SafeAreaView>
+          <View className="flex-row items-center ">
+            <BackButton />
+            <Text className="text-2xl font-bold text-text">Settings</Text>
+          </View>
+          <View className="items-center">
+            <View className="m-2 w-[90%] rounded-2xl bg-white p-5 shadow-sm">
+              <Text className="mb-4 text-lg font-bold">Profile</Text>
+              <View className="mb-4 items-center">
+                <TouchableOpacity onPress={handleImageUpload}>
+                  <Image source={{ uri: imageUrl }} className="mb-2 h-24 w-24 rounded-full" />
+                  <Text className="text-center text-blue-500">Change Photo</Text>
+                </TouchableOpacity>
+              </View>
+              <View className="mb-2">
+                <Text className="mb-1 text-gray-600">Display Name</Text>
+                <TextInput
+                  value={name}
+                  onChangeText={setName}
+                  className="rounded-lg border border-gray-300 p-2"
+                />
+              </View>
             </View>
+            <View className="m-2 w-[90%] rounded-2xl bg-white p-5 shadow-sm">
+              <Text className="mb-4 text-lg font-bold">Notifications</Text>
 
-            <View className="mb-2">
-              <Text className="mb-1 text-gray-600">Display Name</Text>
-              <TextInput
-                value={name}
-                onChangeText={setName}
-                className="rounded-lg border border-gray-300 p-2"
-              />
+              <View className="mb-4 flex-row items-center justify-between">
+                <Text>Announcement Notifications</Text>
+                <Switch
+                  value={announcementNotifications}
+                  onValueChange={toggleAnnouncementNotifications}
+                  trackColor={{ false: '#767577', true: '#4CAF50' }}
+                />
+              </View>
+
+              <View className="flex-row items-center justify-between">
+                <Text>Run Notifications</Text>
+                <Switch
+                  value={runNotifications}
+                  onValueChange={toggleRunNotifications}
+                  trackColor={{ false: '#767577', true: '#4CAF50' }}
+                />
+              </View>
             </View>
           </View>
-          <View className="m-2 w-[90%] rounded-2xl bg-white p-5 shadow-sm">
-            <Text className="mb-4 text-lg font-bold">Notifications</Text>
-
-            <View className="mb-4 flex-row items-center justify-between">
-              <Text>Announcement Notifications</Text>
-              <Switch
-                value={announcementNotifications}
-                onValueChange={toggleAnnouncementNotifications}
-                trackColor={{ false: '#767577', true: '#4CAF50' }}
-              />
-            </View>
-
-            <View className="flex-row items-center justify-between">
-              <Text>Run Notifications</Text>
-              <Switch
-                value={runNotifications}
-                onValueChange={toggleRunNotifications}
-                trackColor={{ false: '#767577', true: '#4CAF50' }}
-              />
-            </View>
-          </View>
-        </View>
-        <Pressable
-          className="m-2 items-center rounded-lg bg-blue-500 p-4"
-          onPress={() => {
-            handleSave();
-          }}>
-          <Text className="font-bold text-white">Save Changes</Text>
-        </Pressable>
-        <Pressable
-          className="m-2 items-center rounded-lg bg-red-500 p-4"
-          onPress={() => {
-            logOut();
-          }}>
-          <Text className="font-bold text-white">Logout</Text>
-        </Pressable>
-      </SafeAreaView>
-    </View>
+          <TouchableOpacity
+            className="mt-4 w-[200px] items-center self-center rounded-full bg-blue-500 p-4"
+            onPress={() => {
+              handleSave();
+            }}>
+            <Text className="font-bold text-white">Save Changes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="m-2 mt-20 w-[200px] items-center self-center rounded-full bg-red-500 p-4"
+            onPress={() => {
+              logOut();
+            }}>
+            <Text className="font-bold text-white">Logout</Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

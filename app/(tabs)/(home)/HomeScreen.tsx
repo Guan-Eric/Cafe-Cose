@@ -101,13 +101,13 @@ function HomeScreen() {
             <View className="flex-row items-center">
               {user?.admin && (
                 <TouchableOpacity
-                  className="mr-2 rounded-lg bg-blue-500 px-4 py-2"
+                  className="mr-2 rounded-full bg-primary px-4 py-2"
                   onPress={() =>
                     router.replace({
                       pathname: `/(admin)/(home)/HomeScreen`,
                     })
                   }>
-                  <Text className="text-lg font-semibold text-text">Admin</Text>
+                  <Text className="text-lg font-semibold text-secondaryText">Admin</Text>
                 </TouchableOpacity>
               )}
 
@@ -178,14 +178,14 @@ function HomeScreen() {
                 ))
               ) : (
                 <View className="m-2 flex-row flex-wrap justify-between gap-6">
-                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
-                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
-                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
-                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
-                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
-                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
-                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
-                  <CardLoader width={Dimensions.get('window').width * 0.4} height={180} />
+                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
                 </View>
               )}
             </View>
