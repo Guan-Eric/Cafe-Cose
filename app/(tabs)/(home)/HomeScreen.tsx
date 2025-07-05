@@ -7,6 +7,7 @@ import {
   Pressable,
   Dimensions,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
@@ -99,7 +100,7 @@ function HomeScreen() {
             <Text className="pl-2 text-2xl font-bold text-text">Home</Text>
             <View className="flex-row items-center">
               {user?.admin && (
-                <Pressable
+                <TouchableOpacity
                   className="mr-2 rounded-lg bg-blue-500 px-4 py-2"
                   onPress={() =>
                     router.replace({
@@ -107,10 +108,10 @@ function HomeScreen() {
                     })
                   }>
                   <Text className="text-lg font-semibold text-text">Admin</Text>
-                </Pressable>
+                </TouchableOpacity>
               )}
 
-              <Pressable
+              <TouchableOpacity
                 onPress={() =>
                   router.push({
                     pathname: `/(tabs)/(home)/SettingsScreen`,
@@ -123,7 +124,7 @@ function HomeScreen() {
                   })
                 }>
                 <MaterialCommunityIcons name="cog" size={24} color="#1a1a1a" />
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </View>
           <View className="py-4">
@@ -144,11 +145,11 @@ function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               data={['All', ...Object.values(Category)]}
               renderItem={({ item }) => (
-                <Pressable
+                <TouchableOpacity
                   className={`ml-2 rounded-lg p-2 ${item === selectedCategory ? 'bg-primary' : 'bg-gray-400'}`}
                   onPress={() => filterMenu(item as Category)}>
                   <Text className="text-white">{item}</Text>
-                </Pressable>
+                </TouchableOpacity>
               )}
               keyExtractor={(item) => item}
             />

@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, Pressable, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, Pressable, Image, Animated } from 'react-native';
 import { MenuItem } from 'components/types';
+import useButtonAnimation from 'components/useButtonAnimation';
 
 interface MenuCardProps {
   menuItem: MenuItem;
@@ -9,9 +9,12 @@ interface MenuCardProps {
 }
 
 const MenuCard: React.FC<MenuCardProps> = ({ menuItem, onPress }) => {
+  const { scaleValue, handlePressIn, handlePressOut } = useButtonAnimation(0.95);
   return (
-    <Pressable onPress={onPress}>
-      <View className="m-2 rounded-2xl bg-white p-4 shadow-sm">
+    <Pressable onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
+      <Animated.View
+        className="m-2 rounded-2xl bg-white p-4 shadow-sm"
+        style={{ transform: [{ scale: scaleValue }] }}>
         <Image
           source={{ uri: menuItem.imageUrl }}
           className={`h-[130px] w-[130px] rounded-lg`}
@@ -25,7 +28,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ menuItem, onPress }) => {
             ${menuItem?.price?.toFixed(2)}
           </Text>
         </View>
-      </View>
+      </Animated.View>
     </Pressable>
   );
 };
