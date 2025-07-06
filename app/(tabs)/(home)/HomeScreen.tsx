@@ -95,58 +95,57 @@ function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1">
-        <ScrollView className="flex-1 px-4">
-          <View className="flex-row items-center justify-between pr-2">
-            <Text className="pl-2 text-2xl font-bold text-text">Home</Text>
-            <View className="flex-row items-center">
-              {user?.admin && (
-                <TouchableOpacity
-                  className="mr-2 rounded-full bg-primary px-4 py-2"
-                  onPress={() =>
-                    router.replace({
-                      pathname: `/(admin)/(home)/HomeScreen`,
-                    })
-                  }>
-                  <Text className="text-lg font-semibold text-secondaryText">Admin</Text>
-                </TouchableOpacity>
-              )}
-
+        <View className="flex-row items-center justify-between px-4 pr-2">
+          <Text className="pl-2 text-2xl font-bold text-text">Home</Text>
+          <View className="flex-row items-center px-4">
+            {user?.admin && (
               <TouchableOpacity
+                className="mr-2 rounded-full bg-primary px-4 py-2"
                 onPress={() =>
-                  router.push({
-                    pathname: `/(tabs)/(home)/SettingsScreen`,
-                    params: {
-                      username: user?.name,
-                      userUrl: user?.url,
-                      userAnnouncement: user?.announcements?.toString(),
-                      userRun: user?.runs?.toString(),
-                    },
+                  router.replace({
+                    pathname: `/(admin)/(home)/HomeScreen`,
                   })
                 }>
-                <MaterialCommunityIcons name="cog" size={24} color="#1a1a1a" />
+                <Text className="text-lg font-semibold text-secondaryText">Admin</Text>
               </TouchableOpacity>
-            </View>
-          </View>
-          <View className="py-4">
-            <Text className="pl-2 text-xl font-semibold text-text">Welcome to Café Cosé</Text>
-            <Text className="mt-2 pl-2 text-gray-400">Pointe-Saint-Charles</Text>
-          </View>
+            )}
 
-          <View className="items-center">
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: `/(tabs)/(home)/SettingsScreen`,
+                  params: {
+                    username: user?.name,
+                    userUrl: user?.url,
+                    userAnnouncement: user?.announcements?.toString(),
+                    userRun: user?.runs?.toString(),
+                  },
+                })
+              }>
+              <MaterialCommunityIcons name="cog" size={24} color="#1a1a1a" />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View className="px-4 pt-4">
+          <Text className="pl-2 text-xl font-semibold text-text">Welcome to Café Cosé</Text>
+          <Text className="mt-2 pl-2 text-gray-400">Pointe-Saint-Charles</Text>
+        </View>
+
+        <ScrollView className="flex-1 ">
+          <View className="items-center px-4 pt-4">
             <LoyaltyCard
               points={stamps}
               onPress={() => router.push({ pathname: '/(tabs)/(home)/QRCodeScreen' })}
             />
           </View>
-
-          <View className="mt-2">
+          <View className="px-4 pt-2">
             <FlatList
               horizontal
               showsHorizontalScrollIndicator={false}
               data={['All', ...Object.values(Category)]}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  className={`ml-2 rounded-lg p-2 ${item === selectedCategory ? 'bg-primary' : 'bg-gray-400'}`}
+                  className={`shadow-xs ml-2 rounded-lg p-2 ${item === selectedCategory ? 'bg-primary' : 'bg-gray-400'}`}
                   onPress={() => filterMenu(item as Category)}>
                   <Text className="text-white">{item}</Text>
                 </TouchableOpacity>

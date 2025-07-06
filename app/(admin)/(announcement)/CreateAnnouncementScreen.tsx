@@ -89,9 +89,10 @@ const CreateAnnouncementScreen = () => {
           }
         );
       });
-
-      const updatedAnnouncement = { ...newAnnouncement, imageUrl: downloadUrl as string };
-      editAnnouncement(updatedAnnouncement);
+      if (blob) {
+        const updatedAnnouncement = { ...newAnnouncement, imageUrl: downloadUrl as string };
+        editAnnouncement(updatedAnnouncement);
+      }
       setLoading(false);
       await sendNotificationAlert();
       router.back();

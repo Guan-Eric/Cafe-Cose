@@ -15,7 +15,7 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ points, onPress }) => {
   return (
     <Pressable onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <Animated.View
-        className="m-2 w-[95%] rounded-2xl bg-white p-4 shadow-sm"
+        className="m-2 w-[95%] rounded-2xl bg-white p-4 shadow-md"
         style={{ transform: [{ scale: scaleValue }] }}>
         <View className="flex-row items-center justify-between">
           <Text className="text-xl font-[Lato_400Regular] text-text">Loyalty Stamps</Text>

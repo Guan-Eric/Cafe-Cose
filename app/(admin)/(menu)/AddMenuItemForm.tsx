@@ -68,9 +68,10 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
           }
         );
       });
-
-      const updatedMenuItem = { ...menuItem, imageUrl: downloadUrl as string };
-      editMenuItem(updatedMenuItem);
+      if (blob) {
+        const updatedMenuItem = { ...menuItem, imageUrl: downloadUrl as string };
+        editMenuItem(updatedMenuItem);
+      }
       Alert.alert('Success', 'Menu item added successfully!');
       router.back();
     } catch (error) {

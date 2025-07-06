@@ -96,9 +96,10 @@ const CreateRunScreen = () => {
           }
         );
       });
-
-      const updatedRun = { ...newRun, imageUrl: (downloadUrl as string) || '' };
-      editRun(updatedRun);
+      if (blob) {
+        const updatedRun = { ...newRun, imageUrl: (downloadUrl as string) || '' };
+        editRun(updatedRun);
+      }
       setLoading(false);
       await sendNotificationAlert();
       router.back();
