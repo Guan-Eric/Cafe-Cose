@@ -22,7 +22,6 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CardLoader from 'components/loaders/CardLoader';
 import { getMenu } from 'backend/menu';
 import MenuCard from 'components/cards/MenuCard';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function HomeScreen() {
   const [user, setUser] = useState<User>();
@@ -132,7 +131,7 @@ function HomeScreen() {
         </View>
 
         <ScrollView className="flex-1 ">
-          <View className="items-center px-4 pt-4">
+          <View className=" justify-center px-4 pt-4">
             <LoyaltyCard
               points={stamps}
               onPress={() => router.push({ pathname: '/(tabs)/(home)/QRCodeScreen' })}

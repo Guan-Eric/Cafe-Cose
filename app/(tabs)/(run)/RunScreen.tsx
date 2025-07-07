@@ -42,7 +42,7 @@ function RunScreen() {
       <RunImageHeader />
       <ScrollView className="flex-1 bg-background">
         <SafeAreaView className="flex-1 px-4 pt-4">
-          <View className="mb-2 px-4 pt-2">
+          <View className="mb-2 px-6 pt-2">
             <Text className="text-2xl font-bold text-text">Café Cosé Run Club 🏃‍♂️</Text>
             <Text className="text-text">• Tuesday 7 AM</Text>
             <Text className="text-text">• Wednesday 6:30 PM</Text>
@@ -58,7 +58,7 @@ function RunScreen() {
             ) : (
               <>
                 {upcomingRuns.length > 0 && (
-                  <Text className="mb-2 ml-4  text-xl font-bold text-text">Upcoming Runs</Text>
+                  <Text className="mb-2 ml-6 text-xl font-bold text-text">Upcoming Runs</Text>
                 )}
                 {upcomingRuns.map((run) => (
                   <RunCard
@@ -81,7 +81,7 @@ function RunScreen() {
                     }
                   />
                 ))}
-                <Text className="mb-2 ml-4  text-xl font-bold text-text">Past Runs</Text>
+                <Text className="mb-2 ml-6 text-xl font-bold text-text">Past Runs</Text>
                 {pastRuns.map((run) => (
                   <RunCard
                     key={run.id}

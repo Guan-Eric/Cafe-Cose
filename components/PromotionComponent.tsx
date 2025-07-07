@@ -1,4 +1,4 @@
-import { View, Text, Image, Pressable, Dimensions, ImageBackground } from 'react-native';
+import { View, Text, Image, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
 import { router } from 'expo-router';
 
 interface PromotionComponentProps {
@@ -38,15 +38,17 @@ export default function PromotionComponent({
         <Text className="text-3xl font-bold text-primary">{message}</Text>
         <View className="mt-6 flex-row gap-4 self-end">
           {buttonTitle === 'Edit' && (
-            <Pressable
+            <TouchableOpacity
               onPress={handleCreatePromotion}
               className="bg-muted rounded-full border border-primary px-6 py-3">
               <Text className="text-lg font-semibold text-primary">Create Promotion</Text>
-            </Pressable>
+            </TouchableOpacity>
           )}
-          <Pressable onPress={handleDismiss} className="rounded-full bg-primary px-6 py-3 shadow">
+          <TouchableOpacity
+            onPress={handleDismiss}
+            className="rounded-full bg-primary px-6 py-3 shadow">
             <Text className="text-lg font-semibold text-white">{buttonTitle}</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

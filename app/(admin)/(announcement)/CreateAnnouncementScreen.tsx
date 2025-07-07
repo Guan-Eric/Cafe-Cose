@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Announcement } from 'components/types';
@@ -173,7 +174,7 @@ const CreateAnnouncementScreen = () => {
               </View>
 
               {imageUrl ? (
-                <Pressable
+                <TouchableOpacity
                   onPress={handleImageUpload}
                   className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
                   <Image
@@ -181,15 +182,15 @@ const CreateAnnouncementScreen = () => {
                     className="h-full w-full rounded-lg"
                     resizeMode="cover"
                   />
-                </Pressable>
+                </TouchableOpacity>
               ) : (
-                <Pressable
+                <TouchableOpacity
                   onPress={handleImageUpload}
                   className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
                   <Text className="text-text">Upload Image</Text>
-                </Pressable>
+                </TouchableOpacity>
               )}
-              <Pressable
+              <TouchableOpacity
                 onPress={handleCreateAnnouncement}
                 className="mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
                 {loading ? (
@@ -197,7 +198,7 @@ const CreateAnnouncementScreen = () => {
                 ) : (
                   <Text className="font-[Lato_400Regular] text-white">Create Announcement</Text>
                 )}
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

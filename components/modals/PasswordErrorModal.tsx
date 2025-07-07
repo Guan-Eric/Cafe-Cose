@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, View, Text, Pressable } from 'react-native';
+import { Modal, View, Text, TouchableOpacity } from 'react-native';
 
 interface PasswordErrorModalProps {
   modalVisible: boolean;
@@ -26,11 +26,11 @@ const PasswordErrorModal: React.FC<PasswordErrorModalProps> = ({
             {'\n'}- Match the confirmation password.
           </Text>
           <View className="w-full flex-col">
-            <Pressable
+            <TouchableOpacity
               onPress={onClose}
               className="my-1.5 w-full items-center rounded-[10px] bg-[#3490de] p-2.5">
               <Text className="text-base text-[#f8f9fa]">Ok</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

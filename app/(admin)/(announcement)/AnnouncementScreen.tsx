@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import { getAnnouncements } from 'backend/announcement';
 import { router, useFocusEffect } from 'expo-router';
 import { Announcement } from 'components/types';
@@ -32,9 +32,13 @@ function AnnouncementScreen() {
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
           <Text className="text-2xl font-bold text-text">Announcements</Text>
-          <Pressable onPress={handleAddAnnouncement} className="rounded-lg bg-blue-500 px-4 py-2">
-            <Text className="text-text">+ Add Announcement</Text>
-          </Pressable>
+          <TouchableOpacity
+            onPress={handleAddAnnouncement}
+            className="rounded-full bg-primary px-4 py-2">
+            <Text className="text-lg font-[Lato_400Regular] text-secondaryText">
+              + Add Announcement
+            </Text>
+          </TouchableOpacity>
         </View>
         <ScrollView className="flex-1 px-4">
           <View className="mt-2 items-center">

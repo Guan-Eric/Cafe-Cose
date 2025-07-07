@@ -10,6 +10,7 @@ import {
   TextInput,
   Pressable,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { router } from 'expo-router';
 import { logIn } from '../../backend/auth';
@@ -87,7 +88,7 @@ function SignInScreen() {
                 </View>
               </View>
 
-              <Pressable
+              <TouchableOpacity
                 onPress={signIn}
                 disabled={loading}
                 className="h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
@@ -96,17 +97,17 @@ function SignInScreen() {
                 ) : (
                   <Text className="font-[Lato_400Regular] text-white">Sign In</Text>
                 )}
-              </Pressable>
+              </TouchableOpacity>
 
               <View className="items-center pt-5">
                 <Text className="text-base font-[Lato_400Regular] text-gray-500">
                   Don't have an account?
                 </Text>
-                <Pressable
+                <TouchableOpacity
                   onPress={() => router.push('/(auth)/SignUpScreen')}
                   className="h-[42px] w-[100px] items-center justify-center">
                   <Text className="text-base font-[Lato_400Regular] text-primary">Sign Up</Text>
-                </Pressable>
+                </TouchableOpacity>
               </View>
             </View>
           </SafeAreaView>

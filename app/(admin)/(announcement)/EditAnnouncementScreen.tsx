@@ -13,6 +13,7 @@ import {
   Switch,
   Image,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -226,7 +227,7 @@ const EditAnnouncementScreen = () => {
                 </View>
 
                 {image ? (
-                  <Pressable
+                  <TouchableOpacity
                     onPress={handleImageUpload}
                     className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
                     <Image
@@ -234,16 +235,16 @@ const EditAnnouncementScreen = () => {
                       className="h-full w-full rounded-lg"
                       resizeMode="cover"
                     />
-                  </Pressable>
+                  </TouchableOpacity>
                 ) : (
-                  <Pressable
+                  <TouchableOpacity
                     onPress={handleImageUpload}
                     className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
                     <Text className="text-text">Upload Image</Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 )}
               </View>
-              <Pressable
+              <TouchableOpacity
                 onPress={handleSubmit}
                 className="h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
                 {loading ? (
@@ -251,12 +252,12 @@ const EditAnnouncementScreen = () => {
                 ) : (
                   <Text className="font-bold text-white">Update Announcement</Text>
                 )}
-              </Pressable>
-              <Pressable
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={handleDelete}
                 className="mb-4 mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-red-500">
                 <Text className="font-bold text-white">Delete Announcement</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

@@ -5,7 +5,7 @@ import {
   TextInput,
   Alert,
   SafeAreaView,
-  Pressable,
+  TouchableOpacity,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
@@ -174,7 +174,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                   <Switch value={available} onValueChange={setAvailable} className="ml-2" />
                 </View>
                 {imageUrl ? (
-                  <Pressable
+                  <TouchableOpacity
                     onPress={handleImageUpload}
                     className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
                     <Image
@@ -182,17 +182,17 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                       className="h-full w-full rounded-lg"
                       resizeMode="cover"
                     />
-                  </Pressable>
+                  </TouchableOpacity>
                 ) : (
-                  <Pressable
+                  <TouchableOpacity
                     onPress={handleImageUpload}
                     className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
                     <Text className="text-text">Upload Image</Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 )}
               </View>
 
-              <Pressable
+              <TouchableOpacity
                 onPress={handleSubmit}
                 disabled={loading || !(description && name && price)}
                 className={`h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading || !(description && name && price) ? 'bg-gray-400' : 'bg-primary'}`}>
@@ -201,7 +201,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                 ) : (
                   <Text className="font-[Lato_400Regular] text-white">Add Item</Text>
                 )}
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

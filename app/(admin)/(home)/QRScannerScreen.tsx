@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, Button, Modal, Pressable, SafeAreaView } from 'react-native';
+import { View, Text, Button, Modal, Pressable, SafeAreaView, TouchableOpacity } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { getUser, incrementStamp } from 'backend/user';
 import { User } from 'components/types';
@@ -84,24 +84,24 @@ function QRScannerScreen() {
                 alignItems: 'center',
                 marginBottom: 10,
               }}>
-              <Pressable onPress={() => setStampCount((prev) => Math.max(1, prev - 1))}>
+              <TouchableOpacity onPress={() => setStampCount((prev) => Math.max(1, prev - 1))}>
                 <Text style={{ fontSize: 20, paddingHorizontal: 10 }}>−</Text>
-              </Pressable>
+              </TouchableOpacity>
               <Text style={{ fontSize: 20 }}>{stampCount}</Text>
-              <Pressable onPress={() => setStampCount((prev) => prev + 1)}>
+              <TouchableOpacity onPress={() => setStampCount((prev) => prev + 1)}>
                 <Text style={{ fontSize: 20, paddingHorizontal: 10 }}>+</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
-            <Pressable
+            <TouchableOpacity
               onPress={handleGiveStamp}
               style={{ backgroundColor: '#3490de', padding: 10, borderRadius: 5 }}>
               <Text style={{ color: 'white', textAlign: 'center' }}>Yes</Text>
-            </Pressable>
-            <Pressable
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={handleCancel}
               style={{ marginTop: 10, padding: 10, borderRadius: 5 }}>
               <Text style={{ textAlign: 'center' }}>Cancel</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

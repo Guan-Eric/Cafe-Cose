@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, Modal, TextInput, TouchableOpacity, Alert, Pressable } from 'react-native';
+import { View, Text, Modal, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { scheduleRunReminder } from 'backend/notification';
 
 interface ReminderModalProps {
@@ -56,7 +56,7 @@ const ReminderModal = ({ visible, onClose, runDate }: ReminderModalProps) => {
           <Text className="mb-3 font-medium text-gray-600">Select reminder time:</Text>
           <View className="mb-5 flex-row flex-wrap justify-between">
             {reminderPresets.map((preset) => (
-              <Pressable
+              <TouchableOpacity
                 key={preset}
                 onPress={() => {
                   handleSelectPreset(preset);
@@ -70,19 +70,21 @@ const ReminderModal = ({ visible, onClose, runDate }: ReminderModalProps) => {
                   style={{ color: selectedPreset === preset ? '#FFFFFF' : '#374151' }}>
                   {preset} minutes
                 </Text>
-              </Pressable>
+              </TouchableOpacity>
             ))}
           </View>
 
           <View className="flex-row justify-between">
-            <Pressable onPress={resetAndClose} className="mr-2 flex-1 rounded-lg bg-gray-200 p-3">
+            <TouchableOpacity
+              onPress={resetAndClose}
+              className="mr-2 flex-1 rounded-lg bg-gray-200 p-3">
               <Text className="text-center font-bold text-gray-700">Cancel</Text>
-            </Pressable>
-            <Pressable
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={handleSetReminder}
               className="ml-2 flex-1 rounded-lg bg-blue-500 p-3 shadow">
               <Text className="text-center font-bold text-white">Set Reminder</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

@@ -1,6 +1,7 @@
-import { View, Text, SafeAreaView, Pressable } from 'react-native';
+import { View, Text, SafeAreaView, Pressable, TouchableOpacity } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { logOut } from '../../../backend/auth';
 
 function HomeScreen() {
@@ -10,29 +11,32 @@ function HomeScreen() {
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
           <Text className="text-2xl font-bold text-text">Admin</Text>
-          <Pressable
-            className="rounded-lg bg-blue-500 px-4 py-2"
+          <TouchableOpacity
+            className="mr-2 rounded-full bg-primary px-4 py-2"
             onPress={() =>
               router.replace({
                 pathname: `/(tabs)/(home)/HomeScreen`,
               })
             }>
-            <Text className="text-lg font-semibold text-text">Client View</Text>
-          </Pressable>
-          <Pressable onPress={() => logOut()} className="rounded-lg bg-red-500 px-4 py-2">
-            <Text className="text-lg font-semibold text-text">Logout</Text>
-          </Pressable>
+            <Text className="text-lg font-semibold text-secondaryText">Client View</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => logOut()} className="rounded-full bg-red-500 px-4 py-2">
+            <Text className="text-lg font-semibold text-secondaryText">Logout</Text>
+          </TouchableOpacity>
         </View>
         <View className="px-4">
           <View className="py-4">
             <Text className="text-xl font-semibold text-text">Café Cosé</Text>
           </View>
           <View className="px-4 py-2">
-            <Pressable
+            <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/QRScannerScreen')}
-              className="rounded-lg bg-green-500 px-4 py-4">
-              <Text className="text-text">Scan QR Code</Text>
-            </Pressable>
+              className="flex-row items-center justify-center rounded-full bg-green-500 px-4 py-4">
+              <Text className="mr-2 self-center text-lg font-[Lato_400Regular] text-secondaryText">
+                Scan QR Code
+              </Text>
+              <MaterialCommunityIcons name="camera" size={24} color="white" />
+            </TouchableOpacity>
           </View>
         </View>
       </View>

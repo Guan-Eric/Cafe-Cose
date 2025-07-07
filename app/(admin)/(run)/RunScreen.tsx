@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import { getRuns } from 'backend/run'; // Assuming you have a similar function to fetch runs
 import { router, useFocusEffect } from 'expo-router';
 import { Run } from 'components/types';
@@ -32,9 +32,9 @@ function RunScreen() {
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
           <Text className="text-2xl font-bold text-text">Runs</Text>
-          <Pressable onPress={handleAddRun} className="rounded-lg bg-blue-500 px-4 py-2">
-            <Text className="text-text">+ Add Run</Text>
-          </Pressable>
+          <TouchableOpacity onPress={handleAddRun} className="rounded-full bg-primary px-4 py-2">
+            <Text className="text-lg font-[Lato_400Regular] text-secondaryText">+ Add Run</Text>
+          </TouchableOpacity>
         </View>
         <ScrollView className="flex-1 px-4">
           <View className="mt-2 items-center">

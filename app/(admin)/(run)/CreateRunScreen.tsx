@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  Pressable,
+  TouchableOpacity,
   Alert,
   SafeAreaView,
   Image,
@@ -204,7 +204,7 @@ const CreateRunScreen = () => {
                 <Switch value={isRSVP} onValueChange={setIsRSVP} className="ml-2" />
               </View>
               {imageUrl ? (
-                <Pressable
+                <TouchableOpacity
                   onPress={handleImageUpload}
                   className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
                   <Image
@@ -212,15 +212,15 @@ const CreateRunScreen = () => {
                     className="h-full w-full rounded-lg"
                     resizeMode="cover"
                   />
-                </Pressable>
+                </TouchableOpacity>
               ) : (
-                <Pressable
+                <TouchableOpacity
                   onPress={handleImageUpload}
                   className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
                   <Text className="text-text">Upload Image</Text>
-                </Pressable>
+                </TouchableOpacity>
               )}
-              <Pressable
+              <TouchableOpacity
                 onPress={handleCreateRun}
                 disabled={loading}
                 className={`mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading ? 'bg-gray-400' : 'bg-primary'}`}>
@@ -229,7 +229,7 @@ const CreateRunScreen = () => {
                 ) : (
                   <Text className="font-[Lato_400Regular] text-white">Create Run</Text>
                 )}
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

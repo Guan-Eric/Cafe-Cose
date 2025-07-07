@@ -10,6 +10,7 @@ import {
   TextInput,
   Pressable,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { register } from '../../backend/auth';
@@ -138,7 +139,7 @@ function SignUpScreen() {
                 </View>
               </View>
 
-              <Pressable
+              <TouchableOpacity
                 onPress={signUp}
                 disabled={loading}
                 className="h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
@@ -147,17 +148,17 @@ function SignUpScreen() {
                 ) : (
                   <Text className="font-[Lato_400Regular] text-white">Sign Up</Text>
                 )}
-              </Pressable>
+              </TouchableOpacity>
 
               <View className="items-center pt-5">
                 <Text className="text-base font-[Lato_400Regular] text-gray-500">
                   Already have an account?
                 </Text>
-                <Pressable
+                <TouchableOpacity
                   onPress={() => router.push('/(auth)/SignInScreen')}
                   className="h-[42px] w-[100px] items-center justify-center">
                   <Text className="text-base font-[Lato_400Regular] text-primary">Sign In</Text>
-                </Pressable>
+                </TouchableOpacity>
               </View>
             </View>
 

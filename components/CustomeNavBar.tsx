@@ -34,8 +34,8 @@ const CustomNavBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
   useEffect(() => {
     if (tabLayouts[focusedIndex]) {
       const { x, width } = tabLayouts[focusedIndex];
-      // Center the indicator within the tab
-      const indicatorX = x + width / 2 - 7.5; // 7.5 is half of indicator width (15/2)
+
+      const indicatorX = x + width / 2 - 7.5;
 
       indicatorPosition.value = withSpring(indicatorX, {
         damping: 20,
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingBottom: 50,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
     shadowRadius: 5,
   },
   tabItem: {

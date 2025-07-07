@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TextInput,
-  Pressable,
+  TouchableOpacity,
   Alert,
   SafeAreaView,
   Image,
@@ -172,7 +172,7 @@ const CreatePromotionScreen = () => {
               </View>
 
               {imageUrl ? (
-                <Pressable
+                <TouchableOpacity
                   onPress={handleImageUpload}
                   className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
                   <Image
@@ -180,15 +180,15 @@ const CreatePromotionScreen = () => {
                     className="h-full w-full rounded-lg"
                     resizeMode="cover"
                   />
-                </Pressable>
+                </TouchableOpacity>
               ) : (
-                <Pressable
+                <TouchableOpacity
                   onPress={handleImageUpload}
                   className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
                   <Text className="text-text">Upload Image</Text>
-                </Pressable>
+                </TouchableOpacity>
               )}
-              <Pressable
+              <TouchableOpacity
                 onPress={handleCreatePromotion}
                 className="mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
                 {loading ? (
@@ -196,7 +196,7 @@ const CreatePromotionScreen = () => {
                 ) : (
                   <Text className="font-[Lato_400Regular] text-white">Create Promotion</Text>
                 )}
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Animated, View, Text, Image, Pressable, Dimensions } from 'react-native';
+import { Animated, View, Text, Image, Pressable, Dimensions, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -82,13 +82,13 @@ export default function OnboardingScreen() {
         ))}
       </View>
       <View style={{ padding: 20, alignItems: 'center' }}>
-        <Pressable
+        <TouchableOpacity
           onPress={handleNext}
           style={{ backgroundColor: '#762e1f', padding: 14, borderRadius: 8 }}>
           <Text style={{ color: 'white', fontWeight: 'bold' }}>
             {index === slides.length - 1 ? 'Get Started' : 'Next'}
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

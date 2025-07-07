@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, ScrollView, Pressable } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, Pressable, TouchableOpacity } from 'react-native';
 import MenuCard from '../../../components/cards/MenuCard';
 import { getMenu } from 'backend/menu';
 import { router, useFocusEffect } from 'expo-router';
@@ -31,9 +31,13 @@ function MenuScreen() {
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
           <Text className="text-2xl font-bold text-text">Edit Menu</Text>
-          <Pressable onPress={handleAddMenuItem} className="rounded-lg bg-blue-500 px-4 py-2">
-            <Text className="text-lg font-[Lato_400Regular] text-text">+ Add Menu Item</Text>
-          </Pressable>
+          <TouchableOpacity
+            onPress={handleAddMenuItem}
+            className="rounded-full bg-primary px-4 py-2">
+            <Text className="text-lg font-[Lato_400Regular] text-secondaryText">
+              + Add Menu Item
+            </Text>
+          </TouchableOpacity>
         </View>
         <ScrollView className="flex-1 px-4">
           <View className="mt-2">

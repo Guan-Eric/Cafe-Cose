@@ -1,4 +1,4 @@
-import { SafeAreaView, View, Image, Text, Pressable } from 'react-native';
+import { SafeAreaView, View, Image, Text, Pressable, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 
 function WelcomeScreen() {
@@ -28,11 +28,11 @@ function WelcomeScreen() {
             <Text className="text-sm font-[Lato_400Regular] text-gray-500">
               Already have an account?
             </Text>
-            <Pressable
+            <TouchableOpacity
               onPress={() => router.push('/(auth)/SignInScreen')}
               className="h-[46px] w-[100px] items-center justify-center">
               <Text className="text-sm font-[Lato_400Regular] text-primary">Sign In</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
       </SafeAreaView>

@@ -5,7 +5,7 @@ import {
   TextInput,
   Alert,
   SafeAreaView,
-  Pressable,
+  TouchableOpacity,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
@@ -236,7 +236,7 @@ const EditMenuItemForm = () => {
                   <Switch value={available} onValueChange={setAvailable} className="ml-2" />
                 </View>
                 {imageUrl ? (
-                  <Pressable
+                  <TouchableOpacity
                     onPress={handleImageUpload}
                     className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
                     <Image
@@ -244,16 +244,16 @@ const EditMenuItemForm = () => {
                       className="h-full w-full rounded-lg"
                       resizeMode="cover"
                     />
-                  </Pressable>
+                  </TouchableOpacity>
                 ) : (
-                  <Pressable
+                  <TouchableOpacity
                     onPress={handleImageUpload}
                     className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
                     <Text className="text-text">Upload Image</Text>
-                  </Pressable>
+                  </TouchableOpacity>
                 )}
               </View>
-              <Pressable
+              <TouchableOpacity
                 onPress={handleSubmit}
                 disabled={loading || !(description && name && price)}
                 className={`h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading || !(description && name && price) ? 'bg-gray-400' : 'bg-primary'}`}>
@@ -262,13 +262,13 @@ const EditMenuItemForm = () => {
                 ) : (
                   <Text className="font-bold text-white">Update Item</Text>
                 )}
-              </Pressable>
-              <Pressable
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={handleDelete}
                 disabled={loading}
                 className={`mb-4 mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading ? 'bg-gray-400' : 'bg-red-500'}`}>
                 <Text className="font-bold text-white">Delete Item</Text>
-              </Pressable>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
