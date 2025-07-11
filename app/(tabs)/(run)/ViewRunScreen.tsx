@@ -61,119 +61,133 @@ const ViewRunScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <ScrollView>
-        <View className="flex-row items-center">
-          <BackButton />
-          <Text className="text-2xl font-bold text-text">{runTitle}</Text>
-        </View>
-        <View className="flex-1 px-4 py-2">
-          {runImageUrl ? (
-            <Image
-              source={{ uri: updatedImageUrl }}
-              className="h-[350px] w-[350px] self-center rounded-lg shadow-lg"
-              resizeMode="cover"
+    <View className="flex-1">
+      {runImageUrl ? (
+        <Image
+          source={{ uri: updatedImageUrl }}
+          className="h-[350px] w-full shadow-lg"
+          resizeMode="cover"
+        />
+      ) : null}
+      <SafeAreaView className="flex-1 bg-background">
+        <ScrollView>
+          <View className="absolute left-4 top-4 z-10">
+            <BackButton />
+          </View>
+          <View className="mt-2 flex-row ">
+            <Text className="text-2xl font-bold text-text">{runTitle}</Text>
+          </View>
+
+          <View className="flex-1 px-4 py-2">
+            <View className="mt-3 flex-row items-center justify-between">
+              <Text className=" text-text">{formattedRunDate}</Text>
+              {new Date(runDate as string) > new Date() && (
+                <TouchableOpacity
+                  onPress={() => setModalVisible(true)}
+                  className="mr-1 rounded rounded-lg bg-blue-500 p-2">
+                  <Text className="text-center text-white">Set Reminder</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <Text className="mt-2 text-text">{runMessage}</Text>
+            <ReminderModal
+              visible={modalVisible}
+              onClose={() => setModalVisible(false)}
+              runDate={runDate as string}
             />
-          ) : null}
-          <View className="mt-3 flex-row items-center justify-between">
-            <Text className=" text-text">{formattedRunDate}</Text>
-            {new Date(runDate as string) > new Date() && (
-              <TouchableOpacity
-                onPress={() => setModalVisible(true)}
-                className="mr-1 rounded rounded-lg bg-blue-500 p-2">
-                <Text className="text-center text-white">Set Reminder</Text>
-              </TouchableOpacity>
+            {runIsRSVP && (
+              <View>
+                {new Date(runDate as string) > new Date() ? (
+                  <>
+                    <Text className="mt-2 text-lg font-semibold text-text">Will you attend?</Text>
+                    <View className="mt-2 flex-row justify-between">
+                      <TouchableOpacity
+                        disabled={RSVP === 'yes'}
+                        onPress={() => handleRSVP('yes')}
+                        className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'yes' ? 'bg-green-600' : 'bg-green-100'}`}>
+                        <Text
+                          className={` font-medium ${RSVP === 'yes' ? 'text-white' : 'text-green-600'}`}>
+                          Yes: {yesCount}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        disabled={RSVP === 'maybe'}
+                        onPress={() => handleRSVP('maybe')}
+                        className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'maybe' ? 'bg-yellow-500' : 'bg-yellow-100'}`}>
+                        <Text
+                          className={` font-medium ${RSVP === 'maybe' ? 'text-white' : 'text-yellow-600'}`}>
+                          Maybe: {maybeCount}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        disabled={RSVP === 'no'}
+                        onPress={() => handleRSVP('no')}
+                        className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'no' ? 'bg-red-600' : 'bg-red-100'}`}>
+                        <Text
+                          className={` font-medium ${RSVP === 'no' ? 'text-white' : 'text-red-600'}`}>
+                          No: {noCount}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <View className="mt-2 flex-row justify-between">
+                      <TouchableOpacity
+                        disabled={true}
+                        className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'yes' ? 'bg-green-600' : 'bg-green-100'}`}>
+                        <Text
+                          className={` font-medium ${RSVP === 'yes' ? 'text-white' : 'text-green-600'}`}>
+                          Yes: {yesCount}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        disabled={true}
+                        className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'maybe' ? 'bg-yellow-500' : 'bg-yellow-100'}`}>
+                        <Text
+                          className={` font-medium ${RSVP === 'maybe' ? 'text-white' : 'text-yellow-600'}`}>
+                          Maybe: {maybeCount}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        disabled={true}
+                        className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'no' ? 'bg-red-600' : 'bg-red-100'}`}>
+                        <Text
+                          className={` font-medium ${RSVP === 'no' ? 'text-white' : 'text-red-600'}`}>
+                          No: {noCount}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </>
+                )}
+
+                <View>
+                  <Text className="my-2 text-lg font-semibold text-text">Participants:</Text>
+                  {participants.length > 0 ? (
+                    <View className="rounded-lg bg-gray-50 p-2">
+                      {participants
+                        .sort((a, b) => {
+                          const statusOrder: { [key: string]: number } = {
+                            yes: 1,
+                            maybe: 2,
+                            no: 3,
+                          };
+                          return statusOrder[a.status as string] - statusOrder[b.status as string];
+                        })
+                        .map((participant: Participant) => (
+                          <ParticipantsCard key={participant.id} participant={participant} />
+                        ))}
+                    </View>
+                  ) : (
+                    <Text className="italic text-gray-500">No participants yet. Be the first!</Text>
+                  )}
+                </View>
+              </View>
             )}
           </View>
-          <Text className="mt-2 text-text">{runMessage}</Text>
-          <ReminderModal
-            visible={modalVisible}
-            onClose={() => setModalVisible(false)}
-            runDate={runDate as string}
-          />
-          {runIsRSVP && (
-            <View>
-              {new Date(runDate as string) > new Date() ? (
-                <>
-                  <Text className="mt-2 text-lg font-semibold text-text">Will you attend?</Text>
-                  <View className="mt-2 flex-row justify-between">
-                    <TouchableOpacity
-                      disabled={RSVP === 'yes'}
-                      onPress={() => handleRSVP('yes')}
-                      className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'yes' ? 'bg-green-600' : 'bg-green-100'}`}>
-                      <Text
-                        className={` font-medium ${RSVP === 'yes' ? 'text-white' : 'text-green-600'}`}>
-                        Yes: {yesCount}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      disabled={RSVP === 'maybe'}
-                      onPress={() => handleRSVP('maybe')}
-                      className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'maybe' ? 'bg-yellow-500' : 'bg-yellow-100'}`}>
-                      <Text
-                        className={` font-medium ${RSVP === 'maybe' ? 'text-white' : 'text-yellow-600'}`}>
-                        Maybe: {maybeCount}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      disabled={RSVP === 'no'}
-                      onPress={() => handleRSVP('no')}
-                      className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'no' ? 'bg-red-600' : 'bg-red-100'}`}>
-                      <Text
-                        className={` font-medium ${RSVP === 'no' ? 'text-white' : 'text-red-600'}`}>
-                        No: {noCount}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </>
-              ) : (
-                <>
-                  <View className="mt-2 flex-row justify-between">
-                    <TouchableOpacity
-                      disabled={true}
-                      className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'yes' ? 'bg-green-600' : 'bg-green-100'}`}>
-                      <Text
-                        className={` font-medium ${RSVP === 'yes' ? 'text-white' : 'text-green-600'}`}>
-                        Yes: {yesCount}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      disabled={true}
-                      className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'maybe' ? 'bg-yellow-500' : 'bg-yellow-100'}`}>
-                      <Text
-                        className={` font-medium ${RSVP === 'maybe' ? 'text-white' : 'text-yellow-600'}`}>
-                        Maybe: {maybeCount}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      disabled={true}
-                      className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'no' ? 'bg-red-600' : 'bg-red-100'}`}>
-                      <Text
-                        className={` font-medium ${RSVP === 'no' ? 'text-white' : 'text-red-600'}`}>
-                        No: {noCount}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </>
-              )}
-
-              <View>
-                <Text className="my-2 text-lg font-semibold text-text">Participants:</Text>
-                {participants.length > 0 ? (
-                  <View className="rounded-lg bg-gray-50 p-2">
-                    {participants.map((participant: Participant) => (
-                      <ParticipantsCard key={participant.id} participant={participant} />
-                    ))}
-                  </View>
-                ) : (
-                  <Text className="italic text-gray-500">No participants yet. Be the first!</Text>
-                )}
-              </View>
-            </View>
-          )}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </View>
   );
 };
 
