@@ -11,8 +11,7 @@ export default function PromotionScreen() {
   const [promo, setPromo] = useState<Promotion | null>();
 
   const handleDismiss = async () => {
-    await AsyncStorage.setItem('lastSeenPromoId', promo?.id as string);
-    router.replace('/(tabs)/(home)/HomeScreen');
+    router.push('/(tabs)/(home)/HomeScreen');
   };
 
   const checkPromo = async () => {

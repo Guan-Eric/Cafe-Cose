@@ -27,16 +27,12 @@ export default function PromotionComponent({
   return (
     <View className="flex-1 justify-between bg-background">
       {imageUrl && (
-        <ImageBackground
-          source={{ uri: imageUrl }}
-          resizeMode="cover"
-          className="h-[85%] w-full "
-        />
+        <ImageBackground source={{ uri: imageUrl }} resizeMode="cover" className="h-[80%] w-full" />
       )}
       <View className="w-full px-6 pb-12">
         <Text className="text-bold mb-1 mt-2 text-text">{title}</Text>
         <Text className="text-3xl font-bold text-primary">{message}</Text>
-        <View className="mt-6 flex-row gap-4 self-end">
+        <View className="mb-4 mt-6 flex-row gap-4 self-end">
           {buttonTitle === 'Edit' && (
             <TouchableOpacity
               onPress={handleCreatePromotion}
@@ -46,7 +42,7 @@ export default function PromotionComponent({
           )}
           <TouchableOpacity
             onPress={handleDismiss}
-            className="rounded-full bg-primary px-6 py-3 shadow">
+            className=" rounded-full bg-primary px-6 py-3 shadow">
             <Text className="text-lg font-semibold text-white">{buttonTitle}</Text>
           </TouchableOpacity>
         </View>

@@ -36,7 +36,7 @@ function RunScreen() {
             <Text className="text-lg font-[Lato_400Regular] text-secondaryText">+ Add Run</Text>
           </TouchableOpacity>
         </View>
-        <ScrollView className="flex-1 px-4">
+        <ScrollView className="flex-1 ">
           <View className="mt-2 items-center">
             {runs.length > 0 ? (
               runs.map((run) => (

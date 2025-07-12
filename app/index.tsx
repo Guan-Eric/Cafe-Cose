@@ -12,18 +12,12 @@ function Index() {
 
   const checkFirstLaunch = async () => {
     const hasOnboarded = await AsyncStorage.getItem('hasOnboarded');
-    const latestPromo = await getLatestPromotion();
-    const storedPromoId = await AsyncStorage.getItem('lastSeenPromoId');
 
     onAuthStateChanged(FIREBASE_AUTH, (user) => {
       if (!hasOnboarded) {
         router.replace('/OnboardingScreen');
       } else if (user) {
-        if (latestPromo?.id !== storedPromoId) {
-          router.push('/PromotionScreen');
-        } else {
-          router.replace('/(tabs)/(home)/HomeScreen');
-        }
+        router.replace('/PromotionScreen');
       } else {
         router.replace('/(auth)/WelcomeScreen');
       }
