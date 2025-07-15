@@ -23,39 +23,41 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
 import { notifyRun } from 'backend/notification';
+import RunImageCarousel from 'components/RunImageCarousel';
+import ImageCarousel from 'components/ImageCarousel';
 
 const CreateRunScreen = () => {
   const [title, setTitle] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [notificationMessage, setNotificationMessage] = useState<string>('');
-  const [imageUrl, setImageUrl] = useState<string>('');
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [date, setDate] = useState<Date>(new Date());
   const [isRSVP, setIsRSVP] = useState<boolean>(true);
-  const [blob, setBlob] = useState<Blob>();
+  const [blobs, setBlobs] = useState<Blob[]>([]);
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleImageUpload = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
-      allowsMultipleSelection: false,
-      aspect: [1, 1],
-      allowsEditing: true,
-      quality: 0.5,
+      allowsMultipleSelection: true,
+      quality: 1,
     });
 
     if (!result.canceled) {
-      try {
-        const response = await fetch(result.assets[0].uri);
-        const blob = await response.blob();
+      const blobsAndImages = await Promise.all(
+        result.assets.map(async (asset) => {
+          const response = await fetch(asset.uri);
+          const blob = await response.blob();
+          return { blob, image: asset.uri };
+        })
+      );
 
-        setImageUrl(result.assets[0].uri);
-        setBlob(blob);
-      } catch (error) {
-        console.error('Error uploading images:', error);
-      }
-    } else {
-      console.error('Image selection was canceled.');
+      const blobs = blobsAndImages.map((item) => item.blob);
+      const images = blobsAndImages.map((item) => item.image);
+
+      setBlobs(blobs);
+      setImageUrls(images);
     }
   };
 
@@ -77,27 +79,31 @@ const CreateRunScreen = () => {
 
     try {
       const newRun = await createRun(newRunData);
-      const imageRef = ref(FIREBASE_STR, `runs/${newRun.id}`);
-      const uploadTask = uploadBytesResumable(imageRef, blob as Blob);
+      const downloadUrls = [];
+      for (let i = 0; i < blobs.length; i++) {
+        const imageRef = ref(FIREBASE_STR, `runs/${newRun.id}_${i}`);
+        const uploadTask = uploadBytesResumable(imageRef, blobs[i]);
 
-      const downloadUrl = await new Promise((resolve, reject) => {
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          },
-          (error) => {
-            console.error(`Error uploading image:`, error);
-            reject(error);
-          },
-          async () => {
-            const url = await getDownloadURL(uploadTask.snapshot.ref);
-            resolve(url);
-          }
-        );
-      });
-      if (blob) {
-        const updatedRun = { ...newRun, imageUrl: (downloadUrl as string) || '' };
+        const downloadUrl = await new Promise((resolve, reject) => {
+          uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            },
+            (error) => {
+              console.error(`Error uploading image:`, error);
+              reject(error);
+            },
+            async () => {
+              const url = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(url);
+            }
+          );
+        });
+        downloadUrls.push(downloadUrl);
+      }
+      if (blobs.length > 0) {
+        const updatedRun = { ...newRun, imageUrls: (downloadUrls as string[]) || [] };
         editRun(updatedRun);
       }
       setLoading(false);
@@ -150,7 +156,7 @@ const CreateRunScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView className="flex-1 bg-background p-4">
+      <SafeAreaView className="flex-1 bg-background">
         <KeyboardAvoidingView behavior="padding" className="flex-1">
           <ScrollView>
             <View className="flex-row items-center">
@@ -203,16 +209,8 @@ const CreateRunScreen = () => {
                 <Text className="font-[Lato_400Regular] text-text">RSVP?</Text>
                 <Switch value={isRSVP} onValueChange={setIsRSVP} className="ml-2" />
               </View>
-              {imageUrl ? (
-                <TouchableOpacity
-                  onPress={handleImageUpload}
-                  className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
-                  <Image
-                    source={{ uri: imageUrl }}
-                    className="h-full w-full rounded-lg"
-                    resizeMode="cover"
-                  />
-                </TouchableOpacity>
+              {imageUrls.length > 0 ? (
+                <ImageCarousel data={imageUrls} width={254} />
               ) : (
                 <TouchableOpacity
                   onPress={handleImageUpload}

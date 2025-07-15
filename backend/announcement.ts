@@ -1,6 +1,7 @@
 import { Announcement } from 'components/types';
 import { collection, addDoc, updateDoc, doc, getDoc, getDocs, deleteDoc } from 'firebase/firestore';
-import { FIRESTORE_DB } from 'firebaseConfig';
+import { ref, listAll, deleteObject } from 'firebase/storage';
+import { FIREBASE_STR, FIRESTORE_DB } from 'firebaseConfig';
 
 export async function createAnnouncement(
   announcement: Partial<Announcement>
@@ -63,6 +64,14 @@ export async function deleteAnnouncement(id: string) {
   try {
     const announcementItemRef = doc(FIRESTORE_DB, `Announcements/${id}`);
     await deleteDoc(announcementItemRef);
+    const storageRef = ref(FIREBASE_STR, `announcements`);
+    const listResult = await listAll(storageRef);
+
+    const deletePromises = listResult.items
+      .filter((itemRef) => itemRef.name.startsWith(id))
+      .map((itemRef) => deleteObject(itemRef));
+
+    await Promise.all(deletePromises);
   } catch (error) {
     console.error('Error deleting announcement item:', error);
     throw error;

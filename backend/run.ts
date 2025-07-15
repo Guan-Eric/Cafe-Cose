@@ -9,8 +9,9 @@ import {
   deleteDoc,
   setDoc,
 } from 'firebase/firestore';
-import { FIRESTORE_DB } from 'firebaseConfig';
+import { FIREBASE_STR, FIRESTORE_DB } from 'firebaseConfig';
 import { getUser } from './user';
+import { deleteObject, listAll, ref } from 'firebase/storage';
 
 export async function createRun(run: Partial<Run>): Promise<Run> {
   try {
@@ -20,7 +21,7 @@ export async function createRun(run: Partial<Run>): Promise<Run> {
       message: run.message,
       notificationMessage: run.notificationMessage,
       date: run.date,
-      imageUrl: run.imageUrl || '',
+      imageUrls: run.imageUrls || [],
       isRSVP: run.isRSVP,
     });
     await updateDoc(runDocRef, { id: runDocRef.id });
@@ -39,7 +40,7 @@ export async function editRun(updatedRun: Run): Promise<Run> {
       message: updatedRun.message,
       notificationMessage: updatedRun.notificationMessage,
       date: updatedRun.date,
-      imageUrl: updatedRun.imageUrl,
+      imageUrls: updatedRun.imageUrls,
       isRSVP: updatedRun.isRSVP,
     });
     const updatedDoc = await getDoc(runRef);
@@ -72,7 +73,7 @@ export async function getRuns(): Promise<Run[]> {
         title: doc.data().title,
         message: doc.data().message,
         date: doc.data().date.toDate(),
-        imageUrl: doc.data().imageUrl,
+        imageUrls: doc.data().imageUrls,
         notificationMessage: doc.data().notificationMessage,
         participants: await getParticipants(doc.data().id),
         isRSVP: doc.data().isRSVP,
@@ -88,7 +89,15 @@ export async function getRuns(): Promise<Run[]> {
 export async function deleteRun(id: string) {
   try {
     const runDocRef = doc(FIRESTORE_DB, `Runs/${id}`);
-    deleteDoc(runDocRef);
+    await deleteDoc(runDocRef);
+    const storageRef = ref(FIREBASE_STR, `runs`);
+    const listResult = await listAll(storageRef);
+
+    const deletePromises = listResult.items
+      .filter((itemRef) => itemRef.name.startsWith(id))
+      .map((itemRef) => deleteObject(itemRef));
+
+    await Promise.all(deletePromises);
   } catch (error) {
     console.error('Error deleting run doc', error);
   }

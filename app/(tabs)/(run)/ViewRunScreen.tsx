@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,9 @@ import {
   TextInput,
   Button,
   ScrollView,
+  Pressable,
+  Animated,
+  Dimensions,
 } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Participant, RSVPStatus } from 'components/types';
@@ -20,9 +23,12 @@ import ReminderModal from 'components/modals/ReminderModal';
 import { getUser } from 'backend/user';
 import BackButton from 'components/BackButton';
 import ParticipantsCard from 'components/cards/ParticipantsCard';
+import { saveImageToGallery } from 'backend/image';
+import useButtonAnimation from 'components/useButtonAnimation';
+import RunImageCarousel from 'components/RunImageCarousel';
 
 const ViewRunScreen = () => {
-  const { id, runTitle, runMessage, runDate, runImageUrl, runIsRSVP, runParticipants } =
+  const { id, runTitle, runMessage, runDate, runImageUrls, runIsRSVP, runParticipants } =
     useLocalSearchParams();
 
   const [participants, setParticipants] = useState<Participant[]>(
@@ -33,8 +39,9 @@ const ViewRunScreen = () => {
       undefined
   );
   const [modalVisible, setModalVisible] = useState(false);
+  const updatedImageUrl = (runImageUrls as string)?.replaceAll('/o/runs/', '/o/runs%2F');
+  const imageUrls = updatedImageUrl.length > 0 ? updatedImageUrl.split(',') : [];
 
-  const updatedImageUrl = (runImageUrl as string)?.replace('/o/runs/', '/o/runs%2F');
   const formattedRunDate =
     new Date(runDate as string).toLocaleDateString([], {
       day: 'numeric',
@@ -62,23 +69,17 @@ const ViewRunScreen = () => {
 
   return (
     <View className="flex-1">
-      {runImageUrl ? (
-        <Image
-          source={{ uri: updatedImageUrl }}
-          className="h-[350px] w-full shadow-lg"
-          resizeMode="cover"
-        />
-      ) : null}
+      <View className="absolute left-4 top-14 z-10 rounded-xl bg-white/70">
+        <BackButton />
+      </View>
+      {imageUrls.length > 0 ? <RunImageCarousel data={imageUrls} runId={id as string} /> : null}
       <SafeAreaView className="flex-1 bg-background">
         <ScrollView>
-          <View className="absolute left-4 top-4 z-10">
-            <BackButton />
-          </View>
-          <View className="mt-2 flex-row ">
+          <View className="mt-2 flex-row px-4">
             <Text className="text-2xl font-bold text-text">{runTitle}</Text>
           </View>
 
-          <View className="flex-1 px-4 py-2">
+          <View className="flex-1 px-4 pb-2">
             <View className="mt-3 flex-row items-center justify-between">
               <Text className=" text-text">{formattedRunDate}</Text>
               {new Date(runDate as string) > new Date() && (

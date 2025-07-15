@@ -52,7 +52,7 @@ function RunScreen() {
                         runMessage: run.message,
                         runNotificationMessage: run.notificationMessage,
                         runDate: run.date?.toISOString(),
-                        runImageUrl: run.imageUrl,
+                        runImageUrls: run.imageUrls,
                         runIsRSVP: run.isRSVP?.toString(),
                         runParticipants: JSON.stringify(run.participants || []),
                       },

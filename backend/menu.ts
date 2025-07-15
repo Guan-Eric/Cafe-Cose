@@ -1,6 +1,7 @@
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore';
-import { FIRESTORE_DB } from '../firebaseConfig';
+import { FIREBASE_STR, FIRESTORE_DB } from '../firebaseConfig';
 import { MenuItem } from 'components/types';
+import { ref, listAll, deleteObject } from 'firebase/storage';
 
 export async function getMenu(): Promise<MenuItem[]> {
   try {
@@ -87,6 +88,14 @@ export async function deleteMenuItem(id: string): Promise<void> {
   try {
     const menuItemRef = doc(FIRESTORE_DB, `Menu/${id}`);
     await deleteDoc(menuItemRef);
+    const storageRef = ref(FIREBASE_STR, `menu`);
+    const listResult = await listAll(storageRef);
+
+    const deletePromises = listResult.items
+      .filter((itemRef) => itemRef.name.startsWith(id))
+      .map((itemRef) => deleteObject(itemRef));
+
+    await Promise.all(deletePromises);
   } catch (error) {
     console.error('Error deleting menu item:', error);
     throw error;

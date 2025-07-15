@@ -45,7 +45,7 @@ export interface Run {
   message: string;
   notificationMessage: string;
   date: Date;
-  imageUrl?: string;
+  imageUrls?: string[];
   isRSVP: boolean;
   participants?: Participant[];
 }

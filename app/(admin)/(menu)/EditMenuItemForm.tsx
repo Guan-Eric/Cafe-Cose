@@ -169,7 +169,7 @@ const EditMenuItemForm = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView className="flex-1 bg-background p-4">
+      <SafeAreaView className="flex-1 bg-background">
         <KeyboardAvoidingView behavior="padding" className="flex-1">
           <ScrollView>
             <BackButton />

@@ -16,6 +16,8 @@ export default {
         ITSAppUsesNonExemptEncryption: false,
         NSPhotoLibraryUsageDescription:
           'We need access to your photos to allow you to upload your profile picture.',
+        NSPhotoLibraryAddUsageDescription:
+          'This app needs permission to save images to your photo library.',
       },
     },
     android: {
@@ -47,6 +49,14 @@ export default {
         },
       ],
       ['expo-notifications', {}],
+      [
+        'expo-media-library',
+        {
+          photosPermission: 'Allow Café Cosé to access your photos.',
+          savePhotosPermission: 'Allow Café Cosé to save photos.',
+          isAccessMediaLocationEnabled: true,
+        },
+      ],
     ],
     extra: {
       eas: {

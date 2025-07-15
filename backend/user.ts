@@ -1,6 +1,7 @@
 import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
-import { FIREBASE_AUTH, FIRESTORE_DB } from '../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_STR, FIRESTORE_DB } from '../firebaseConfig';
 import { User } from 'components/types';
+import { ref, listAll, deleteObject } from 'firebase/storage';
 
 export async function addUser(name: string) {
   try {
@@ -97,6 +98,14 @@ export async function deleteAccount() {
   try {
     const userDocRef = doc(FIRESTORE_DB, `Users/${FIREBASE_AUTH.currentUser?.uid}`);
     await deleteDoc(userDocRef);
+    const storageRef = ref(FIREBASE_STR, `profile`);
+    const listResult = await listAll(storageRef);
+
+    const deletePromises = listResult.items
+      .filter((itemRef) => itemRef.name.startsWith(FIREBASE_AUTH.currentUser?.uid as string))
+      .map((itemRef) => deleteObject(itemRef));
+
+    await Promise.all(deletePromises);
   } catch (error) {
     console.error('Error deleting account:', error);
   }

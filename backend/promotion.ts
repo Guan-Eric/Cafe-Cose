@@ -10,7 +10,8 @@ import {
   query,
   updateDoc,
 } from 'firebase/firestore';
-import { FIRESTORE_DB } from 'firebaseConfig';
+import { ref, listAll, deleteObject } from 'firebase/storage';
+import { FIREBASE_STR, FIRESTORE_DB } from 'firebaseConfig';
 
 export async function getLatestPromotion(): Promise<Promotion | null> {
   try {
@@ -70,6 +71,14 @@ export async function deletePromotion(id: string) {
   try {
     const announcementItemRef = doc(FIRESTORE_DB, `Promotions/${id}`);
     await deleteDoc(announcementItemRef);
+    const storageRef = ref(FIREBASE_STR, `promotions`);
+    const listResult = await listAll(storageRef);
+
+    const deletePromises = listResult.items
+      .filter((itemRef) => itemRef.name.startsWith(id))
+      .map((itemRef) => deleteObject(itemRef));
+
+    await Promise.all(deletePromises);
   } catch (error) {
     console.error('Error deleting promotion item:', error);
     throw error;
