@@ -25,7 +25,7 @@ function PromotionScreen() {
 
   const handleEditPromotion = async () => {
     router.push({
-      pathname: '/(admin)/(promotion)/EditPromotionScreen',
+      pathname: '/(admin)/(home)/EditPromotionScreen',
       params: {
         id: promotion?.id,
         title: promotion?.title,

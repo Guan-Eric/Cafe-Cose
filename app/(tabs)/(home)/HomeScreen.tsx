@@ -188,6 +188,11 @@ function HomeScreen() {
               )}
             </View>
           </View>
+          <TouchableOpacity
+            className="my-4 w-[180px] self-center rounded-full bg-primary p-3"
+            onPress={() => router.push('/(tabs)/(home)/FeedbackScreen')}>
+            <Text className="text-center font-semibold text-white">Give Feedback</Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
     </SafeAreaView>

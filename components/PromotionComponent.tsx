@@ -19,7 +19,7 @@ export default function PromotionComponent({
   handleDismiss,
 }: PromotionComponentProps) {
   const handleCreatePromotion = () => {
-    router.push('/(admin)/(promotion)/CreatePromotionScreen');
+    router.push('/(admin)/(home)/CreatePromotionScreen');
   };
 
   const { width, height } = Dimensions.get('window');

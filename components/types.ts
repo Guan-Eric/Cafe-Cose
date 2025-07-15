@@ -67,3 +67,10 @@ export interface Promotion {
   imageUrl?: string;
   createdAt: Date;
 }
+
+export interface Feedback {
+  id: string;
+  feedback: string;
+  name: string;
+  createdAt: Date;
+}

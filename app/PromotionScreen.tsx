@@ -7,11 +7,10 @@ import { Promotion } from 'components/types';
 import { getLatestPromotion } from 'backend/promotion';
 
 export default function PromotionScreen() {
-  const { id } = useLocalSearchParams();
   const [promo, setPromo] = useState<Promotion | null>();
 
   const handleDismiss = async () => {
-    router.push('/(tabs)/(home)/HomeScreen');
+    router.replace('/(tabs)/(home)/HomeScreen');
   };
 
   const checkPromo = async () => {

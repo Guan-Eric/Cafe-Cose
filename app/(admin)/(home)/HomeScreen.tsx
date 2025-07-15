@@ -28,7 +28,7 @@ function HomeScreen() {
           <View className="py-4">
             <Text className="text-xl font-semibold text-text">Café Cosé</Text>
           </View>
-          <View className="px-4 py-2">
+          <View className="gap-4 px-4 py-2">
             <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/QRScannerScreen')}
               className="flex-row items-center justify-center rounded-full bg-green-500 px-4 py-4">
@@ -36,6 +36,20 @@ function HomeScreen() {
                 Scan QR Code
               </Text>
               <MaterialCommunityIcons name="camera" size={24} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.push('/(admin)/(home)/PromotionScreen')}
+              className="flex-row items-center justify-center rounded-full bg-blue-500 px-4 py-4">
+              <Text className="mr-2 self-center text-lg font-[Lato_400Regular] text-secondaryText">
+                View Promotion
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.push('/(admin)/(home)/FeedbackScreen')}
+              className="flex-row items-center justify-center rounded-full bg-gray-500 px-4 py-4">
+              <Text className="mr-2 self-center text-lg font-[Lato_400Regular] text-secondaryText">
+                View Feedback
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
