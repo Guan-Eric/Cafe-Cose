@@ -16,6 +16,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { register } from '../../backend/auth';
 import BackButton from '../../components/BackButton';
 import PasswordErrorModal from '../../components/modals/PasswordErrorModal';
+import AppleSignInButton from '../../components/AppleSignInButton';
 
 function SignUpScreen() {
   const [email, onChangeEmail] = useState('');
@@ -71,6 +72,16 @@ function SignUpScreen() {
     }
   };
 
+  const handleAppleSignInSuccess = () => {
+    // Navigate to main app after successful Apple sign-in
+    router.replace('/(tabs)/(home)/HomeScreen');
+  };
+
+  const handleAppleSignInError = (error: Error) => {
+    console.error('Apple Sign-In error:', error);
+    // Handle error if needed
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View className="flex-1 bg-background">
@@ -78,7 +89,7 @@ function SignUpScreen() {
           <SafeAreaView className="flex-1">
             <BackButton />
             <View className="flex-1 items-center justify-center">
-              <View className="items-center pb-[60px]">
+              <View className="items-center pb-[40px]">
                 <Image
                   className="h-[100px] w-[250px] self-center"
                   resizeMode="contain"
@@ -89,7 +100,7 @@ function SignUpScreen() {
                 </Text>
               </View>
 
-              <View className="pb-[90px]">
+              <View className="pb-[30px]">
                 <View className="h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Name</Text>
                   <TextInput
@@ -102,7 +113,7 @@ function SignUpScreen() {
                   />
                 </View>
 
-                <View className="mt-10 h-[60px] w-[254px]">
+                <View className="mt-5 h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">E-mail</Text>
                   <TextInput
                     className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
@@ -115,7 +126,7 @@ function SignUpScreen() {
                   {emailError ? <Text className="text-xs text-red-500">{emailError}</Text> : null}
                 </View>
 
-                <View className="mt-10 h-[60px] w-[254px]">
+                <View className="mt-5 h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Password</Text>
                   <TextInput
                     className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
@@ -126,7 +137,7 @@ function SignUpScreen() {
                   />
                 </View>
 
-                <View className="mt-10 h-[60px] w-[254px]">
+                <View className="mt-5 h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Confirm Password</Text>
                   <TextInput
                     className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
@@ -142,13 +153,21 @@ function SignUpScreen() {
               <TouchableOpacity
                 onPress={signUp}
                 disabled={loading}
-                className="h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
+                className="mb-4 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (
                   <Text className="font-[Lato_400Regular] text-white">Sign Up</Text>
                 )}
               </TouchableOpacity>
+
+              {/* Apple Sign-In Button */}
+              <AppleSignInButton
+                onSuccess={handleAppleSignInSuccess}
+                onError={handleAppleSignInError}
+                style="WHITE_OUTLINE"
+                type="SIGN_UP"
+              />
 
               <View className="items-center pt-5">
                 <Text className="text-base font-[Lato_400Regular] text-gray-500">

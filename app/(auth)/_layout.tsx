@@ -14,8 +14,8 @@ function LoginStackLayout() {
           headerLeft: () => null,
         }}
       />
-      <Stack.Screen name="SignInScreen" options={{ headerShown: false, gestureEnabled: false }} />
-      <Stack.Screen name="SignUpScreen" options={{ headerShown: false, gestureEnabled: false }} />
+      <Stack.Screen name="SignInScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="SignUpScreen" options={{ headerShown: false }} />
     </Stack>
   );
 }

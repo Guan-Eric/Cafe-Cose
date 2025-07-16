@@ -11,6 +11,7 @@ export default {
     newArchEnabled: true,
     ios: {
       bundleIdentifier: 'com.cafe.cose',
+      usesAppleSignIn: true,
       supportsTablet: true,
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
