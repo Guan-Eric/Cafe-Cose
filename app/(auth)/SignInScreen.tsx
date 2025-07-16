@@ -15,6 +15,7 @@ import {
 import { router } from 'expo-router';
 import { logIn } from '../../backend/auth';
 import BackButton from '../../components/BackButton';
+import AppleSignInButton from '../../components/AppleSignInButton';
 
 function SignInScreen() {
   const [email, onChangeEmail] = useState('');
@@ -43,6 +44,16 @@ function SignInScreen() {
     }
   };
 
+  const handleAppleSignInSuccess = () => {
+    // Navigate to main app after successful Apple sign-in
+    router.replace('/(tabs)/(home)/HomeScreen');
+  };
+
+  const handleAppleSignInError = (error: Error) => {
+    console.error('Apple Sign-In error:', error);
+    // Handle error if needed
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View className="flex-1 bg-background">
@@ -61,7 +72,7 @@ function SignInScreen() {
                 </Text>
               </View>
 
-              <View className="pb-[90px]">
+              <View className="pb-[30px]">
                 <View className="h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">E-mail</Text>
                   <TextInput
@@ -91,13 +102,21 @@ function SignInScreen() {
               <TouchableOpacity
                 onPress={signIn}
                 disabled={loading}
-                className="h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
+                className="mb-4 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (
                   <Text className="font-[Lato_400Regular] text-white">Sign In</Text>
                 )}
               </TouchableOpacity>
+
+              {/* Apple Sign-In Button */}
+              <AppleSignInButton
+                onSuccess={handleAppleSignInSuccess}
+                onError={handleAppleSignInError}
+                style="WHITE_OUTLINE"
+                type="SIGN_IN"
+              />
 
               <View className="items-center pt-5">
                 <Text className="text-base font-[Lato_400Regular] text-gray-500">
