@@ -5,11 +5,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#f7f5f1',
+        background: '#F6F0E8',
         primary: '#762e1f',
         text: '#1a1a1a',
         secondaryText: '#f8f9fa',
         input: '#e5e5e5',
+        cards: '#f1e3d1',
       },
     },
   },

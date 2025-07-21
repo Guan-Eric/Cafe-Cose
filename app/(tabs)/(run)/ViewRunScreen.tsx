@@ -69,12 +69,17 @@ const ViewRunScreen = () => {
 
   return (
     <View className="flex-1">
-      <View className="absolute left-4 top-14 z-10 rounded-xl bg-white/70">
-        <BackButton />
-      </View>
-      {imageUrls.length > 0 ? <RunImageCarousel data={imageUrls} runId={id as string} /> : null}
+      {imageUrls.length > 0 ? (
+        <>
+          <View className="absolute left-4 top-14 z-10 rounded-xl bg-white/70">
+            <BackButton />
+          </View>
+          <RunImageCarousel data={imageUrls} runId={id as string} />
+        </>
+      ) : null}
       <SafeAreaView className="flex-1 bg-background">
         <ScrollView>
+          {imageUrls.length === 0 ? <BackButton /> : null}
           <View className="mt-2 flex-row px-4">
             <Text className="text-2xl font-bold text-text">{runTitle}</Text>
           </View>

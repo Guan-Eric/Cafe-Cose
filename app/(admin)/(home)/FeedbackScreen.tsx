@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, SafeAreaView } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, SafeAreaView, Pressable } from 'react-native';
 import { getFeedbacks } from 'backend/feedback'; // Assuming there's a function to fetch feedbacks
 import { Feedback } from 'components/types';
+import BackButton from 'components/BackButton';
+import { router } from 'expo-router';
 
 const FeedbackScreen = () => {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
@@ -23,10 +25,22 @@ const FeedbackScreen = () => {
   }, []);
 
   const renderItem = ({ item }: { item: Feedback }) => (
-    <View style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
+    <Pressable
+      onPress={() =>
+        router.push({
+          pathname: '/(admin)/(home)/ViewFeedbackScreen',
+          params: {
+            id: item.id,
+            feedback: item.feedback,
+            name: item.name,
+            createdAt: item.createdAt.toLocaleString(),
+          },
+        })
+      }
+      style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
       <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
       <Text>{item.feedback}</Text>
-    </View>
+    </Pressable>
   );
 
   if (loading) {
@@ -35,6 +49,7 @@ const FeedbackScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
+      <BackButton />
       <FlatList
         data={feedbacks}
         renderItem={renderItem}

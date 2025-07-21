@@ -25,7 +25,7 @@ export const getFeedbacks = async (): Promise<Feedback[]> => {
       feedbackSnapshot.docs.map(async (doc) => ({
         id: doc.data().id as string,
         feedback: doc.data().feedback as string,
-        name: (await getUser(doc.id))?.name as string,
+        name: (await getUser(doc.data().userId))?.name as string,
         createdAt: doc.data().createdAt.toDate() as Date,
       }))
     );
