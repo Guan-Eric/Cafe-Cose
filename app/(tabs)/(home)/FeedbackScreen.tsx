@@ -22,15 +22,17 @@ const FeedbackScreen = () => {
 
   return (
     <SafeAreaView className="flex-1  bg-background ">
-      <BackButton />
-      <Text className="mx-4 mb-4 text-2xl font-bold text-text">User Feedback</Text>
+      <View className="mb-4 flex-row items-center">
+        <BackButton />
+        <Text className="font-sans text-3xl text-text">User Feedback</Text>
+      </View>
       <TextInput
         multiline
-        numberOfLines={4}
+        numberOfLines={10}
         value={feedback}
         onChangeText={setFeedback}
         placeholder="Enter your feedback here..."
-        className="mx-4 mb-4 h-40 rounded-lg border border-gray-300 p-2"
+        className="mx-4 mb-4 h-60 rounded-xl border-2 border-primary p-3"
       />
       <TouchableOpacity
         className="w-[180px] self-center rounded-full bg-primary p-3"

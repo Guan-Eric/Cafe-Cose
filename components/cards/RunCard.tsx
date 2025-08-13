@@ -31,7 +31,7 @@ const RunCard: React.FC<RunCardProps> = ({ run, onPress }) => {
       className="mb-4 w-[90%] self-center">
       <Animated.View
         style={{ transform: [{ scale: scaleValue }] }}
-        className="w-full self-center rounded-2xl bg-white p-4 shadow-sm">
+        className="w-full self-center rounded-2xl bg-card p-4 shadow-sm">
         <View className="flex-row items-center justify-between">
           <View className="justify-between">
             <Text className="mb-1 text-lg font-bold text-text">{formattedDate}</Text>
@@ -49,7 +49,7 @@ const RunCard: React.FC<RunCardProps> = ({ run, onPress }) => {
                           marginLeft: index === 0 ? 0 : -16,
                           zIndex: maxAvatars - index,
                         }}
-                        className="h-9 w-9 overflow-hidden rounded-full border-2 border-white bg-primary">
+                        className="h-9 w-9 overflow-hidden rounded-full border-2 border-card bg-primary">
                         {p.url ? (
                           <Image
                             source={{ uri: p.url }}

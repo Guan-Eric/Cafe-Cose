@@ -92,45 +92,47 @@ function HomeScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-1">
-        <View className="flex-row items-center justify-between px-4 pr-2">
-          <Text className="pl-2 text-2xl font-bold text-text">Home</Text>
-          <View className="flex-row items-center px-4">
-            {user?.admin && (
-              <TouchableOpacity
-                className="mr-2 rounded-full bg-primary px-4 py-2"
-                onPress={() =>
-                  router.replace({
-                    pathname: `/(admin)/(home)/HomeScreen`,
-                  })
-                }>
-                <Text className="text-lg font-semibold text-secondaryText">Admin</Text>
-              </TouchableOpacity>
-            )}
-
+    <View className="flex-1 bg-background">
+      <View
+        className={`absolute left-0 right-0 top-0 ${user?.admin ? 'h-[265px]' : 'h-[235px]'} bg-primary`}
+      />
+      <SafeAreaView className="flex-1">
+        <View className="flex-1">
+          {user?.admin && (
             <TouchableOpacity
+              className="mr-2 w-[130px] items-center self-center rounded-full bg-background px-2 py-1"
               onPress={() =>
-                router.push({
-                  pathname: `/(tabs)/(home)/SettingsScreen`,
-                  params: {
-                    username: user?.name,
-                    userUrl: user?.url,
-                    userAnnouncement: user?.announcements?.toString(),
-                    userRun: user?.runs?.toString(),
-                  },
+                router.replace({
+                  pathname: `/(admin)/(home)/HomeScreen`,
                 })
               }>
-              <MaterialCommunityIcons name="cog" size={24} color="#1a1a1a" />
+              <Text className="font-sans text-lg text-text">Admin</Text>
             </TouchableOpacity>
+          )}
+          <View className="flex-row items-center justify-between px-4 pr-2 pt-4">
+            <Text className="pl-2 font-sans text-3xl text-offwhite">Welcome to Café Cosé</Text>{' '}
+            <View className="flex-row items-center px-4">
+              <TouchableOpacity
+                onPress={() =>
+                  router.push({
+                    pathname: `/(tabs)/(home)/SettingsScreen`,
+                    params: {
+                      username: user?.name,
+                      userUrl: user?.url,
+                      userAnnouncement: user?.announcements?.toString(),
+                      userRun: user?.runs?.toString(),
+                    },
+                  })
+                }>
+                <MaterialCommunityIcons name="cog" size={24} color="#f8f8f8" />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <View className="px-4 pt-4">
-          <Text className="pl-2 text-xl font-semibold text-text">Welcome to Café Cosé</Text>
-          <Text className="mt-2 pl-2 text-gray-400">Pointe-Saint-Charles</Text>
-        </View>
-
-        <ScrollView className="flex-1 ">
+          <View className="px-4 ">
+            <Text className="mt-2 pl-2 font-sans text-xl text-offwhite opacity-60">
+              Pointe-Saint-Charles
+            </Text>
+          </View>
           <View className=" justify-center px-4 pt-4">
             <LoyaltyCard
               points={stamps}
@@ -144,58 +146,67 @@ function HomeScreen() {
               data={['All', ...Object.values(Category)]}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  className={`shadow-xs ml-2 rounded-lg p-2 ${item === selectedCategory ? 'bg-primary' : 'bg-gray-400'}`}
+                  className={`ml-2 rounded-lg px-2  ${
+                    item === selectedCategory ? 'bg-primary' : 'bg-background'
+                  } ${item === selectedCategory ? '' : 'border border-primary'}`}
                   onPress={() => filterMenu(item as Category)}>
-                  <Text className="text-white">{item}</Text>
+                  <Text
+                    className={`${item === selectedCategory ? 'text-white' : 'text-primary'} font-sans text-lg`}>
+                    {item}
+                  </Text>
                 </TouchableOpacity>
               )}
               keyExtractor={(item) => item}
             />
-            <View className="mt-2 flex-row flex-wrap justify-start justify-between">
-              {!loading && filteredMenu.length > 0 ? (
-                filteredMenu.map((menuItem) => (
-                  <MenuCard
-                    key={menuItem.id}
-                    menuItem={menuItem}
-                    onPress={() =>
-                      router.push({
-                        pathname: '/(tabs)/(home)/ViewMenuItem',
-                        params: {
-                          id: menuItem.id,
-                          name: menuItem.name,
-                          description: menuItem.description,
-                          price: menuItem.price,
-                          imageUrl: menuItem.imageUrl,
-                          available: menuItem.available?.toString(),
-                          category: menuItem.category,
-                          index: menuItem.index,
-                        },
-                      })
-                    }
-                  />
-                ))
-              ) : (
-                <View className="m-2 flex-row flex-wrap justify-between gap-6">
-                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
-                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
-                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
-                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
-                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
-                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
-                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
-                  <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
-                </View>
-              )}
-            </View>
           </View>
-          <TouchableOpacity
-            className="my-4 w-[180px] self-center rounded-full bg-primary p-3"
-            onPress={() => router.push('/(tabs)/(home)/FeedbackScreen')}>
-            <Text className="text-center font-semibold text-white">Give Feedback</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+          <ScrollView className="flex-1 ">
+            <View className="px-4">
+              <View className="mt-2 flex-row flex-wrap justify-start justify-between">
+                {!loading && filteredMenu.length > 0 ? (
+                  filteredMenu.map((menuItem) => (
+                    <MenuCard
+                      key={menuItem.id}
+                      menuItem={menuItem}
+                      onPress={() =>
+                        router.push({
+                          pathname: '/(tabs)/(home)/ViewMenuItem',
+                          params: {
+                            id: menuItem.id,
+                            name: menuItem.name,
+                            description: menuItem.description,
+                            price: menuItem.price,
+                            imageUrl: menuItem.imageUrl,
+                            available: menuItem.available?.toString(),
+                            category: menuItem.category,
+                            index: menuItem.index,
+                          },
+                        })
+                      }
+                    />
+                  ))
+                ) : (
+                  <View className="m-2 flex-row flex-wrap justify-between gap-6">
+                    <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                    <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                    <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                    <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                    <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                    <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                    <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                    <CardLoader width={Dimensions.get('window').width * 0.42} height={200} />
+                  </View>
+                )}
+              </View>
+            </View>
+            <TouchableOpacity
+              className="my-4 w-[150px] self-center rounded-full bg-primary py-3"
+              onPress={() => router.push('/(tabs)/(home)/FeedbackScreen')}>
+              <Text className="text-md text-center font-sans text-offwhite">Give Feedback</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 }
 

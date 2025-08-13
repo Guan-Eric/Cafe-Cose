@@ -5,12 +5,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#F6F0E8',
-        primary: '#762e1f',
-        text: '#1a1a1a',
-        secondaryText: '#f8f9fa',
-        input: '#e5e5e5',
-        cards: '#f1e3d1',
+        primary: '#762E1F', // Logo, main CTAs
+        background: '#F7F5F1', // Screen background
+        card: '#F7F5F1', // Cards / panels
+        text: '#3C2A20', // Main text
+        offwhite: '#F8F8F8', // Off white text
+        subtext: '#776759', // Secondary text / placeholder
+      },
+      fontFamily: {
+        sans: ['HALTimezoneTest', 'sans-serif'],
+        sansItalic: ['HALTimezoneTestItalic', 'sans-serif'],
       },
     },
   },

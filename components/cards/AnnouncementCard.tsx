@@ -15,7 +15,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, onPre
   return (
     <Pressable onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <Animated.View
-        className="m-2 w-[95%] flex-row rounded-2xl bg-white p-4 shadow-sm"
+        className="m-2 w-[95%] flex-row rounded-2xl bg-card p-4 shadow-sm"
         style={{ transform: [{ scale: scaleValue }] }}>
         <View className="flex-1">
           {announcement.imageUrl ? (

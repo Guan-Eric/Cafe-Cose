@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-const PRIMARY_COLOR = '#f8f9fa';
+const PRIMARY_COLOR = '#F7F5F1';
 const SECONDARY_COLOR = '#762e1f';
 const UNSELECTED_COLOR = '#e5e5e5';
 
@@ -90,7 +90,11 @@ const CustomNavBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
             onPress={onPress}
             onLayout={(event) => handleTabLayout(index, event)}
             style={[styles.tabItem]}>
-            {getIconByRouteName(route.name, isFocused ? SECONDARY_COLOR : UNSELECTED_COLOR)}
+            {getIconByRouteName(
+              route.name,
+              isFocused ? SECONDARY_COLOR : UNSELECTED_COLOR,
+              isFocused ? 'transparent' : SECONDARY_COLOR
+            )}
           </AnimatedTouchableOpacity>
         );
       })}
@@ -98,17 +102,35 @@ const CustomNavBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
     </View>
   );
 
-  function getIconByRouteName(routeName: string, color: string) {
+  function getIconByRouteName(routeName: string, color: string, borderColor: string) {
     switch (routeName) {
       case '(home)':
-        return <MaterialCommunityIcons name="home-variant" size={24} color={color} />;
+        return (
+          <MaterialCommunityIcons
+            name="home-variant"
+            size={24}
+            color={color}
+            borderColor={borderColor}
+          />
+        );
       case '(run)':
-        return <MaterialCommunityIcons name="run" size={24} color={color} />;
+        return (
+          <MaterialCommunityIcons name="run" size={24} color={color} borderColor={borderColor} />
+        );
       case '(announcement)':
-        return <MaterialCommunityIcons name="bell" size={24} color={color} />;
+        return (
+          <MaterialCommunityIcons name="bell" size={24} color={color} borderColor={borderColor} />
+        );
 
       default:
-        return <MaterialCommunityIcons name="home-variant" size={24} color={color} />;
+        return (
+          <MaterialCommunityIcons
+            name="home-variant"
+            size={24}
+            color={color}
+            borderColor={borderColor}
+          />
+        );
     }
   }
 };

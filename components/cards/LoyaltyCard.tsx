@@ -16,15 +16,9 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ points, onPress }) => {
   return (
     <Pressable onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <Animated.View
-        className="bg-cards m-2 rounded-2xl p-4 "
+        className="m-2 rounded-3xl bg-card p-4 shadow-md"
         style={{ transform: [{ scale: scaleValue }] }}>
-        <View className="flex-row items-center justify-between">
-          <Text className="text-xl font-[Lato_400Regular] text-text">Loyalty Stamps</Text>
-        </View>
-        <Text className="mt-1 text-sm font-[Lato_400Regular] text-text/80">
-          Collect 9 stamps and get your 10th drink for free!
-        </Text>
-        <View className="mt-4 justify-center">
+        <View className=" justify-center">
           {[...Array(rows)].map((_, rowIndex) => (
             <View key={rowIndex} className="space-around flex-row justify-center">
               {[...Array(stampsPerRow)].map((_, colIndex) => {
@@ -44,7 +38,7 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ points, onPress }) => {
             </View>
           ))}
         </View>
-        <Text className="mt-2 text-sm font-[Lato_400Regular] text-text/80">
+        <Text className="pl-2 text-sm font-[Lato_400Regular] text-text/80">
           Tap to scan QR code
         </Text>
       </Animated.View>

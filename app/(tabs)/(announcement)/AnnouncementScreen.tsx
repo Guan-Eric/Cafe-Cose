@@ -41,46 +41,49 @@ function MenuScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <StatusBar style="light" />
-      <View className="flex-1">
-        <View className="flex-row items-center justify-between px-4 py-2">
-          <Text className="pl-2 text-2xl font-bold text-text">Announcements</Text>
-        </View>
-        <ScrollView className="flex-1 px-4">
-          <View className="mt-2">
-            <View className="mt-2 items-center">
-              {loading ? (
-                <View className="gap-4">
-                  <CardLoader width={Dimensions.get('window').width * 0.9} height={200} />
-                  <CardLoader width={Dimensions.get('window').width * 0.9} height={200} />
-                </View>
-              ) : (
-                announcement.map((announcementItem) => (
-                  <AnnouncementCard
-                    key={announcementItem.id}
-                    announcement={announcementItem}
-                    onPress={() =>
-                      router.push({
-                        pathname: '/(tabs)/(announcement)/ViewAnnouncementScreen',
-                        params: {
-                          id: announcementItem.id,
-                          message: announcementItem.message,
-                          title: announcementItem.title,
-                          createdAt: announcementItem.createdAt?.toISOString(),
-                          imageUrl: announcementItem.imageUrl,
-                          notificationMessage: announcementItem.notificationMessage,
-                        },
-                      })
-                    }
-                  />
-                ))
-              )}
-            </View>
+    <View className="flex-1 bg-background">
+      <View className={`absolute left-0 right-0 top-0 h-[235px] bg-primary`} />
+      <SafeAreaView className="flex-1">
+        <StatusBar style="light" />
+        <View className="flex-1">
+          <View className="flex-row items-center justify-between px-4 pt-2">
+            <Text className="text-offwhite pl-4 font-sans text-3xl">Announcements</Text>
           </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+          <ScrollView className="flex-1 px-4">
+            <View className="mt-2">
+              <View className="mt-2 items-center">
+                {loading ? (
+                  <View className="gap-4">
+                    <CardLoader width={Dimensions.get('window').width * 0.9} height={200} />
+                    <CardLoader width={Dimensions.get('window').width * 0.9} height={200} />
+                  </View>
+                ) : (
+                  announcement.map((announcementItem) => (
+                    <AnnouncementCard
+                      key={announcementItem.id}
+                      announcement={announcementItem}
+                      onPress={() =>
+                        router.push({
+                          pathname: '/(tabs)/(announcement)/ViewAnnouncementScreen',
+                          params: {
+                            id: announcementItem.id,
+                            message: announcementItem.message,
+                            title: announcementItem.title,
+                            createdAt: announcementItem.createdAt?.toISOString(),
+                            imageUrl: announcementItem.imageUrl,
+                            notificationMessage: announcementItem.notificationMessage,
+                          },
+                        })
+                      }
+                    />
+                  ))
+                )}
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 }
 

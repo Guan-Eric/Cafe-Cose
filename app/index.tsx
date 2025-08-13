@@ -4,11 +4,14 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../firebaseConfig';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getLatestPromotion } from 'backend/promotion';
-import { Promotion } from 'components/types';
+import { useFonts } from 'expo-font';
 
 function Index() {
   const [loading, setLoading] = useState(true);
+  const [fontsLoaded] = useFonts({
+    HALTimezoneTestItalic: require('../assets/fonts/HALTimezoneTest-Italic.otf'),
+    HALTimezoneTest: require('../assets/fonts/HALTimezoneTest-Regular.otf'),
+  });
 
   const checkFirstLaunch = async () => {
     const hasOnboarded = await AsyncStorage.getItem('hasOnboarded');

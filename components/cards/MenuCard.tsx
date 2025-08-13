@@ -14,16 +14,14 @@ const MenuCard: React.FC<MenuCardProps> = ({ menuItem, onPress }) => {
   return (
     <Pressable onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <Animated.View
-        className="m-2 rounded-2xl bg-white p-4 shadow-sm"
+        className="m-2 rounded-3xl bg-card shadow-sm"
         style={{ transform: [{ scale: scaleValue }] }}>
         <MenuCardImage url={menuItem.imageUrl} />
-        <View className="justify-between">
+        <View className="justify-between px-4 py-1 pb-2">
           <View>
-            <Text className="text-lg font-[Lato_400Regular] text-text">{menuItem.name}</Text>
+            <Text className="font-sans text-lg text-text">{menuItem.name}</Text>
           </View>
-          <Text className="text-base font-[Lato_400Regular] text-primary">
-            ${menuItem?.price?.toFixed(2)}
-          </Text>
+          <Text className="font-sans text-base text-primary">${menuItem?.price?.toFixed(2)}</Text>
         </View>
       </Animated.View>
     </Pressable>
