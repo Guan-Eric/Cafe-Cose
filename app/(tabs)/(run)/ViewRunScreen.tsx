@@ -26,6 +26,7 @@ import ParticipantsCard from 'components/cards/ParticipantsCard';
 import { saveImageToGallery } from 'backend/image';
 import useButtonAnimation from 'components/useButtonAnimation';
 import RunImageCarousel from 'components/RunImageCarousel';
+import BackButtonWithBackground from 'components/BackButtonWithBackground';
 
 const ViewRunScreen = () => {
   const { id, runTitle, runMessage, runDate, runImageUrls, runIsRSVP, runParticipants } =
@@ -71,10 +72,8 @@ const ViewRunScreen = () => {
     <View className="flex-1">
       {imageUrls.length > 0 ? (
         <>
-          <View className="absolute left-4 top-14 z-10 rounded-xl bg-white/70">
-            <BackButton />
-          </View>
-          <RunImageCarousel data={imageUrls} runId={id as string} />
+          <BackButtonWithBackground />
+          <RunImageCarousel data={imageUrls} runId={id as string} isDownloadable={true} />
         </>
       ) : null}
       <SafeAreaView className="flex-1 bg-background">

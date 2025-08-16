@@ -39,11 +39,10 @@ function RunScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <View className={`absolute left-0 right-0 top-0 h-[235px] bg-primary`} />
+      <RunImageHeader />
       <ScrollView className="flex-1 ">
-        <RunImageHeader />
-        <SafeAreaView className="flex-1 px-4 pt-4">
-          <View className="mb-2 px-6 pt-2">
+        <SafeAreaView className="flex-1 px-4 ">
+          <View className="mb-2 px-6 ">
             <Text className="text-2xl font-bold text-text">Café Cosé Run Club 🏃‍♂️</Text>
             <Text className="text-text">• Tuesday 7 AM</Text>
             <Text className="text-text">• Wednesday 6:30 PM</Text>

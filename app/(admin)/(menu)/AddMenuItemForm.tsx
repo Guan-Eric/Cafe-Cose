@@ -22,6 +22,7 @@ import { router } from 'expo-router';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
 import { Category, MenuItem } from 'components/types';
+import ImageCarousel from 'components/ImageCarousel';
 
 interface AddMenuItemFormProps {
   onClose: () => void;
@@ -31,8 +32,8 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [blob, setBlob] = useState<Blob>();
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [blobs, setBlobs] = useState<Blob[]>([]);
   const [loading, setLoading] = useState(false);
   const [available, setAvailable] = useState<boolean>(true);
   const [category, setCategory] = useState<Category>(Category.Coffee);
@@ -45,31 +46,35 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
         description,
         price: parseFloat(price),
         available: available,
-        imageUrl,
+        imageUrls,
         category,
       };
       const menuItem = await addMenuItem(menuItemData);
-      const imageRef = ref(FIREBASE_STR, `menu/${menuItem.id}`);
-      const uploadTask = uploadBytesResumable(imageRef, blob as Blob);
+      const downloadUrls = [];
+      for (let i = 0; i < blobs.length; i++) {
+        const imageRef = ref(FIREBASE_STR, `menu/${menuItem.id}_${i}`);
+        const uploadTask = uploadBytesResumable(imageRef, blobs[i]);
 
-      const downloadUrl = await new Promise((resolve, reject) => {
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          },
-          (error) => {
-            console.error(`Error uploading image:`, error);
-            reject(error);
-          },
-          async () => {
-            const url = await getDownloadURL(uploadTask.snapshot.ref);
-            resolve(url);
-          }
-        );
-      });
-      if (blob) {
-        const updatedMenuItem = { ...menuItem, imageUrl: downloadUrl as string };
+        const downloadUrl = await new Promise((resolve, reject) => {
+          uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            },
+            (error) => {
+              console.error(`Error uploading image:`, error);
+              reject(error);
+            },
+            async () => {
+              const url = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(url);
+            }
+          );
+        });
+        downloadUrls.push(downloadUrl);
+      }
+      if (blobs.length > 0) {
+        const updatedMenuItem = { ...menuItem, imageUrls: (downloadUrls as string[]) || [] };
         editMenuItem(updatedMenuItem);
       }
       Alert.alert('Success', 'Menu item added successfully!');
@@ -84,24 +89,24 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
   const handleImageUpload = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
-      allowsMultipleSelection: false,
-      aspect: [1, 1],
-      allowsEditing: true,
-      quality: 0.5,
+      allowsMultipleSelection: true,
+      quality: 1,
     });
 
     if (!result.canceled) {
-      try {
-        const response = await fetch(result.assets[0].uri);
-        const blob = await response.blob();
+      const blobsAndImages = await Promise.all(
+        result.assets.map(async (asset) => {
+          const response = await fetch(asset.uri);
+          const blob = await response.blob();
+          return { blob, image: asset.uri };
+        })
+      );
 
-        setImageUrl(result.assets[0].uri);
-        setBlob(blob);
-      } catch (error) {
-        Alert.alert('Error', 'Cannot upload image');
-      }
-    } else {
-      Alert.alert('Image selection was canceled.');
+      const blobs = blobsAndImages.map((item) => item.blob);
+      const images = blobsAndImages.map((item) => item.image);
+
+      setBlobs(blobs);
+      setImageUrls(images);
     }
   };
 
@@ -121,7 +126,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                 <View className="h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Name</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
                     value={name}
                     onChangeText={setName}
                     autoCapitalize="words"
@@ -132,7 +137,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                 <View className="mt-3 h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Price</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
                     value={price}
                     onChangeText={setPrice}
                     keyboardType="numeric"
@@ -143,7 +148,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                 <View className="mt-3 h-[100px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Description</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
                     value={description}
                     onChangeText={setDescription}
                     multiline
@@ -173,16 +178,8 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                   <Text className="font-[Lato_400Regular] text-text">Available</Text>
                   <Switch value={available} onValueChange={setAvailable} className="ml-2" />
                 </View>
-                {imageUrl ? (
-                  <TouchableOpacity
-                    onPress={handleImageUpload}
-                    className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
-                    <Image
-                      source={{ uri: imageUrl }}
-                      className="h-full w-full rounded-lg"
-                      resizeMode="cover"
-                    />
-                  </TouchableOpacity>
+                {imageUrls.length > 0 ? (
+                  <ImageCarousel data={imageUrls} width={254} />
                 ) : (
                   <TouchableOpacity
                     onPress={handleImageUpload}
@@ -191,7 +188,6 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                   </TouchableOpacity>
                 )}
               </View>
-
               <TouchableOpacity
                 onPress={handleSubmit}
                 disabled={loading || !(description && name && price)}

@@ -10,9 +10,15 @@ interface RunImageCarouselProps {
   data: string[];
   runId: string; // Add runId prop
   imageStoragePaths?: string[]; // Optional: if you have the storage paths
+  isDownloadable: boolean;
 }
 
-const RunImageCarousel = ({ data, runId, imageStoragePaths }: RunImageCarouselProps) => {
+const RunImageCarousel = ({
+  data,
+  runId,
+  imageStoragePaths,
+  isDownloadable,
+}: RunImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const ScreenWidth = Dimensions.get('screen').width;
   const { scaleValue, handlePressIn, handlePressOut } = useButtonAnimation(1.05);
@@ -67,7 +73,7 @@ const RunImageCarousel = ({ data, runId, imageStoragePaths }: RunImageCarouselPr
             width: ScreenWidth,
             height: ScreenWidth,
             resizeMode: 'cover',
-            transform: [{ scale: scaleValue }],
+            transform: isDownloadable ? [{ scale: scaleValue }] : undefined,
           }}
           source={{ uri: item }}
         />
@@ -83,21 +89,23 @@ const RunImageCarousel = ({ data, runId, imageStoragePaths }: RunImageCarouselPr
       style={{
         width: ScreenWidth,
         height: 350, // Fixed height as in your original code
+        position: 'relative',
       }}>
       <Animated.Image
         style={{
           width: '100%',
           height: '100%',
           resizeMode: 'cover',
-          transform: [{ scale: scaleValue }],
+          transform: isDownloadable ? [{ scale: scaleValue }] : undefined,
         }}
         source={{ uri: data[0] }}
       />
+      <View className="absolute bottom-0 w-full items-center rounded-tl-3xl rounded-tr-3xl bg-background p-3" />
     </Pressable>
   );
 
   return (
-    <View style={{ alignItems: 'center', gap: 10 }} className="bg-background">
+    <View style={{ alignItems: 'center' }} className="relative bg-background">
       {data?.length > 1 ? (
         <>
           <Carousel
@@ -111,34 +119,36 @@ const RunImageCarousel = ({ data, runId, imageStoragePaths }: RunImageCarouselPr
               setCurrentIndex(index);
             }}
           />
-          <AnimatedDotsCarousel
-            length={data?.length}
-            currentIndex={currentIndex}
-            maxIndicators={data?.length}
-            activeIndicatorConfig={{
-              color: '#762e1f',
-              margin: 3,
-              opacity: 1,
-              size: 8,
-            }}
-            inactiveIndicatorConfig={{
-              color: 'black',
-              margin: 3,
-              opacity: 0.5,
-              size: 6,
-            }}
-            decreasingDots={[
-              {
-                config: {
-                  color: 'black',
-                  margin: 3,
-                  opacity: 0.5,
-                  size: 6,
+          <View className="absolute bottom-0 w-full items-center rounded-tl-3xl rounded-tr-3xl bg-background pt-3">
+            <AnimatedDotsCarousel
+              length={data?.length}
+              currentIndex={currentIndex}
+              maxIndicators={data?.length}
+              activeIndicatorConfig={{
+                color: '#762e1f',
+                margin: 3,
+                opacity: 1,
+                size: 8,
+              }}
+              inactiveIndicatorConfig={{
+                color: 'black',
+                margin: 3,
+                opacity: 0.5,
+                size: 6,
+              }}
+              decreasingDots={[
+                {
+                  config: {
+                    color: 'black',
+                    margin: 3,
+                    opacity: 0.5,
+                    size: 6,
+                  },
+                  quantity: 1,
                 },
-                quantity: 1,
-              },
-            ]}
-          />
+              ]}
+            />
+          </View>
         </>
       ) : data?.length === 1 ? (
         renderSingleImage()

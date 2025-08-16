@@ -58,6 +58,7 @@ export default {
           isAccessMediaLocationEnabled: true,
         },
       ],
+      ['expo-video'],
     ],
     extra: {
       eas: {

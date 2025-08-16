@@ -16,7 +16,7 @@ export interface MenuItem {
   description: string;
   price: number;
   category: Category;
-  imageUrl: string;
+  imageUrls?: string[];
   available: boolean;
   index: number;
 }
@@ -26,7 +26,7 @@ export interface Announcement {
   title: string;
   message: string;
   notificationMessage: string;
-  imageUrl?: string;
+  imageUrls?: string[];
   createdAt: Date;
 }
 
