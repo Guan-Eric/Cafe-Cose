@@ -18,21 +18,21 @@ function HomeScreen() {
                 pathname: `/(tabs)/(home)/HomeScreen`,
               })
             }>
-            <Text className="text-lg font-semibold text-secondaryText">Client View</Text>
+            <Text className="text-lg font-semibold text-offwhite">Client View</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => logOut()} className="rounded-full bg-red-500 px-4 py-2">
-            <Text className="text-lg font-semibold text-secondaryText">Logout</Text>
+            <Text className="text-lg font-semibold text-offwhite">Logout</Text>
           </TouchableOpacity>
         </View>
         <View className="px-4">
           <View className="py-4">
-            <Text className="text-xl font-semibold text-text">Café Cosé</Text>
+            <Text className="font-sans text-3xl text-primary">Café Cosé</Text>
           </View>
           <View className="gap-4 px-4 py-2">
             <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/QRScannerScreen')}
               className="flex-row items-center justify-center rounded-full bg-green-500 px-4 py-4">
-              <Text className="mr-2 self-center text-lg font-[Lato_400Regular] text-secondaryText">
+              <Text className="mr-2 self-center text-lg font-[Lato_400Regular] text-offwhite">
                 Scan QR Code
               </Text>
               <MaterialCommunityIcons name="camera" size={24} color="white" />
@@ -40,14 +40,14 @@ function HomeScreen() {
             <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/PromotionScreen')}
               className="flex-row items-center justify-center rounded-full bg-blue-500 px-4 py-4">
-              <Text className="mr-2 self-center text-lg font-[Lato_400Regular] text-secondaryText">
+              <Text className="mr-2 self-center text-lg font-[Lato_400Regular] text-offwhite">
                 View Promotion
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/FeedbackScreen')}
               className="flex-row items-center justify-center rounded-full bg-gray-500 px-4 py-4">
-              <Text className="mr-2 self-center text-lg font-[Lato_400Regular] text-secondaryText">
+              <Text className="mr-2 self-center text-lg font-[Lato_400Regular] text-offwhite">
                 View Feedback
               </Text>
             </TouchableOpacity>

@@ -13,7 +13,7 @@ export async function createAnnouncement(
       message: announcement.message,
       notificationMessage: announcement.notificationMessage,
       createdAt: new Date(),
-      imageUrl: announcement.imageUrl || '',
+      imageUrls: announcement.imageUrls || [],
     });
     await updateDoc(announcementDocRef, { id: announcementDocRef.id });
     return { ...announcement, id: announcementDocRef.id } as Announcement;
@@ -31,7 +31,7 @@ export async function editAnnouncement(updatedAnnouncement: Announcement): Promi
       message: updatedAnnouncement.message,
       notificationMessage: updatedAnnouncement.notificationMessage,
       createdAt: updatedAnnouncement.createdAt,
-      imageUrl: updatedAnnouncement.imageUrl,
+      imageUrls: updatedAnnouncement.imageUrls,
     });
     const updatedDoc = await getDoc(announcementRef);
     return updatedDoc.data() as Announcement;
@@ -51,7 +51,7 @@ export async function getAnnouncements(): Promise<Announcement[]> {
       message: doc.data().message,
       notificationMessage: doc.data().notificationMessage,
       createdAt: doc.data().createdAt.toDate(),
-      imageUrl: doc.data().imageUrl,
+      imageUrls: doc.data().imageUrls,
     })) as Announcement[];
     return announcements;
   } catch (error) {

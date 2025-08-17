@@ -18,9 +18,9 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, onPre
         className="m-2 w-[95%] flex-row rounded-2xl bg-card p-4 shadow-sm"
         style={{ transform: [{ scale: scaleValue }] }}>
         <View className="flex-1">
-          {announcement.imageUrl ? (
+          {announcement.imageUrls ? (
             <Image
-              source={{ uri: announcement.imageUrl }}
+              source={{ uri: announcement.imageUrls[0] }}
               className="h-[200px] w-[100%] rounded-lg"
               resizeMode="cover"
             />

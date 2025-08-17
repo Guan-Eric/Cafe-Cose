@@ -13,6 +13,7 @@ import {
   ScrollView,
   Image,
   Switch,
+  Pressable,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
@@ -23,6 +24,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
 import { Category, MenuItem } from 'components/types';
 import ImageCarousel from 'components/ImageCarousel';
+import { handleImageUpload } from 'backend/image';
 
 interface AddMenuItemFormProps {
   onClose: () => void;
@@ -83,30 +85,6 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
       console.error('Error adding menu item:', error);
       Alert.alert('Error', 'Failed to add menu item.');
       setLoading(false);
-    }
-  };
-
-  const handleImageUpload = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsMultipleSelection: true,
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      const blobsAndImages = await Promise.all(
-        result.assets.map(async (asset) => {
-          const response = await fetch(asset.uri);
-          const blob = await response.blob();
-          return { blob, image: asset.uri };
-        })
-      );
-
-      const blobs = blobsAndImages.map((item) => item.blob);
-      const images = blobsAndImages.map((item) => item.image);
-
-      setBlobs(blobs);
-      setImageUrls(images);
     }
   };
 
@@ -179,10 +157,12 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                   <Switch value={available} onValueChange={setAvailable} className="ml-2" />
                 </View>
                 {imageUrls.length > 0 ? (
-                  <ImageCarousel data={imageUrls} width={254} />
+                  <Pressable onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
+                    <ImageCarousel data={imageUrls} width={254} />
+                  </Pressable>
                 ) : (
                   <TouchableOpacity
-                    onPress={handleImageUpload}
+                    onPress={() => handleImageUpload(setBlobs, setImageUrls)}
                     className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
                     <Text className="text-text">Upload Image</Text>
                   </TouchableOpacity>

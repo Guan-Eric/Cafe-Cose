@@ -4,7 +4,7 @@ import {
   Text,
   SafeAreaView,
   ScrollView,
-  Pressable,
+  Image,
   Dimensions,
   FlatList,
   TouchableOpacity,
@@ -110,7 +110,7 @@ function HomeScreen() {
             </TouchableOpacity>
           )}
           <View className="flex-row items-center justify-between px-4 pr-2 pt-4">
-            <Text className="pl-2 font-sans text-3xl text-offwhite">Welcome to Café Cosé</Text>{' '}
+            <Text className="pl-2 font-sans text-3xl text-offwhite">Welcome to Café Cosé</Text>
             <View className="flex-row items-center px-4">
               <TouchableOpacity
                 onPress={() =>
@@ -139,27 +139,27 @@ function HomeScreen() {
               onPress={() => router.push({ pathname: '/(tabs)/(home)/QRCodeScreen' })}
             />
           </View>
-          <View className="px-4 pt-2">
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={['All', ...Object.values(Category)]}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  className={`ml-2 rounded-lg px-2  ${
-                    item === selectedCategory ? 'bg-primary' : 'bg-background'
-                  } ${item === selectedCategory ? '' : 'border border-primary'}`}
-                  onPress={() => filterMenu(item as Category)}>
-                  <Text
-                    className={`${item === selectedCategory ? 'text-white' : 'text-primary'} font-sans text-lg`}>
-                    {item}
-                  </Text>
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item) => item}
-            />
-          </View>
           <ScrollView className="flex-1 ">
+            <View className="mt-4 px-4">
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={['All', ...Object.values(Category)]}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    className={`ml-2 rounded-lg px-2  ${
+                      item === selectedCategory ? 'bg-primary' : 'bg-background'
+                    } ${item === selectedCategory ? '' : 'border border-primary'}`}
+                    onPress={() => filterMenu(item as Category)}>
+                    <Text
+                      className={`${item === selectedCategory ? 'text-white' : 'text-primary'} font-sans text-lg`}>
+                      {item}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item}
+              />
+            </View>
             <View className="px-4">
               <View className="mt-2 flex-row flex-wrap justify-start justify-between">
                 {!loading && filteredMenu.length > 0 ? (
@@ -175,7 +175,7 @@ function HomeScreen() {
                             name: menuItem.name,
                             description: menuItem.description,
                             price: menuItem.price,
-                            imageUrl: menuItem.imageUrl,
+                            menuImageUrls: menuItem.imageUrls,
                             available: menuItem.available?.toString(),
                             category: menuItem.category,
                             index: menuItem.index,
@@ -198,6 +198,11 @@ function HomeScreen() {
                 )}
               </View>
             </View>
+            <Image
+              source={require('../../../assets/cafe-cose.png')}
+              className="m-1 h-32 w-32 self-center"
+              resizeMode="contain"
+            />
             <TouchableOpacity
               className="my-4 w-[150px] self-center rounded-full bg-primary py-3"
               onPress={() => router.push('/(tabs)/(home)/FeedbackScreen')}>

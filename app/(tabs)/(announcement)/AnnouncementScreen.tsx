@@ -70,7 +70,7 @@ function MenuScreen() {
                             message: announcementItem.message,
                             title: announcementItem.title,
                             createdAt: announcementItem.createdAt?.toISOString(),
-                            imageUrl: announcementItem.imageUrl,
+                            announcementImageUrls: announcementItem.imageUrls,
                             notificationMessage: announcementItem.notificationMessage,
                           },
                         })

@@ -16,7 +16,7 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ points, onPress }) => {
   return (
     <Pressable onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <Animated.View
-        className="m-2 rounded-3xl bg-card p-4 shadow-md"
+        className="mx-2 mt-2 rounded-3xl bg-card p-4 shadow-md"
         style={{ transform: [{ scale: scaleValue }] }}>
         <View className=" justify-center">
           {[...Array(rows)].map((_, rowIndex) => (

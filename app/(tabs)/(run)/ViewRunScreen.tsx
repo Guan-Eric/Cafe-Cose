@@ -1,30 +1,12 @@
-import { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Image,
-  TouchableOpacity,
-  Alert,
-  Modal,
-  TextInput,
-  Button,
-  ScrollView,
-  Pressable,
-  Animated,
-  Dimensions,
-} from 'react-native';
+import { useState } from 'react';
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Participant, RSVPStatus } from 'components/types';
 import { editRSVPRun, getParticipants } from 'backend/run';
 import { FIREBASE_AUTH } from 'firebaseConfig';
-import { scheduleRunReminder } from 'backend/notification'; // Import the function to schedule reminders
 import ReminderModal from 'components/modals/ReminderModal';
-import { getUser } from 'backend/user';
 import BackButton from 'components/BackButton';
 import ParticipantsCard from 'components/cards/ParticipantsCard';
-import { saveImageToGallery } from 'backend/image';
-import useButtonAnimation from 'components/useButtonAnimation';
 import RunImageCarousel from 'components/RunImageCarousel';
 import BackButtonWithBackground from 'components/BackButtonWithBackground';
 

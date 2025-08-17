@@ -13,13 +13,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 const cafeAddress = '1883 Centre St, Montreal, Quebec H3K 1J1';
 
 const openingHours = [
+  { day: 'Sunday', hours: '9:00 AM - 9:00 PM' },
   { day: 'Monday', hours: '8:00 AM - 6:00 PM' },
   { day: 'Tuesday', hours: '8:00 AM - 6:00 PM' },
-  { day: 'Wednesday', hours: '8:00 AM - 6:00 PM' },
-  { day: 'Thursday', hours: '8:00 AM - 6:00 PM' },
-  { day: 'Friday', hours: '8:00 AM - 8:00 PM' },
-  { day: 'Saturday', hours: '9:00 AM - 8:00 PM' },
-  { day: 'Sunday', hours: '9:00 AM - 4:00 PM' },
+  { day: 'Wednesday', hours: '8:00 AM - 9:00 PM' },
+  { day: 'Thursday', hours: '8:00 AM - 9:00 PM' },
+  { day: 'Friday', hours: '8:00 AM - 9:00 PM' },
+  { day: 'Saturday', hours: '9:00 AM - 9:00 PM' },
 ];
 
 export default function InformationScreen() {
@@ -53,7 +53,7 @@ export default function InformationScreen() {
           {openingHours.map((item) => (
             <View key={item.day} className="w-full flex-row items-center py-1">
               <Text className="flex-1 font-sans text-text">{item.day}</Text>
-              <View className="mx-4 h-px flex-1 bg-primary" />
+              <View className="mx-6 h-px flex-1 bg-primary" />
               <Text className="text-right font-sans text-primary">{item.hours}</Text>
             </View>
           ))}

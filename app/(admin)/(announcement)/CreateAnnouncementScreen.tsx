@@ -22,38 +22,16 @@ import { createAnnouncement, editAnnouncement } from 'backend/announcement';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
 import { notifyAnnouncement } from 'backend/notification';
+import { handleImageUpload } from 'backend/image';
+import ImageCarousel from 'components/ImageCarousel';
 
 const CreateAnnouncementScreen = () => {
   const [title, setTitle] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [notificationMessage, setNotificationMessage] = useState<string>('');
-  const [imageUrl, setImageUrl] = useState<string>('');
-  const [blob, setBlob] = useState<Blob>();
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [blobs, setBlobs] = useState<Blob[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-
-  const handleImageUpload = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsMultipleSelection: false,
-      aspect: [1, 1],
-      allowsEditing: true,
-      quality: 0.5,
-    });
-
-    if (!result.canceled) {
-      try {
-        const response = await fetch(result.assets[0].uri);
-        const blob = await response.blob();
-
-        setImageUrl(result.assets[0].uri);
-        setBlob(blob);
-      } catch (error) {
-        console.error('Error uploading images:', error);
-      }
-    } else {
-      console.error('Image selection was canceled.');
-    }
-  };
 
   const handleCreateAnnouncement = async () => {
     setLoading(true);
@@ -67,31 +45,38 @@ const CreateAnnouncementScreen = () => {
       message,
       notificationMessage,
       createdAt: new Date(),
-      imageUrl,
+      imageUrls,
     };
     try {
       const newAnnouncement = await createAnnouncement(newAnnouncementData);
-      const imageRef = ref(FIREBASE_STR, `announcements/${newAnnouncement.id}`);
-      const uploadTask = uploadBytesResumable(imageRef, blob as Blob);
+      const downloadUrls = [];
+      for (let i = 0; i < blobs.length; i++) {
+        const imageRef = ref(FIREBASE_STR, `announcements/${newAnnouncement.id}_${i}`);
+        const uploadTask = uploadBytesResumable(imageRef, blobs[i]);
 
-      const downloadUrl = await new Promise((resolve, reject) => {
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          },
-          (error) => {
-            console.error(`Error uploading image:`, error);
-            reject(error);
-          },
-          async () => {
-            const url = await getDownloadURL(uploadTask.snapshot.ref);
-            resolve(url);
-          }
-        );
-      });
-      if (blob) {
-        const updatedAnnouncement = { ...newAnnouncement, imageUrl: downloadUrl as string };
+        const downloadUrl = await new Promise((resolve, reject) => {
+          uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            },
+            (error) => {
+              console.error(`Error uploading image:`, error);
+              reject(error);
+            },
+            async () => {
+              const url = await getDownloadURL(uploadTask.snapshot.ref);
+              resolve(url);
+            }
+          );
+        });
+        downloadUrls.push(downloadUrl);
+      }
+      if (blobs.length > 0) {
+        const updatedAnnouncement = {
+          ...newAnnouncement,
+          imageUrls: (downloadUrls as string[]) || [],
+        };
         editAnnouncement(updatedAnnouncement);
       }
       setLoading(false);
@@ -151,7 +136,7 @@ const CreateAnnouncementScreen = () => {
                   value={title}
                   maxLength={40}
                   onChangeText={setTitle}
-                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                  className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
                 />
               </View>
               <View className="mt-3 h-[60px] w-[254px]">
@@ -160,7 +145,7 @@ const CreateAnnouncementScreen = () => {
                   value={notificationMessage}
                   maxLength={120}
                   onChangeText={setNotificationMessage}
-                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                  className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
                 />
               </View>
               <View className="mt-3 h-[180px] w-[254px]">
@@ -169,23 +154,17 @@ const CreateAnnouncementScreen = () => {
                   value={message}
                   onChangeText={setMessage}
                   multiline
-                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                  className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
                 />
               </View>
 
-              {imageUrl ? (
-                <TouchableOpacity
-                  onPress={handleImageUpload}
-                  className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
-                  <Image
-                    source={{ uri: imageUrl }}
-                    className="h-full w-full rounded-lg"
-                    resizeMode="cover"
-                  />
-                </TouchableOpacity>
+              {imageUrls.length > 0 ? (
+                <Pressable onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
+                  <ImageCarousel data={imageUrls} width={254} />
+                </Pressable>
               ) : (
                 <TouchableOpacity
-                  onPress={handleImageUpload}
+                  onPress={() => handleImageUpload(setBlobs, setImageUrls)}
                   className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
                   <Text className="text-text">Upload Image</Text>
                 </TouchableOpacity>

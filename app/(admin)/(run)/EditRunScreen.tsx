@@ -13,6 +13,7 @@ import {
   Keyboard,
   Switch,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { RSVPStatus, User } from 'components/types';
@@ -24,6 +25,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
 import { notifyRun } from 'backend/notification';
 import ImageCarousel from 'components/ImageCarousel';
+import { handleImageUpload } from 'backend/image';
 
 const EditRunScreen = () => {
   const {
@@ -55,30 +57,6 @@ const EditRunScreen = () => {
   const [blobs, setBlobs] = useState<Blob[]>([]);
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-
-  const handleImageUpload = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsMultipleSelection: true,
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      const blobsAndImages = await Promise.all(
-        result.assets.map(async (asset) => {
-          const response = await fetch(asset.uri);
-          const blob = await response.blob();
-          return { blob, image: asset.uri };
-        })
-      );
-
-      const blobs = blobsAndImages.map((item) => item.blob);
-      const images = blobsAndImages.map((item) => item.image);
-
-      setBlobs(blobs);
-      setImageUrls(images);
-    }
-  };
 
   const handleUpdateRun = async () => {
     setLoading(true);
@@ -239,7 +217,7 @@ const EditRunScreen = () => {
                 value={title}
                 maxLength={40}
                 onChangeText={setTitle}
-                className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
               />
             </View>
             <View className="mt-3 h-[60px] w-[254px]">
@@ -248,7 +226,7 @@ const EditRunScreen = () => {
                 value={notificationMessage}
                 maxLength={120}
                 onChangeText={setNotificationMessage}
-                className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
               />
             </View>
             <View className="mt-3 h-[180px] w-[254px]">
@@ -257,7 +235,7 @@ const EditRunScreen = () => {
                 value={message}
                 onChangeText={setMessage}
                 multiline
-                className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
               />
             </View>
             <View className="mt-3">
@@ -279,10 +257,12 @@ const EditRunScreen = () => {
               <Switch value={isRSVP} onValueChange={setIsRSVP} className="ml-2" />
             </View>
             {imageUrls.length > 0 ? (
-              <ImageCarousel data={imageUrls} width={254} />
+              <Pressable onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
+                <ImageCarousel data={imageUrls} width={254} />
+              </Pressable>
             ) : (
               <TouchableOpacity
-                onPress={handleImageUpload}
+                onPress={() => handleImageUpload(setBlobs, setImageUrls)}
                 className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
                 <Text className="text-text">Upload Image</Text>
               </TouchableOpacity>

@@ -2,6 +2,7 @@ import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
 import { Alert } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 // Function to get fresh download URL
 async function getFreshDownloadUrl(storagePath: string): Promise<string> {
@@ -94,3 +95,30 @@ export async function saveImageToGallery(storagePath: string) {
     Alert.alert('Error', `Could not save the image: ${errorMessage}`);
   }
 }
+
+export const handleImageUpload = async (
+  setBlobs: (blobs: Blob[]) => void,
+  setImageUrls: (urls: string[]) => void
+) => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ['images'],
+    allowsMultipleSelection: true,
+    quality: 1,
+  });
+
+  if (!result.canceled) {
+    const blobsAndImages = await Promise.all(
+      result.assets.map(async (asset) => {
+        const response = await fetch(asset.uri);
+        const blob = await response.blob();
+        return { blob, image: asset.uri };
+      })
+    );
+
+    const blobs = blobsAndImages.map((item) => item.blob);
+    const images = blobsAndImages.map((item) => item.image);
+
+    setBlobs(blobs);
+    setImageUrls(images);
+  }
+};

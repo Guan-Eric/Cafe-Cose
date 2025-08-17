@@ -34,7 +34,7 @@ function MenuScreen() {
           <TouchableOpacity
             onPress={handleAddMenuItem}
             className="rounded-full bg-primary px-4 py-2">
-            <Text className="text-lg font-[Lato_400Regular] text-secondaryText">
+            <Text className="text-secondaryText text-lg font-[Lato_400Regular]">
               + Add Menu Item
             </Text>
           </TouchableOpacity>
@@ -54,7 +54,7 @@ function MenuScreen() {
                         menuName: menuItem.name,
                         menuDescription: menuItem.description,
                         menuPrice: menuItem.price,
-                        menuImageUrl: menuItem.imageUrl,
+                        menuImageUrls: menuItem.imageUrls,
                         menuAvailable: menuItem.available?.toString(),
                         menuCategory: menuItem.category,
                         index: menuItem.index,

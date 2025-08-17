@@ -22,6 +22,8 @@ import { Category, MenuItem } from 'components/types';
 import BackButton from 'components/BackButton';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
+import { handleImageUpload } from 'backend/image';
+import ImageCarousel from 'components/ImageCarousel';
 
 const EditMenuItemForm = () => {
   const {
@@ -29,7 +31,7 @@ const EditMenuItemForm = () => {
     menuName,
     menuDescription,
     menuPrice,
-    menuImageUrl,
+    menuImageUrls,
     menuAvailable,
     menuCategory,
     index,
@@ -40,35 +42,10 @@ const EditMenuItemForm = () => {
   const [price, setPrice] = useState<string>(menuPrice?.toString());
   const [available, setAvailable] = useState<boolean>(menuAvailable === 'true');
   const [category, setCategory] = useState<Category>(menuCategory as Category);
-  const [imageUrl, setImageUrl] = useState<string>(
-    (menuImageUrl as string)?.replace('/o/menu/', '/o/menu%2F')
-  );
-  const [blob, setBlob] = useState<Blob>();
+  const updatedImageUrl = (menuImageUrls as string)?.replaceAll('/o/menu/', '/o/menu%2F');
+  const [imageUrls, setImageUrls] = useState<string[]>(updatedImageUrl.split(','));
+  const [blobs, setBlobs] = useState<Blob[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const handleImageUpload = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsMultipleSelection: false,
-      aspect: [1, 1],
-      allowsEditing: true,
-      quality: 0.5,
-    });
-
-    if (!result.canceled) {
-      try {
-        const response = await fetch(result.assets[0].uri);
-        const blob = await response.blob();
-
-        setImageUrl(result.assets[0].uri);
-        setBlob(blob);
-      } catch (error) {
-        console.error('Error uploading images:', error);
-      }
-    } else {
-      console.error('Image selection was canceled.');
-    }
-  };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -78,26 +55,31 @@ const EditMenuItemForm = () => {
     }
 
     try {
-      if (blob) {
-        const imageRef = ref(FIREBASE_STR, `menu/${id}`);
-        const uploadTask = uploadBytesResumable(imageRef, blob as Blob);
+      if (blobs.length > 0) {
+        const downloadUrls = [];
+        for (let i = 0; i < blobs.length; i++) {
+          const imageRef = ref(FIREBASE_STR, `menu/${id}_${i}`);
+          const uploadTask = uploadBytesResumable(imageRef, blobs[i] as Blob);
 
-        const downloadUrl = await new Promise((resolve, reject) => {
-          uploadTask.on(
-            'state_changed',
-            (snapshot) => {
-              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            },
-            (error) => {
-              console.error(`Error uploading image:`, error);
-              reject(error);
-            },
-            async () => {
-              const url = await getDownloadURL(uploadTask.snapshot.ref);
-              resolve(url);
-            }
-          );
-        });
+          const downloadUrl = await new Promise((resolve, reject) => {
+            uploadTask.on(
+              'state_changed',
+              (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              },
+              (error) => {
+                console.error(`Error uploading image:`, error);
+                reject(error);
+              },
+              async () => {
+                const url = await getDownloadURL(uploadTask.snapshot.ref);
+                resolve(url);
+              }
+            );
+          });
+          downloadUrls.push(downloadUrl);
+        }
+        console.log(downloadUrls);
 
         const updatedMenuItem: MenuItem = {
           name,
@@ -106,7 +88,7 @@ const EditMenuItemForm = () => {
           available,
           category,
           id: id as string,
-          imageUrl: downloadUrl as string,
+          imageUrls: downloadUrls as string[],
           index: Number(index),
         };
         await editMenuItem(updatedMenuItem);
@@ -118,7 +100,7 @@ const EditMenuItemForm = () => {
           available,
           category,
           id: id as string,
-          imageUrl: imageUrl,
+          imageUrls: imageUrls,
           index: Number(index),
         };
         await editMenuItem(updatedMenuItem);
@@ -183,7 +165,7 @@ const EditMenuItemForm = () => {
                 <View className="h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Name</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
                     value={name}
                     onChangeText={setName}
                     autoCapitalize="words"
@@ -194,7 +176,7 @@ const EditMenuItemForm = () => {
                 <View className="mt-3 h-[60px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Price</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
                     value={price}
                     onChangeText={setPrice}
                     keyboardType="numeric"
@@ -205,7 +187,7 @@ const EditMenuItemForm = () => {
                 <View className="mt-3 h-[100px] w-[254px]">
                   <Text className="font-[Lato_400Regular] text-text">Description</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
                     value={description}
                     onChangeText={setDescription}
                     multiline
@@ -235,19 +217,11 @@ const EditMenuItemForm = () => {
                   <Text className="font-[Lato_400Regular] text-text">Available</Text>
                   <Switch value={available} onValueChange={setAvailable} className="ml-2" />
                 </View>
-                {imageUrl ? (
-                  <TouchableOpacity
-                    onPress={handleImageUpload}
-                    className="mt-4 h-[254px] w-[254px] items-center justify-center self-center">
-                    <Image
-                      source={{ uri: imageUrl }}
-                      className="h-full w-full rounded-lg"
-                      resizeMode="cover"
-                    />
-                  </TouchableOpacity>
+                {imageUrls.length > 0 ? (
+                  <ImageCarousel data={imageUrls} width={254} />
                 ) : (
                   <TouchableOpacity
-                    onPress={handleImageUpload}
+                    onPress={() => handleImageUpload(setBlobs, setImageUrls)}
                     className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
                     <Text className="text-text">Upload Image</Text>
                   </TouchableOpacity>

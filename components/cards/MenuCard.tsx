@@ -16,7 +16,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ menuItem, onPress }) => {
       <Animated.View
         className="m-2 rounded-3xl bg-card shadow-sm"
         style={{ transform: [{ scale: scaleValue }] }}>
-        <MenuCardImage url={menuItem.imageUrl} />
+        <MenuCardImage url={menuItem.imageUrls?.[0] || ''} />
         <View className="justify-between px-4 py-1 pb-2">
           <View>
             <Text className="font-sans text-lg text-text">{menuItem.name}</Text>

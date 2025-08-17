@@ -35,7 +35,7 @@ function AnnouncementScreen() {
           <TouchableOpacity
             onPress={handleAddAnnouncement}
             className="rounded-full bg-primary px-4 py-2">
-            <Text className="text-lg font-[Lato_400Regular] text-secondaryText">
+            <Text className="text-secondaryText text-lg font-[Lato_400Regular]">
               + Add Announcement
             </Text>
           </TouchableOpacity>
@@ -56,7 +56,7 @@ function AnnouncementScreen() {
                         message: announcement.message,
                         notificationMessage: announcement.notificationMessage,
                         createdAt: announcement.createdAt?.toString(),
-                        imageUrl: announcement.imageUrl,
+                        announcementImageUrls: announcement.imageUrls,
                       },
                     })
                   }
