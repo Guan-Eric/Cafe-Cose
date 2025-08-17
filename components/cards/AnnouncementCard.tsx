@@ -25,11 +25,11 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, onPre
               resizeMode="cover"
             />
           ) : null}
-          <Text className="text-lg font-[Lato_400Regular] text-text">{announcement.title}</Text>
-          <Text className="text-sm font-[Lato_400Regular] text-text/60" numberOfLines={1}>
+          <Text className="font-sans text-lg text-text">{announcement.title}</Text>
+          <Text className="font-sans text-sm text-text/60" numberOfLines={1}>
             {announcement.message}
           </Text>
-          <Text className="mt-2 text-xs font-[Lato_400Regular] text-text/50">
+          <Text className="mt-2 font-sans text-xs text-text/50">
             {announcement.createdAt?.toDateString()}
           </Text>
         </View>

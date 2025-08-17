@@ -30,13 +30,11 @@ function MenuScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
-          <Text className="text-2xl font-bold text-text">Edit Menu</Text>
+          <Text className="font-sans text-2xl text-text">Edit Menu</Text>
           <TouchableOpacity
             onPress={handleAddMenuItem}
             className="rounded-full bg-primary px-4 py-2">
-            <Text className="text-secondaryText text-lg font-[Lato_400Regular]">
-              + Add Menu Item
-            </Text>
+            <Text className="text-secondaryText font-sans text-lg">+ Add Menu Item</Text>
           </TouchableOpacity>
         </View>
         <ScrollView className="flex-1 px-4">

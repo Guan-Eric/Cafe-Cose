@@ -114,11 +114,11 @@ function SettingsScreen() {
         <SafeAreaView>
           <View className="flex-row items-center ">
             <BackButton />
-            <Text className="text-2xl font-bold text-text">Settings</Text>
+            <Text className="font-sans text-2xl text-text">Settings</Text>
           </View>
           <View className="items-center">
             <View className="m-2 w-[90%] rounded-2xl bg-white p-5 shadow-sm">
-              <Text className="mb-4 text-lg font-bold">Profile</Text>
+              <Text className="mb-4 font-sans text-lg">Profile</Text>
               <View className="mb-4 items-center">
                 <TouchableOpacity onPress={handleImageUpload}>
                   <Image source={{ uri: imageUrl }} className="mb-2 h-24 w-24 rounded-full" />
@@ -135,10 +135,10 @@ function SettingsScreen() {
               </View>
             </View>
             <View className="m-2 w-[90%] rounded-2xl bg-white p-5 shadow-sm">
-              <Text className="mb-4 text-lg font-bold">Notifications</Text>
+              <Text className="mb-4 font-sans text-lg">Notifications</Text>
 
               <View className="mb-4 flex-row items-center justify-between">
-                <Text>Announcement Notifications</Text>
+                <Text className="font-sans">Announcement Notifications</Text>
                 <Switch
                   value={announcementNotifications}
                   onValueChange={toggleAnnouncementNotifications}
@@ -147,7 +147,7 @@ function SettingsScreen() {
               </View>
 
               <View className="flex-row items-center justify-between">
-                <Text>Run Notifications</Text>
+                <Text className="font-sans">Run Notifications</Text>
                 <Switch
                   value={runNotifications}
                   onValueChange={toggleRunNotifications}
@@ -161,14 +161,14 @@ function SettingsScreen() {
             onPress={() => {
               handleSave();
             }}>
-            <Text className="font-bold text-white">Save Changes</Text>
+            <Text className="font-sans text-white">Save Changes</Text>
           </TouchableOpacity>
           <TouchableOpacity
             className="m-2 mt-20 w-[200px] items-center self-center rounded-full bg-red-500 p-4"
             onPress={() => {
               logOut();
             }}>
-            <Text className="font-bold text-white">Logout</Text>
+            <Text className="font-sans text-white">Logout</Text>
           </TouchableOpacity>
         </SafeAreaView>
       </View>

@@ -190,33 +190,31 @@ const EditAnnouncementScreen = () => {
             <BackButton />
             <View className="flex-1 items-center justify-center ">
               <View className="items-center pb-[30px]">
-                <Text className="self-center text-4xl font-[Lato_400Regular] text-text">
-                  Edit Announcement
-                </Text>
+                <Text className="self-center font-sans text-4xl text-text">Edit Announcement</Text>
               </View>
               <View className="pb-[30px]">
                 <View className="h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Title</Text>
+                  <Text className="font-sans text-text">Title</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     value={promotionTitle}
                     onChangeText={setTitle}
                     maxLength={40}
                   />
                 </View>
                 <View className="mt-3 h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Notification Message</Text>
+                  <Text className="font-sans text-text">Notification Message</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     value={notification}
                     onChangeText={setNotification}
                     maxLength={120}
                   />
                 </View>
                 <View className="mt-3 h-[100px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Message</Text>
+                  <Text className="font-sans text-text">Message</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     value={promotionMessage}
                     onChangeText={setMessage}
                     multiline
@@ -238,7 +236,7 @@ const EditAnnouncementScreen = () => {
                   <TouchableOpacity
                     onPress={handleImageUpload}
                     className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
-                    <Text className="text-text">Upload Image</Text>
+                    <Text className="font-sans text-text">Upload Image</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -248,13 +246,13 @@ const EditAnnouncementScreen = () => {
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (
-                  <Text className="font-bold text-white">Update Announcement</Text>
+                  <Text className="font-sans text-white">Update Announcement</Text>
                 )}
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={handleDelete}
                 className="mb-4 mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-red-500">
-                <Text className="font-bold text-white">Delete Announcement</Text>
+                <Text className="font-sans text-white">Delete Announcement</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>

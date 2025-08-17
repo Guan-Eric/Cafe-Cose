@@ -96,15 +96,13 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
             <BackButton />
             <View className="flex-1 items-center justify-center">
               <View className="items-center pb-[30px]">
-                <Text className="self-center text-4xl font-[Lato_400Regular] text-text">
-                  Add Menu Item
-                </Text>
+                <Text className="self-center font-sans text-4xl text-text">Add Menu Item</Text>
               </View>
               <View className="pb-[30px]">
                 <View className="h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Name</Text>
+                  <Text className="font-sans text-text">Name</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     value={name}
                     onChangeText={setName}
                     autoCapitalize="words"
@@ -113,9 +111,9 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                 </View>
 
                 <View className="mt-3 h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Price</Text>
+                  <Text className="font-sans text-text">Price</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     value={price}
                     onChangeText={setPrice}
                     keyboardType="numeric"
@@ -124,9 +122,9 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                 </View>
 
                 <View className="mt-3 h-[100px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Description</Text>
+                  <Text className="font-sans text-text">Description</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     value={description}
                     onChangeText={setDescription}
                     multiline
@@ -135,7 +133,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                   />
                 </View>
                 <View className="mt-3 w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Category</Text>
+                  <Text className="font-sans text-text">Category</Text>
                   <Picker
                     selectedValue={category}
                     onValueChange={(itemValue) => setCategory(itemValue as Category)}
@@ -153,7 +151,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                   </Picker>
                 </View>
                 <View className="mt-3 h-[60px] w-[254px] flex-row items-center justify-between">
-                  <Text className="font-[Lato_400Regular] text-text">Available</Text>
+                  <Text className="font-sans text-text">Available</Text>
                   <Switch value={available} onValueChange={setAvailable} className="ml-2" />
                 </View>
                 {imageUrls.length > 0 ? (
@@ -175,7 +173,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (
-                  <Text className="font-[Lato_400Regular] text-white">Add Item</Text>
+                  <Text className="font-sans text-white">Add Item</Text>
                 )}
               </TouchableOpacity>
             </View>

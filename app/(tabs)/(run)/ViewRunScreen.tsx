@@ -62,7 +62,7 @@ const ViewRunScreen = () => {
         <ScrollView>
           {imageUrls.length === 0 ? <BackButton /> : null}
           <View className="mt-2 flex-row px-4">
-            <Text className="text-2xl font-bold text-text">{runTitle}</Text>
+            <Text className="font-sans text-2xl text-text">{runTitle}</Text>
           </View>
 
           <View className="flex-1 px-4 pb-2">
@@ -93,7 +93,7 @@ const ViewRunScreen = () => {
                         onPress={() => handleRSVP('yes')}
                         className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'yes' ? 'bg-green-600' : 'bg-green-100'}`}>
                         <Text
-                          className={` font-medium ${RSVP === 'yes' ? 'text-white' : 'text-green-600'}`}>
+                          className={` font-sans ${RSVP === 'yes' ? 'text-white' : 'text-green-600'}`}>
                           Yes: {yesCount}
                         </Text>
                       </TouchableOpacity>
@@ -102,7 +102,7 @@ const ViewRunScreen = () => {
                         onPress={() => handleRSVP('maybe')}
                         className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'maybe' ? 'bg-yellow-500' : 'bg-yellow-100'}`}>
                         <Text
-                          className={` font-medium ${RSVP === 'maybe' ? 'text-white' : 'text-yellow-600'}`}>
+                          className={` font-sans ${RSVP === 'maybe' ? 'text-white' : 'text-yellow-600'}`}>
                           Maybe: {maybeCount}
                         </Text>
                       </TouchableOpacity>
@@ -111,7 +111,7 @@ const ViewRunScreen = () => {
                         onPress={() => handleRSVP('no')}
                         className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'no' ? 'bg-red-600' : 'bg-red-100'}`}>
                         <Text
-                          className={` font-medium ${RSVP === 'no' ? 'text-white' : 'text-red-600'}`}>
+                          className={` font-sans ${RSVP === 'no' ? 'text-white' : 'text-red-600'}`}>
                           No: {noCount}
                         </Text>
                       </TouchableOpacity>
@@ -124,7 +124,7 @@ const ViewRunScreen = () => {
                         disabled={true}
                         className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'yes' ? 'bg-green-600' : 'bg-green-100'}`}>
                         <Text
-                          className={` font-medium ${RSVP === 'yes' ? 'text-white' : 'text-green-600'}`}>
+                          className={` font-sans ${RSVP === 'yes' ? 'text-white' : 'text-green-600'}`}>
                           Yes: {yesCount}
                         </Text>
                       </TouchableOpacity>
@@ -132,7 +132,7 @@ const ViewRunScreen = () => {
                         disabled={true}
                         className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'maybe' ? 'bg-yellow-500' : 'bg-yellow-100'}`}>
                         <Text
-                          className={` font-medium ${RSVP === 'maybe' ? 'text-white' : 'text-yellow-600'}`}>
+                          className={` font-sans ${RSVP === 'maybe' ? 'text-white' : 'text-yellow-600'}`}>
                           Maybe: {maybeCount}
                         </Text>
                       </TouchableOpacity>
@@ -140,7 +140,7 @@ const ViewRunScreen = () => {
                         disabled={true}
                         className={`mx-1 flex-1 flex-row items-center justify-center rounded-lg py-3 ${RSVP === 'no' ? 'bg-red-600' : 'bg-red-100'}`}>
                         <Text
-                          className={` font-medium ${RSVP === 'no' ? 'text-white' : 'text-red-600'}`}>
+                          className={` font-sans ${RSVP === 'no' ? 'text-white' : 'text-red-600'}`}>
                           No: {noCount}
                         </Text>
                       </TouchableOpacity>
@@ -149,7 +149,7 @@ const ViewRunScreen = () => {
                 )}
 
                 <View>
-                  <Text className="my-2 text-lg font-semibold text-text">Participants:</Text>
+                  <Text className="my-2 font-sans text-lg text-text">Participants:</Text>
                   {participants.length > 0 ? (
                     <View className="rounded-lg bg-gray-50 p-2">
                       {participants

@@ -37,7 +37,7 @@ const FeedbackScreen = () => {
       <TouchableOpacity
         className="w-[180px] self-center rounded-full bg-primary p-3"
         onPress={handleSubmit}>
-        <Text className="text-center font-semibold text-white">Submit Feedback</Text>
+        <Text className="text-center font-sans text-white">Submit Feedback</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

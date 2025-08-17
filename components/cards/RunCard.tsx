@@ -34,7 +34,7 @@ const RunCard: React.FC<RunCardProps> = ({ run, onPress }) => {
         className="w-full self-center rounded-2xl bg-card p-4 shadow-sm">
         <View className="flex-row items-center justify-between">
           <View className="justify-between">
-            <Text className="mb-1 text-lg font-bold text-text">{formattedDate}</Text>
+            <Text className="mb-1 font-sans text-lg text-text">{formattedDate}</Text>
             <Text className="text-base text-text">{run.message}</Text>
           </View>
           <View className="flex-row items-center justify-center gap-2 py-2 pl-4">
@@ -58,7 +58,7 @@ const RunCard: React.FC<RunCardProps> = ({ run, onPress }) => {
                           />
                         ) : (
                           <View className="flex-1 items-center justify-center">
-                            <Text className="text-xs font-bold text-white">
+                            <Text className="font-sans text-xs text-white">
                               {p.name?.charAt(0).toUpperCase() || '?'}
                             </Text>
                           </View>
@@ -70,7 +70,7 @@ const RunCard: React.FC<RunCardProps> = ({ run, onPress }) => {
                       <View
                         style={{ marginLeft: -4 }}
                         className="z-0 h-8 w-8 items-center justify-center rounded-full border-2 border-white ">
-                        <Text className="text-xs font-bold text-text">
+                        <Text className="font-sans text-xs text-text">
                           +{participants.length - maxAvatars}
                         </Text>
                       </View>

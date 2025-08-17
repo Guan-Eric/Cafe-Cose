@@ -208,38 +208,38 @@ const EditRunScreen = () => {
           keyboardShouldPersistTaps="handled">
           <View className="flex-row items-center">
             <BackButton />
-            <Text className="text-2xl font-bold text-text">Edit Run</Text>
+            <Text className="font-sans text-2xl text-text">Edit Run</Text>
           </View>
           <View className="flex-1 items-center justify-center">
             <View className="h-[60px] w-[254px]">
-              <Text className="font-[Lato_400Regular] text-text">Title</Text>
+              <Text className="font-sans text-text">Title</Text>
               <TextInput
                 value={title}
                 maxLength={40}
                 onChangeText={setTitle}
-                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
               />
             </View>
             <View className="mt-3 h-[60px] w-[254px]">
-              <Text className="font-[Lato_400Regular] text-text">Notification Message</Text>
+              <Text className="font-sans text-text">Notification Message</Text>
               <TextInput
                 value={notificationMessage}
                 maxLength={120}
                 onChangeText={setNotificationMessage}
-                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
               />
             </View>
             <View className="mt-3 h-[180px] w-[254px]">
-              <Text className="font-[Lato_400Regular] text-text">Message</Text>
+              <Text className="font-sans text-text">Message</Text>
               <TextInput
                 value={message}
                 onChangeText={setMessage}
                 multiline
-                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-[Lato_400Regular] text-text"
+                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
               />
             </View>
             <View className="mt-3">
-              <Text className="mb-2 font-[Lato_400Regular] text-text">Date & Time</Text>
+              <Text className="mb-2 font-sans text-text">Date & Time</Text>
               <View className="h-12 w-[254px] justify-center rounded-md  px-3">
                 <DateTimePicker
                   value={date || new Date()}
@@ -253,7 +253,7 @@ const EditRunScreen = () => {
               </View>
             </View>
             <View className="mt-3 h-[60px] w-[254px] flex-row items-center justify-between">
-              <Text className="font-[Lato_400Regular] text-text">RSVP?</Text>
+              <Text className="font-sans text-text">RSVP?</Text>
               <Switch value={isRSVP} onValueChange={setIsRSVP} className="ml-2" />
             </View>
             {imageUrls.length > 0 ? (
@@ -264,7 +264,7 @@ const EditRunScreen = () => {
               <TouchableOpacity
                 onPress={() => handleImageUpload(setBlobs, setImageUrls)}
                 className="mt-4 h-[254px] w-[254px] items-center justify-center self-center rounded-lg border-2 border-dashed border-gray-400">
-                <Text className="text-text">Upload Image</Text>
+                <Text className="font-sans text-text">Upload Image</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity
@@ -274,14 +274,14 @@ const EditRunScreen = () => {
               {loading ? (
                 <ActivityIndicator color="white" />
               ) : (
-                <Text className="font-[Lato_400Regular] text-white">Update Run</Text>
+                <Text className="font-sans text-white">Update Run</Text>
               )}
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleDelete}
               disabled={loading}
               className={`mb-4 mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading ? 'bg-gray-400' : 'bg-red-500'}`}>
-              <Text className="font-bold text-white">Delete Item</Text>
+              <Text className="font-sans text-white">Delete Item</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

@@ -31,19 +31,19 @@ export default function PromotionComponent({
       )}
       <View className="w-full px-6 pb-12">
         <Text className="text-bold mb-1 mt-2 text-text">{title}</Text>
-        <Text className="text-3xl font-bold text-primary">{message}</Text>
+        <Text className="font-sans text-3xl text-primary">{message}</Text>
         <View className="mb-4 mt-6 flex-row gap-4 self-end">
           {buttonTitle === 'Edit' && (
             <TouchableOpacity
               onPress={handleCreatePromotion}
               className="bg-muted rounded-full border border-primary px-6 py-3">
-              <Text className="text-lg font-semibold text-primary">Create Promotion</Text>
+              <Text className="font-sans text-lg text-primary">Create Promotion</Text>
             </TouchableOpacity>
           )}
           <TouchableOpacity
             onPress={handleDismiss}
             className=" rounded-full bg-primary px-6 py-3 shadow">
-            <Text className="text-lg font-semibold text-white">{buttonTitle}</Text>
+            <Text className="font-sans text-lg text-white">{buttonTitle}</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -34,19 +34,8 @@ function SignUpScreen() {
 
   const validatePassword = (password: string, confirmPassword: string) => {
     const minLength = 8;
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumber = /\d/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-    return (
-      password.length >= minLength &&
-      hasUpperCase &&
-      hasLowerCase &&
-      hasNumber &&
-      hasSpecialChar &&
-      password === confirmPassword
-    );
+    return password.length >= minLength && password === confirmPassword;
   };
 
   const signUp = async () => {
@@ -95,56 +84,57 @@ function SignUpScreen() {
                   resizeMode="contain"
                   source={require('../../assets/logo.png')}
                 />
-                <Text className="self-center text-4xl font-[Lato_400Regular] text-text">
-                  Sign Up
-                </Text>
+                <Text className="self-center font-sans text-4xl text-text">Sign Up</Text>
               </View>
 
               <View className="pb-[30px]">
                 <View className="h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Name</Text>
+                  <Text className="font-sans text-text">Name</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     placeholder="Enter your name"
                     value={name}
                     onChangeText={setName}
-                    autoCapitalize="words"
+                    autoCorrect={false}
                     placeholderTextColor="gray"
                   />
                 </View>
 
                 <View className="mt-5 h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">E-mail</Text>
+                  <Text className="font-sans text-text">E-mail</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     placeholder="e.g. johnsmith@email.com"
                     value={email}
                     onChangeText={onChangeEmail}
                     autoCapitalize="none"
+                    autoCorrect={false}
                     placeholderTextColor="gray"
                   />
                   {emailError ? <Text className="text-xs text-red-500">{emailError}</Text> : null}
                 </View>
 
                 <View className="mt-5 h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Password</Text>
+                  <Text className="font-sans text-text">Password</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
+                    autoCorrect={false}
                     autoCapitalize="none"
                   />
                 </View>
 
                 <View className="mt-5 h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Confirm Password</Text>
+                  <Text className="font-sans text-text">Confirm Password</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
                     secureTextEntry
                     autoCapitalize="none"
+                    autoCorrect={false}
                     placeholderTextColor="gray"
                   />
                 </View>
@@ -157,7 +147,7 @@ function SignUpScreen() {
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (
-                  <Text className="font-[Lato_400Regular] text-white">Sign Up</Text>
+                  <Text className="font-sans text-white">Sign Up</Text>
                 )}
               </TouchableOpacity>
 
@@ -170,13 +160,11 @@ function SignUpScreen() {
               />
 
               <View className="items-center pt-5">
-                <Text className="text-base font-[Lato_400Regular] text-gray-500">
-                  Already have an account?
-                </Text>
+                <Text className="font-sans text-base text-gray-500">Already have an account?</Text>
                 <TouchableOpacity
                   onPress={() => router.push('/(auth)/SignInScreen')}
                   className="h-[42px] w-[100px] items-center justify-center">
-                  <Text className="text-base font-[Lato_400Regular] text-primary">Sign In</Text>
+                  <Text className="font-sans text-base text-primary">Sign In</Text>
                 </TouchableOpacity>
               </View>
             </View>

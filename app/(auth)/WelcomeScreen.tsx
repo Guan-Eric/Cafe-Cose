@@ -32,7 +32,7 @@ function WelcomeScreen() {
           <Pressable
             onPress={() => router.push('/(auth)/SignUpScreen')}
             className="mb-4 h-[42px] w-[240px] items-center justify-center rounded-[20px] bg-primary">
-            <Text className="text-lg font-[Lato_400Regular] text-secondaryText">Sign Up</Text>
+            <Text className="font-sans text-lg text-offwhite">Sign Up</Text>
           </Pressable>
 
           {/* Apple Sign-In Button */}
@@ -44,13 +44,11 @@ function WelcomeScreen() {
           />
 
           <View className="items-center pt-10">
-            <Text className="text-sm font-[Lato_400Regular] text-gray-500">
-              Already have an account?
-            </Text>
+            <Text className="font-sans text-sm text-gray-500">Already have an account?</Text>
             <TouchableOpacity
               onPress={() => router.push('/(auth)/SignInScreen')}
               className="h-[46px] w-[100px] items-center justify-center">
-              <Text className="text-sm font-[Lato_400Regular] text-primary">Sign In</Text>
+              <Text className="font-sans text-sm text-primary">Sign In</Text>
             </TouchableOpacity>
           </View>
         </View>

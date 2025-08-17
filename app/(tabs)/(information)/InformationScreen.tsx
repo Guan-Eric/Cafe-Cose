@@ -32,8 +32,8 @@ export default function InformationScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="absolute left-0 right-0 top-0 h-[235px] bg-primary" />
       <ScrollView>
-        <Text className="mb-3 pl-4 font-sans text-3xl text-offwhite">Our Location</Text>
-        <View className="mb-4 px-4">
+        <Text className="mb-3 pl-8 font-sans text-3xl text-offwhite">Our Location</Text>
+        <View className="mb-4 px-6">
           <View className="shadow-lg">
             <TouchableOpacity onPress={handleOpenMaps}>
               <Image source={require('assets/maps.png')} className="h-52 w-full rounded-2xl" />
@@ -54,7 +54,7 @@ export default function InformationScreen() {
             <View key={item.day} className="w-full flex-row items-center py-1">
               <Text className="flex-1 font-sans text-text">{item.day}</Text>
               <View className="mx-6 h-px flex-1 bg-primary" />
-              <Text className="text-right font-sans text-primary">{item.hours}</Text>
+              <Text className="text-right font-sans text-text">{item.hours}</Text>
             </View>
           ))}
         </View>

@@ -38,9 +38,7 @@ const LoyaltyCard: React.FC<LoyaltyCardProps> = ({ points, onPress }) => {
             </View>
           ))}
         </View>
-        <Text className="pl-2 text-sm font-[Lato_400Regular] text-text/80">
-          Tap to scan QR code
-        </Text>
+        <Text className="pl-2 font-sans text-sm text-text/80">Tap to scan QR code</Text>
       </Animated.View>
     </Pressable>
   );

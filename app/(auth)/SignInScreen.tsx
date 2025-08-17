@@ -67,33 +67,33 @@ function SignInScreen() {
                   resizeMode="contain"
                   source={require('../../assets/logo.png')}
                 />
-                <Text className="self-center text-4xl font-[Lato_400Regular] text-text">
-                  Sign In
-                </Text>
+                <Text className="self-center font-sans text-4xl text-text">Sign In</Text>
               </View>
 
               <View className="pb-[30px]">
                 <View className="h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">E-mail</Text>
+                  <Text className="font-sans text-text">E-mail</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     placeholder="e.g. johnsmith@email.com"
                     value={email}
                     onChangeText={onChangeEmail}
                     autoCapitalize="none"
+                    autoCorrect={false}
                     placeholderTextColor="gray"
                   />
                   {emailError ? <Text className="text-xs text-red-500">{emailError}</Text> : null}
                 </View>
 
                 <View className="mt-10 h-[60px] w-[254px]">
-                  <Text className="font-[Lato_400Regular] text-text">Password</Text>
+                  <Text className="font-sans text-text">Password</Text>
                   <TextInput
-                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-[Lato_400Regular] text-text"
+                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
                     value={password}
                     onChangeText={onChangePassword}
                     secureTextEntry
                     autoCapitalize="none"
+                    autoCorrect={false}
                     placeholderTextColor="gray"
                   />
                 </View>
@@ -106,7 +106,7 @@ function SignInScreen() {
                 {loading ? (
                   <ActivityIndicator color="white" />
                 ) : (
-                  <Text className="font-[Lato_400Regular] text-white">Sign In</Text>
+                  <Text className="font-sans text-white">Sign In</Text>
                 )}
               </TouchableOpacity>
 
@@ -119,13 +119,11 @@ function SignInScreen() {
               />
 
               <View className="items-center pt-5">
-                <Text className="text-base font-[Lato_400Regular] text-gray-500">
-                  Don't have an account?
-                </Text>
+                <Text className="font-sans text-base text-gray-500">Don't have an account?</Text>
                 <TouchableOpacity
                   onPress={() => router.push('/(auth)/SignUpScreen')}
                   className="h-[42px] w-[100px] items-center justify-center">
-                  <Text className="text-base font-[Lato_400Regular] text-primary">Sign Up</Text>
+                  <Text className="font-sans text-base text-primary">Sign Up</Text>
                 </TouchableOpacity>
               </View>
             </View>

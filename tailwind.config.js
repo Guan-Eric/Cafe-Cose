@@ -11,6 +11,7 @@ module.exports = {
         text: '#3C2A20', // Main text
         offwhite: '#F8F8F8', // Off white text
         subtext: '#776759', // Secondary text / placeholder
+        input: '#F8F8F8',
       },
       fontFamily: {
         sans: ['HALTimezoneTest', 'sans-serif'],

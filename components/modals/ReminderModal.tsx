@@ -49,11 +49,11 @@ const ReminderModal = ({ visible, onClose, runDate }: ReminderModalProps) => {
         className="flex-1 items-center justify-center"
         style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
         <View className="w-5/6 rounded-xl bg-white p-6 shadow-xl">
-          <Text className="mb-6 text-center text-2xl font-bold text-gray-800">
+          <Text className="mb-6 text-center font-sans text-2xl text-gray-800">
             Set Run Reminder
           </Text>
 
-          <Text className="mb-3 font-medium text-gray-600">Select reminder time:</Text>
+          <Text className="mb-3 font-sans text-gray-600">Select reminder time:</Text>
           <View className="mb-5 flex-row flex-wrap justify-between">
             {reminderPresets.map((preset) => (
               <TouchableOpacity
@@ -66,7 +66,7 @@ const ReminderModal = ({ visible, onClose, runDate }: ReminderModalProps) => {
                   backgroundColor: selectedPreset === preset ? '#3B82F6' : '#E5E7EB',
                 }}>
                 <Text
-                  className={`text-center font-medium`}
+                  className={`text-center font-sans`}
                   style={{ color: selectedPreset === preset ? '#FFFFFF' : '#374151' }}>
                   {preset} minutes
                 </Text>
@@ -78,12 +78,12 @@ const ReminderModal = ({ visible, onClose, runDate }: ReminderModalProps) => {
             <TouchableOpacity
               onPress={resetAndClose}
               className="mr-2 flex-1 rounded-lg bg-gray-200 p-3">
-              <Text className="text-center font-bold text-gray-700">Cancel</Text>
+              <Text className="text-center font-sans text-gray-700">Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleSetReminder}
               className="ml-2 flex-1 rounded-lg bg-blue-500 p-3 shadow">
-              <Text className="text-center font-bold text-white">Set Reminder</Text>
+              <Text className="text-center font-sans text-white">Set Reminder</Text>
             </TouchableOpacity>
           </View>
         </View>

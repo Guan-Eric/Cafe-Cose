@@ -25,7 +25,7 @@ const ViewAnnouncementScreen = () => {
           {imageUrls.length == 0 ? <BackButton /> : null}
         </View>
         <ScrollView>
-          <Text className="px-4 text-3xl font-bold text-text">{title}</Text>
+          <Text className="px-4 font-sans text-3xl text-text">{title}</Text>
           <Text className="mt-2 px-4 text-sm text-text/70">
             {new Date(createdAt as string).toDateString()}
           </Text>
