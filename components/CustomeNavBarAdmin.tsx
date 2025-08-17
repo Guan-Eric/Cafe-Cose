@@ -15,7 +15,6 @@ const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpaci
 
 const PRIMARY_COLOR = '#F7F5F1';
 const SECONDARY_COLOR = '#762e1f';
-const UNSELECTED_COLOR = '#e5e5e5';
 
 const CustomNavBarAdmin: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
   const [tabLayouts, setTabLayouts] = useState<{ [key: number]: { x: number; width: number } }>({});
@@ -90,11 +89,7 @@ const CustomNavBarAdmin: React.FC<BottomTabBarProps> = ({ state, descriptors, na
             onPress={onPress}
             onLayout={(event) => handleTabLayout(index, event)}
             style={[styles.tabItem]}>
-            {getIconByRouteName(
-              route.name,
-              isFocused ? SECONDARY_COLOR : UNSELECTED_COLOR,
-              isFocused ? 'transparent' : SECONDARY_COLOR
-            )}
+            {getIconByRouteName(route.name, isFocused)}
           </AnimatedTouchableOpacity>
         );
       })}
@@ -102,47 +97,31 @@ const CustomNavBarAdmin: React.FC<BottomTabBarProps> = ({ state, descriptors, na
     </View>
   );
 
-  function getIconByRouteName(routeName: string, color: string, borderColor: string) {
+  function getIconByRouteName(routeName: string, isFocused: boolean) {
     switch (routeName) {
       case '(home)':
-        return (
-          <MaterialCommunityIcons
-            name="home-variant"
-            size={24}
-            color={color}
-            borderColor={borderColor}
-          />
-        );
+        if (isFocused)
+          return <MaterialCommunityIcons name="home-variant" size={24} color={SECONDARY_COLOR} />;
+        else
+          return (
+            <MaterialCommunityIcons name="home-variant-outline" size={24} color={SECONDARY_COLOR} />
+          );
       case '(menu)':
-        return (
-          <MaterialCommunityIcons name="coffee" size={24} color={color} borderColor={borderColor} />
-        );
+        if (isFocused)
+          return <MaterialCommunityIcons name="coffee" size={24} color={SECONDARY_COLOR} />;
+        else
+          return <MaterialCommunityIcons name="coffee-outline" size={24} color={SECONDARY_COLOR} />;
       case '(run)':
-        return (
-          <MaterialCommunityIcons name="run" size={24} color={color} borderColor={borderColor} />
-        );
+        if (isFocused)
+          return <MaterialCommunityIcons name="run-fast" size={24} color={SECONDARY_COLOR} />;
+        else return <MaterialCommunityIcons name="run" size={24} color={SECONDARY_COLOR} />;
       case '(announcement)':
-        return (
-          <MaterialCommunityIcons name="bell" size={24} color={color} borderColor={borderColor} />
-        );
-      case '(promotion)':
-        return (
-          <MaterialCommunityIcons
-            name="new-box"
-            size={24}
-            color={color}
-            borderColor={borderColor}
-          />
-        );
+        if (isFocused)
+          return <MaterialCommunityIcons name="bell" size={24} color={SECONDARY_COLOR} />;
+        else
+          return <MaterialCommunityIcons name="bell-outline" size={24} color={SECONDARY_COLOR} />;
       default:
-        return (
-          <MaterialCommunityIcons
-            name="home-variant"
-            size={24}
-            color={color}
-            borderColor={borderColor}
-          />
-        );
+        return <MaterialCommunityIcons name="home-variant" size={24} color={SECONDARY_COLOR} />;
     }
   }
 };

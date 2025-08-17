@@ -42,12 +42,12 @@ function MenuScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <View className={`absolute left-0 right-0 top-0 h-[235px] bg-primary`} />
+      <View className="absolute left-0 right-0 top-0 h-[235px] bg-primary" />
       <SafeAreaView className="flex-1">
         <StatusBar style="light" />
         <View className="flex-1">
           <View className="flex-row items-center justify-between px-4 pt-2">
-            <Text className="text-offwhite pl-4 font-sans text-3xl">Announcements</Text>
+            <Text className="pl-4 font-sans text-3xl text-offwhite">Announcements</Text>
           </View>
           <ScrollView className="flex-1 px-4">
             <View className="mt-2">

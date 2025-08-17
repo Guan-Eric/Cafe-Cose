@@ -45,6 +45,16 @@ function TabLayout() {
           animation: 'shift',
         }}
       />
+      <Tabs.Screen
+        name="(information)"
+        options={{
+          title: 'Information',
+          tabBarIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="information" size={size} color={color} />
+          ),
+          animation: 'shift',
+        }}
+      />
     </Tabs>
   );
 }
