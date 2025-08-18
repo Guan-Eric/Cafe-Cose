@@ -17,7 +17,7 @@ const ViewAnnouncementScreen = () => {
       {imageUrls.length > 0 ? (
         <>
           <BackButtonWithBackground />
-          <RunImageCarousel data={imageUrls} runId={id as string} isDownloadable={true} />
+          <RunImageCarousel data={imageUrls} runId={id as string} isDownloadable={false} />
         </>
       ) : null}
       <SafeAreaView className="flex-1 bg-background p-6">

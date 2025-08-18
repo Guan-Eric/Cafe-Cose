@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, Pressable, Image, Animated } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { MenuItem } from 'components/types';
 import useButtonAnimation from 'components/useButtonAnimation';
 import MenuCardImage from 'components/MenuCardImage';
+import Animated from 'react-native-reanimated';
 
 interface MenuCardProps {
   menuItem: MenuItem;
@@ -15,7 +16,7 @@ const MenuCard: React.FC<MenuCardProps> = ({ menuItem, onPress }) => {
     <Pressable onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <Animated.View
         className="m-2 rounded-3xl bg-card shadow-sm"
-        style={{ transform: [{ scale: scaleValue }] }}>
+        style={{ transform: [{ scale: scaleValue.value }] }}>
         <MenuCardImage url={menuItem.imageUrls?.[0] || ''} />
         <View className="justify-between px-4 py-1 pb-2">
           <View>

@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, Pressable, Image, Animated } from 'react-native';
+import { View, Text, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Run } from 'components/types';
 import useButtonAnimation from 'components/useButtonAnimation';
+import Animated from 'react-native-reanimated';
 
 interface RunCardProps {
   run: Run;
@@ -30,7 +31,7 @@ const RunCard: React.FC<RunCardProps> = ({ run, onPress }) => {
       onPressOut={handlePressOut}
       className="mb-4 w-[90%] self-center">
       <Animated.View
-        style={{ transform: [{ scale: scaleValue }] }}
+        style={{ transform: [{ scale: scaleValue.value }] }}
         className="w-full self-center rounded-2xl bg-card p-4 shadow-sm">
         <View className="flex-row items-center justify-between">
           <View className="justify-between">

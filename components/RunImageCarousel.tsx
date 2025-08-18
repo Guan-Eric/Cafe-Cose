@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
-import { View, Image, Dimensions, Pressable, Animated, Alert } from 'react-native';
-import { useSharedValue } from 'react-native-reanimated';
+import { useState, useEffect, useRef } from 'react';
+import { View, Dimensions, Pressable, Alert } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import AnimatedDotsCarousel from 'react-native-animated-dots-carousel';
-import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
+import Carousel from 'react-native-reanimated-carousel';
 import useButtonAnimation from './useButtonAnimation';
 import { saveImageToGallery } from 'backend/image';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 interface RunImageCarouselProps {
   data: string[];
@@ -20,8 +26,64 @@ const RunImageCarousel = ({
   isDownloadable,
 }: RunImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const ScreenWidth = Dimensions.get('screen').width;
+  const screenWidth = Dimensions.get('window').width;
+  const MAX_HEIGHT = screenWidth;
+  const MIN_HEIGHT = 120;
   const { scaleValue, handlePressIn, handlePressOut } = useButtonAnimation(1.05);
+
+  const headerHeight = useSharedValue(MAX_HEIGHT);
+  const dotsOpacity = useSharedValue(1);
+  const hideTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const pan = Gesture.Pan()
+    .onUpdate((e) => {
+      headerHeight.value = Math.min(
+        MAX_HEIGHT,
+        Math.max(MIN_HEIGHT, headerHeight.value + e.translationY)
+      );
+      console.log(headerHeight.value);
+    })
+    .onEnd(() => {
+      const midpoint = (MAX_HEIGHT + MIN_HEIGHT) / 2;
+      headerHeight.value =
+        headerHeight.value < midpoint
+          ? withSpring(MIN_HEIGHT, { damping: 15 })
+          : withSpring(MAX_HEIGHT, { damping: 15 });
+      console.log(headerHeight.value);
+    });
+
+  const showDotsWithTimer = () => {
+    if (hideTimeout.current) {
+      clearTimeout(hideTimeout.current);
+    }
+    dotsOpacity.value = withTiming(1, { duration: 200 });
+
+    hideTimeout.current = setTimeout(() => {
+      dotsOpacity.value = withTiming(0, { duration: 400 });
+    }, 3000);
+  };
+
+  useEffect(() => {
+    showDotsWithTimer();
+    return () => {
+      if (hideTimeout.current) {
+        clearTimeout(hideTimeout.current);
+      }
+    };
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    width: screenWidth,
+    height: headerHeight.value,
+  }));
+
+  const dotsAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: dotsOpacity.value,
+  }));
+
+  const animatedImageStyle = useAnimatedStyle(() => ({
+    transform: isDownloadable ? [{ scale: scaleValue.value }] : [],
+  }));
 
   const handleSaveImage = async (index: number) => {
     const confirmSave = await new Promise<boolean>((resolve) => {
@@ -59,8 +121,8 @@ const RunImageCarousel = ({
   const renderCarouselItem = ({ item, index }: { item: string; index: number }) => (
     <View
       style={{
-        width: ScreenWidth,
-        height: ScreenWidth,
+        width: screenWidth,
+        height: screenWidth,
       }}>
       <Pressable
         onLongPress={() => handleSaveImage(index)}
@@ -68,13 +130,15 @@ const RunImageCarousel = ({
         onPressOut={handlePressOut}
         style={{ flex: 1 }}>
         <Animated.Image
-          style={{
-            alignSelf: 'center',
-            width: ScreenWidth,
-            height: ScreenWidth,
-            resizeMode: 'cover',
-            transform: isDownloadable ? [{ scale: scaleValue }] : undefined,
-          }}
+          style={[
+            {
+              alignSelf: 'center',
+              width: screenWidth,
+              height: screenWidth,
+              resizeMode: 'cover',
+            },
+            animatedImageStyle,
+          ]}
           source={{ uri: item }}
         />
       </Pressable>
@@ -87,73 +151,89 @@ const RunImageCarousel = ({
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       style={{
-        width: ScreenWidth,
-        height: 350, // Fixed height as in your original code
+        width: screenWidth,
+        height: screenWidth, // Fixed height as in your original code
         position: 'relative',
       }}>
       <Animated.Image
-        style={{
-          width: '100%',
-          height: '100%',
-          resizeMode: 'cover',
-          transform: isDownloadable ? [{ scale: scaleValue }] : undefined,
-        }}
+        style={[
+          {
+            alignSelf: 'center',
+            width: screenWidth,
+            height: screenWidth,
+            resizeMode: 'cover',
+          },
+          animatedImageStyle,
+        ]}
         source={{ uri: data[0] }}
       />
-      <View className="absolute bottom-0 w-full items-center rounded-tl-3xl rounded-tr-3xl bg-background p-3" />
+      <View className="absolute bottom-0 w-full items-center rounded-tl-3xl rounded-tr-3xl bg-background pb-2 pt-3">
+        <View className=" h-1.5 w-10 rounded-full bg-input" />
+      </View>
     </Pressable>
   );
 
   return (
-    <View style={{ alignItems: 'center' }} className="relative bg-background">
-      {data?.length > 1 ? (
-        <>
-          <Carousel
-            data={data}
-            renderItem={renderCarouselItem}
-            width={ScreenWidth}
-            height={ScreenWidth}
-            loop={false}
-            onProgressChange={(_offsetProgress, absoluteProgress) => {
-              const index = Math.round(absoluteProgress);
-              setCurrentIndex(index);
-            }}
-          />
-          <View className="absolute bottom-0 w-full items-center rounded-tl-3xl rounded-tr-3xl bg-background pt-3">
-            <AnimatedDotsCarousel
-              length={data?.length}
-              currentIndex={currentIndex}
-              maxIndicators={data?.length}
-              activeIndicatorConfig={{
-                color: '#762e1f',
-                margin: 3,
-                opacity: 1,
-                size: 8,
+    <GestureDetector gesture={pan}>
+      <Animated.View
+        style={[{ alignItems: 'center' }, animatedStyle]}
+        className="relative bg-background">
+        {data?.length > 1 ? (
+          <>
+            <Carousel
+              data={data}
+              renderItem={renderCarouselItem}
+              width={screenWidth}
+              height={screenWidth}
+              loop={false}
+              onProgressChange={(_offsetProgress, absoluteProgress) => {
+                const index = Math.round(absoluteProgress);
+                setCurrentIndex(index);
+                showDotsWithTimer();
               }}
-              inactiveIndicatorConfig={{
-                color: 'black',
-                margin: 3,
-                opacity: 0.5,
-                size: 6,
-              }}
-              decreasingDots={[
-                {
-                  config: {
-                    color: 'black',
-                    margin: 3,
-                    opacity: 0.5,
-                    size: 6,
-                  },
-                  quantity: 1,
-                },
-              ]}
             />
-          </View>
-        </>
-      ) : data?.length === 1 ? (
-        renderSingleImage()
-      ) : null}
-    </View>
+            <Animated.View
+              style={dotsAnimatedStyle}
+              className="absolute bottom-10 items-center rounded-full bg-background p-3"
+              pointerEvents="none">
+              <AnimatedDotsCarousel
+                length={data?.length}
+                currentIndex={currentIndex}
+                maxIndicators={data?.length}
+                activeIndicatorConfig={{
+                  color: '#762e1f',
+                  margin: 3,
+                  opacity: 1,
+                  size: 10,
+                }}
+                inactiveIndicatorConfig={{
+                  color: '#e7e6e4',
+                  margin: 3,
+                  opacity: 1,
+                  size: 8,
+                }}
+                decreasingDots={[
+                  {
+                    config: {
+                      color: '#e7e6e4',
+                      margin: 3,
+                      opacity: 1,
+                      size: 8,
+                    },
+                    quantity: 1,
+                  },
+                ]}
+              />
+            </Animated.View>
+            <View className="absolute bottom-0 w-full items-center rounded-tl-3xl rounded-tr-3xl bg-background pb-2 pt-3">
+              <View className=" h-1.5 w-10 rounded-full bg-input" />
+            </View>
+          </>
+        ) : data?.length === 1 ? (
+          renderSingleImage()
+        ) : null}
+      </Animated.View>
+    </GestureDetector>
   );
 };
 

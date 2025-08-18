@@ -14,16 +14,15 @@ const ViewMenuItem = () => {
       {imageUrls?.length > 0 ? (
         <>
           <BackButtonWithBackground />
-          <RunImageCarousel data={imageUrls} runId={id as string} isDownloadable={true} />
+          <RunImageCarousel data={imageUrls} runId={id as string} isDownloadable={false} />
         </>
       ) : null}
-      <SafeAreaView className="flex-1 bg-background p-6">
+      <SafeAreaView className="flex-1 bg-background">
         <View className="mb-2 flex-row items-center">
           {imageUrls.length == 0 ? <BackButton /> : null}
         </View>
-
         <Text className="px-4 font-sans text-3xl text-text">{name}</Text>
-        <Text className="mt-4 px-4 font-sans text-2xl text-primary">
+        <Text className="mt-2 px-4 font-sans text-2xl text-primary">
           ${parseFloat(price as string)?.toFixed(2)}
         </Text>
         <Text className="mt-2 px-4 font-sans text-2xl text-text">{category}</Text>

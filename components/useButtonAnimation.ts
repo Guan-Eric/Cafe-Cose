@@ -1,15 +1,20 @@
-import { useRef } from 'react';
-import { Animated } from 'react-native';
+import { useSharedValue, withSpring } from 'react-native-reanimated';
 
 const useButtonAnimation = (value: number) => {
-  const scaleValue = useRef(new Animated.Value(1)).current;
+  const scaleValue = useSharedValue(1);
 
   const handlePressIn = () => {
-    Animated.spring(scaleValue, { toValue: value, useNativeDriver: true }).start();
+    scaleValue.value = withSpring(value, {
+      damping: 15,
+      stiffness: 300,
+    });
   };
 
   const handlePressOut = () => {
-    Animated.spring(scaleValue, { toValue: 1, useNativeDriver: true }).start();
+    scaleValue.value = withSpring(1, {
+      damping: 15,
+      stiffness: 300,
+    });
   };
 
   return { scaleValue, handlePressIn, handlePressOut };
