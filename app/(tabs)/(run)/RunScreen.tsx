@@ -44,9 +44,9 @@ function RunScreen() {
         <SafeAreaView className="flex-1 px-4 ">
           <View className="mb-2 px-6 ">
             <Text className="font-sans text-2xl text-text">Café Cosé Run Club 🏃‍♂️</Text>
-            <Text className="text-text">• Tuesday 7 AM</Text>
-            <Text className="text-text">• Wednesday 6:30 PM</Text>
-            <Text className="text-text">• Saturday 9 AM</Text>
+            <Text className="font-sans text-text">• Tuesday 7 AM</Text>
+            <Text className="font-sans text-text">• Wednesday 6:30 PM</Text>
+            <Text className="font-sans text-text">• Saturday 9 AM</Text>
           </View>
           <View>
             {loading ? (

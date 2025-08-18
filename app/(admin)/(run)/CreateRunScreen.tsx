@@ -147,7 +147,7 @@ const CreateRunScreen = () => {
                   value={title}
                   maxLength={40}
                   onChangeText={setTitle}
-                  className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                 />
               </View>
               <View className="mt-3 h-[60px] w-[254px]">
@@ -156,7 +156,7 @@ const CreateRunScreen = () => {
                   value={notificationMessage}
                   maxLength={120}
                   onChangeText={setNotificationMessage}
-                  className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                 />
               </View>
               <View className="mt-3 h-[180px] w-[254px]">
@@ -165,7 +165,7 @@ const CreateRunScreen = () => {
                   value={message}
                   onChangeText={setMessage}
                   multiline
-                  className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                 />
               </View>
               <View className="mt-3">

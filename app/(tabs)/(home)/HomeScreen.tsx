@@ -200,7 +200,7 @@ function HomeScreen() {
             </View>
             <Image
               source={require('../../../assets/cafe-cose.png')}
-              className="m-1 h-32 w-32 self-center"
+              className="m-1 h-24 w-24 self-center"
               resizeMode="contain"
             />
             <TouchableOpacity
