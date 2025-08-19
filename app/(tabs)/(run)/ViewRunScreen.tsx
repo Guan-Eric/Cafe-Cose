@@ -7,7 +7,7 @@ import { FIREBASE_AUTH } from 'firebaseConfig';
 import ReminderModal from 'components/modals/ReminderModal';
 import BackButton from 'components/BackButton';
 import ParticipantsCard from 'components/cards/ParticipantsCard';
-import RunImageCarousel from 'components/RunImageCarousel';
+import ImageHeaderCarousel from 'components/ImageHeaderCarousel';
 import BackButtonWithBackground from 'components/BackButtonWithBackground';
 
 const ViewRunScreen = () => {
@@ -55,7 +55,7 @@ const ViewRunScreen = () => {
       {imageUrls.length > 0 ? (
         <>
           <BackButtonWithBackground />
-          <RunImageCarousel data={imageUrls} runId={id as string} isDownloadable={true} />
+          <ImageHeaderCarousel data={imageUrls} runId={id as string} isDownloadable={true} />
         </>
       ) : null}
       <SafeAreaView className="flex-1 bg-background">

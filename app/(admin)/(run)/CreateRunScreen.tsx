@@ -23,7 +23,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { FIREBASE_STR } from 'firebaseConfig';
 import { notifyRun } from 'backend/notification';
-import RunImageCarousel from 'components/RunImageCarousel';
+import ImageHeaderCarousel from 'components/ImageHeaderCarousel';
 import ImageCarousel from 'components/ImageCarousel';
 import { handleImageUpload } from 'backend/image';
 

@@ -1,7 +1,7 @@
 import { View, Text, Image, SafeAreaView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import BackButton from 'components/BackButton';
-import RunImageCarousel from 'components/RunImageCarousel';
+import ImageHeaderCarousel from 'components/ImageHeaderCarousel';
 import BackButtonWithBackground from 'components/BackButtonWithBackground';
 
 const ViewMenuItem = () => {
@@ -14,7 +14,7 @@ const ViewMenuItem = () => {
       {imageUrls?.length > 0 ? (
         <>
           <BackButtonWithBackground />
-          <RunImageCarousel data={imageUrls} runId={id as string} isDownloadable={false} />
+          <ImageHeaderCarousel data={imageUrls} runId={id as string} isDownloadable={false} />
         </>
       ) : null}
       <SafeAreaView className="flex-1 bg-background">

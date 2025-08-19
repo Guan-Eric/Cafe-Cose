@@ -12,19 +12,19 @@ import useButtonAnimation from './useButtonAnimation';
 import { saveImageToGallery } from 'backend/image';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
-interface RunImageCarouselProps {
+interface ImageHeaderCarouselProps {
   data: string[];
   runId: string; // Add runId prop
   imageStoragePaths?: string[]; // Optional: if you have the storage paths
   isDownloadable: boolean;
 }
 
-const RunImageCarousel = ({
+const ImageHeaderCarousel = ({
   data,
   runId,
   imageStoragePaths,
   isDownloadable,
-}: RunImageCarouselProps) => {
+}: ImageHeaderCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const screenWidth = Dimensions.get('window').width;
   const MAX_HEIGHT = screenWidth;
@@ -237,4 +237,4 @@ const RunImageCarousel = ({
   );
 };
 
-export default RunImageCarousel;
+export default ImageHeaderCarousel;
