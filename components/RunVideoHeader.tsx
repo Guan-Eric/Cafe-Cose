@@ -2,6 +2,8 @@ import { Dimensions, View } from 'react-native';
 import { useVideoPlayer, VideoSource, VideoView } from 'expo-video';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { useFocusEffect } from 'expo-router';
+import { useCallback } from 'react';
 
 const screenWidth = Dimensions.get('window').width;
 const EXPANDED_HEIGHT = screenWidth;
@@ -15,6 +17,12 @@ export default function RunVideoHeader() {
     player.loop = true;
     player.muted = true;
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      player.play();
+    }, [player])
+  );
 
   const height = useSharedValue(EXPANDED_HEIGHT);
   const startHeight = useSharedValue(EXPANDED_HEIGHT);
