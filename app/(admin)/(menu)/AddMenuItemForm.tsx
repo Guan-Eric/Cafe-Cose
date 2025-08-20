@@ -92,7 +92,9 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-background">
         <KeyboardAvoidingView behavior="padding" className="flex-1">
-          <ScrollView>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
+            keyboardShouldPersistTaps="handled">
             <BackButton />
             <View className="flex-1 items-center justify-center">
               <View className="items-center pb-[30px]">
@@ -102,7 +104,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                 <View className="h-[60px] w-[254px]">
                   <Text className="font-sans text-text">Name</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                     value={name}
                     onChangeText={setName}
                     autoCapitalize="words"
@@ -113,7 +115,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                 <View className="mt-3 h-[60px] w-[254px]">
                   <Text className="font-sans text-text">Price</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                     value={price}
                     onChangeText={setPrice}
                     keyboardType="numeric"
@@ -124,7 +126,7 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                 <View className="mt-3 h-[100px] w-[254px]">
                   <Text className="font-sans text-text">Description</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                     value={description}
                     onChangeText={setDescription}
                     multiline
@@ -155,9 +157,9 @@ const AddMenuItemForm: React.FC<AddMenuItemFormProps> = () => {
                   <Switch value={available} onValueChange={setAvailable} className="ml-2" />
                 </View>
                 {imageUrls.length > 0 ? (
-                  <Pressable onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
+                  <TouchableOpacity onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
                     <ImageCarousel data={imageUrls} width={254} />
-                  </Pressable>
+                  </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
                     onPress={() => handleImageUpload(setBlobs, setImageUrls)}

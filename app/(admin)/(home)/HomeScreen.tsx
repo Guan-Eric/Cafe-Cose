@@ -10,7 +10,7 @@ function HomeScreen() {
       <StatusBar style="light" />
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
-          <Text className="font-sans text-2xl text-text">Admin</Text>
+          <Text className="font-sans text-3xl text-text">Admin</Text>
           <TouchableOpacity
             className="mr-2 rounded-full bg-primary px-4 py-2"
             onPress={() =>

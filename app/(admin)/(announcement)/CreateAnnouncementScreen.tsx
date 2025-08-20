@@ -124,7 +124,9 @@ const CreateAnnouncementScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-background">
         <KeyboardAvoidingView behavior="padding" className="flex-1">
-          <ScrollView>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
+            keyboardShouldPersistTaps="handled">
             <View className="flex-row items-center">
               <BackButton />
               <Text className="font-sans text-2xl text-text">Create Announcement</Text>
@@ -136,7 +138,7 @@ const CreateAnnouncementScreen = () => {
                   value={title}
                   maxLength={40}
                   onChangeText={setTitle}
-                  className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                 />
               </View>
               <View className="mt-3 h-[60px] w-[254px]">
@@ -145,23 +147,23 @@ const CreateAnnouncementScreen = () => {
                   value={notificationMessage}
                   maxLength={120}
                   onChangeText={setNotificationMessage}
-                  className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                 />
               </View>
-              <View className="mt-3 h-[180px] w-[254px]">
+              <View className="my-3 h-[180px] w-[254px]">
                 <Text className="font-sans text-text">Message</Text>
                 <TextInput
                   value={message}
                   onChangeText={setMessage}
                   multiline
-                  className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                  className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                 />
               </View>
 
               {imageUrls.length > 0 ? (
-                <Pressable onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
+                <TouchableOpacity onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
                   <ImageCarousel data={imageUrls} width={254} />
-                </Pressable>
+                </TouchableOpacity>
               ) : (
                 <TouchableOpacity
                   onPress={() => handleImageUpload(setBlobs, setImageUrls)}

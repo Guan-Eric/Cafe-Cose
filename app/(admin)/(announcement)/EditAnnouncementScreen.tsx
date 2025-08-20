@@ -174,7 +174,9 @@ const EditAnnouncementScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-background">
         <KeyboardAvoidingView behavior="padding" className="flex-1">
-          <ScrollView>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
+            keyboardShouldPersistTaps="handled">
             <BackButton />
             <View className="flex-1 items-center justify-center ">
               <View className="items-center pb-[30px]">
@@ -184,7 +186,7 @@ const EditAnnouncementScreen = () => {
                 <View className="h-[60px] w-[254px]">
                   <Text className="font-sans text-text">Title</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                     value={announcementTitle}
                     onChangeText={setTitle}
                     maxLength={40}
@@ -193,16 +195,16 @@ const EditAnnouncementScreen = () => {
                 <View className="mt-3 h-[60px] w-[254px]">
                   <Text className="font-sans text-text">Notification Message</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                     value={notification}
                     onChangeText={setNotification}
                     maxLength={120}
                   />
                 </View>
-                <View className="mt-3 h-[100px] w-[254px]">
+                <View className="my-3 h-[100px] w-[254px]">
                   <Text className="font-sans text-text">Message</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                     value={announcementMessage}
                     onChangeText={setMessage}
                     multiline
@@ -211,9 +213,9 @@ const EditAnnouncementScreen = () => {
                 </View>
 
                 {imageUrls.length > 0 ? (
-                  <Pressable onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
+                  <TouchableOpacity onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
                     <ImageCarousel data={imageUrls} width={254} />
-                  </Pressable>
+                  </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
                     onPress={() => handleImageUpload(setBlobs, setImageUrls)}

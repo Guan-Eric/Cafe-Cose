@@ -9,14 +9,11 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
 import LoyaltyCard from '../../../components/cards/LoyaltyCard';
 import { getUser, hasAcceptedLatestTerms, savePushToken, updateTermsCondition } from 'backend/user';
 import { FIREBASE_AUTH } from 'firebaseConfig';
-import { Announcement, Category, MenuItem, User } from 'components/types';
-import AnnouncementCard from 'components/cards/AnnouncementCard';
-import { getAnnouncements } from 'backend/announcement';
+import { Category, MenuItem, User } from 'components/types';
 import useNotifications from 'backend/notification';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CardLoader from 'components/loaders/CardLoader';

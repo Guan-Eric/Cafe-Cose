@@ -3,6 +3,7 @@ import { View, Text, Button, Modal, Pressable, SafeAreaView, TouchableOpacity } 
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { getUser, incrementStamp } from 'backend/user';
 import { User } from 'components/types';
+import BackButtonWithBackground from 'components/BackButtonWithBackground';
 
 function QRScannerScreen() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -49,6 +50,7 @@ function QRScannerScreen() {
 
   return (
     <View style={{ flex: 1 }}>
+      <BackButtonWithBackground />
       <CameraView
         facing="back"
         barcodeScannerSettings={{
