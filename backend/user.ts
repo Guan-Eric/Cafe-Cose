@@ -1,7 +1,9 @@
-import { deleteDoc, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { deleteDoc, doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_STR, FIRESTORE_DB } from '../firebaseConfig';
 import { User } from 'components/types';
 import { ref, listAll, deleteObject } from 'firebase/storage';
+
+const TERMS_VERSION = '1.0.0';
 
 export async function addUser(name: string) {
   try {
@@ -83,10 +85,34 @@ export async function updateUser(
   }
 }
 
+export async function hasAcceptedLatestTerms(): Promise<boolean> {
+  try {
+    const userDocRef = doc(FIRESTORE_DB, `Users/${FIREBASE_AUTH.currentUser?.uid}`);
+    const snap = await getDoc(userDocRef);
+
+    if (!snap.exists()) return false;
+
+    const data = snap.data();
+    const accepted = data?.termsAccepted;
+
+    if (!accepted) return false;
+    if (accepted.version !== TERMS_VERSION) return false;
+
+    return true;
+  } catch (error) {
+    console.error('Error checking Terms acceptance:', error);
+    return false;
+  }
+}
+
 export async function updateTermsCondition(): Promise<void> {
   try {
     const userDocRef = doc(FIRESTORE_DB, `Users/${FIREBASE_AUTH.currentUser?.uid}`);
     await updateDoc(userDocRef, {
+      termsAccepted: {
+        version: TERMS_VERSION,
+        acceptedAt: serverTimestamp(),
+      },
       showTermsCondition: false,
     });
   } catch (error) {

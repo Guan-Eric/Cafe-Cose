@@ -27,10 +27,9 @@ export default function RunVideoHeader() {
       const newHeight = startHeight.value + event.translationY;
       height.value = Math.max(COLLAPSED_HEIGHT, Math.min(EXPANDED_HEIGHT, newHeight));
     })
-    .onEnd((event) => {
+    .onEnd(() => {
       const middle = (EXPANDED_HEIGHT + COLLAPSED_HEIGHT) / 2;
       const shouldCollapse = height.value < middle;
-      console.log(shouldCollapse);
       height.value = withSpring(shouldCollapse ? COLLAPSED_HEIGHT : EXPANDED_HEIGHT, {
         damping: 20,
         stiffness: 200,

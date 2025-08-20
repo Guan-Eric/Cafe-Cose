@@ -22,15 +22,13 @@ export default function PromotionComponent({
     router.push('/(admin)/(home)/CreatePromotionScreen');
   };
 
-  const { width, height } = Dimensions.get('window');
-
   return (
     <View className="flex-1 justify-between bg-background">
       {imageUrl && (
         <ImageBackground source={{ uri: imageUrl }} resizeMode="cover" className="h-[80%] w-full" />
       )}
       <View className="w-full px-6 pb-12">
-        <Text className="text-bold mb-1 mt-2 text-text">{title}</Text>
+        <Text className="mb-1 mt-2 font-sans text-text">{title}</Text>
         <Text className="font-sans text-3xl text-primary">{message}</Text>
         <View className="mb-4 mt-6 flex-row gap-4 self-end">
           {buttonTitle === 'Edit' && (

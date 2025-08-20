@@ -31,13 +31,11 @@ function AnnouncementScreen() {
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
-          <Text className="text-2xl font-bold text-text">Announcements</Text>
+          <Text className="font-sans text-2xl text-text">Announcements</Text>
           <TouchableOpacity
             onPress={handleAddAnnouncement}
             className="rounded-full bg-primary px-4 py-2">
-            <Text className="text-secondaryText text-lg font-[Lato_400Regular]">
-              + Add Announcement
-            </Text>
+            <Text className="font-sans text-lg text-offwhite">+ Add Announcement</Text>
           </TouchableOpacity>
         </View>
         <ScrollView className="flex-1 px-4">

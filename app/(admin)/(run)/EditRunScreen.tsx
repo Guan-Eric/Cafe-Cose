@@ -218,9 +218,7 @@ const EditRunScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-background">
         <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          showsVerticalScrollIndicator={true}
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
           keyboardShouldPersistTaps="handled">
           <View className="flex-row items-center">
             <BackButton />
@@ -273,9 +271,9 @@ const EditRunScreen = () => {
               <Switch value={isRSVP} onValueChange={setIsRSVP} className="ml-2" />
             </View>
             {imageUrls.length > 0 ? (
-              <Pressable onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
+              <TouchableOpacity onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
                 <ImageCarousel data={imageUrls} width={254} />
-              </Pressable>
+              </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 onPress={() => handleImageUpload(setBlobs, setImageUrls)}

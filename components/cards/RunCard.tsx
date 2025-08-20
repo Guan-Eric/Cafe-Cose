@@ -3,7 +3,7 @@ import { View, Text, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Run } from 'components/types';
 import useButtonAnimation from 'components/useButtonAnimation';
-import Animated from 'react-native-reanimated';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 
 interface RunCardProps {
   run: Run;
@@ -23,7 +23,11 @@ const RunCard: React.FC<RunCardProps> = ({ run, onPress }) => {
   const { scaleValue, handlePressIn, handlePressOut } = useButtonAnimation(0.95);
   const participants = (run.participants || []).filter((p) => p.status === 'yes');
   const maxAvatars = 3;
-
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scaleValue.value }],
+    };
+  });
   return (
     <Pressable
       onPress={onPress}
@@ -31,7 +35,7 @@ const RunCard: React.FC<RunCardProps> = ({ run, onPress }) => {
       onPressOut={handlePressOut}
       className="mb-4 w-[90%] self-center">
       <Animated.View
-        style={{ transform: [{ scale: scaleValue.value }] }}
+        style={animatedStyle}
         className="w-full self-center rounded-2xl bg-card p-4 shadow-sm">
         <View className="flex-row items-center justify-between">
           <View className="justify-between">

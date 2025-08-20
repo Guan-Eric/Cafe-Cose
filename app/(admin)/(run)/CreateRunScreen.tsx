@@ -138,7 +138,9 @@ const CreateRunScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView className="flex-1 bg-background">
         <KeyboardAvoidingView behavior="padding" className="flex-1">
-          <ScrollView>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
+            keyboardShouldPersistTaps="handled">
             <View className="flex-row items-center">
               <BackButton />
               <Text className="font-sans text-2xl text-text">Create Run</Text>
@@ -190,7 +192,9 @@ const CreateRunScreen = () => {
                 <Switch value={isRSVP} onValueChange={setIsRSVP} className="ml-2" />
               </View>
               {imageUrls.length > 0 ? (
-                <ImageCarousel data={imageUrls} width={254} />
+                <TouchableOpacity onPress={() => handleImageUpload(setBlobs, setImageUrls)}>
+                  <ImageCarousel data={imageUrls} width={254} />
+                </TouchableOpacity>
               ) : (
                 <TouchableOpacity
                   onPress={() => handleImageUpload(setBlobs, setImageUrls)}

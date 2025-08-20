@@ -31,23 +31,22 @@ export default function InformationScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="absolute left-0 right-0 top-0 h-[235px] bg-primary" />
-      <ScrollView>
-        <Text className="mb-3 pl-8 font-sans text-3xl text-offwhite">Our Location</Text>
-        <View className="mb-4 px-6">
-          <View className="shadow-lg">
-            <TouchableOpacity onPress={handleOpenMaps}>
-              <Image source={require('assets/maps.png')} className="h-52 w-full rounded-2xl" />
-            </TouchableOpacity>
-          </View>
-
-          <TouchableOpacity
-            onPress={handleOpenMaps}
-            className="mt-2 flex-row items-center justify-center">
-            <MaterialCommunityIcons name="map-marker" size={22} color="#762e1f" />
-            <Text className="ml-2 font-sans text-primary">{cafeAddress}</Text>
+      <Text className="mb-3 pl-8 font-sans text-3xl text-offwhite">Our Location</Text>
+      <View className="mb-4 px-6">
+        <View className="shadow-lg">
+          <TouchableOpacity onPress={handleOpenMaps}>
+            <Image source={require('assets/maps.png')} className="h-52 w-full rounded-2xl" />
           </TouchableOpacity>
         </View>
 
+        <TouchableOpacity
+          onPress={handleOpenMaps}
+          className="mt-2 flex-row items-center justify-center">
+          <MaterialCommunityIcons name="map-marker" size={22} color="#762e1f" />
+          <Text className="ml-2 font-sans text-primary">{cafeAddress}</Text>
+        </TouchableOpacity>
+      </View>
+      <ScrollView>
         <Text className="mb-3 mt-2 pl-4 font-sans text-2xl text-primary">Opening Hours</Text>
         <View className="mb-8 rounded-lg px-6">
           {openingHours.map((item) => (

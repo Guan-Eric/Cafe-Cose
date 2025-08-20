@@ -9,19 +9,17 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
 import LoyaltyCard from '../../../components/cards/LoyaltyCard';
-import { getUser, savePushToken } from 'backend/user';
+import { getUser, hasAcceptedLatestTerms, savePushToken, updateTermsCondition } from 'backend/user';
 import { FIREBASE_AUTH } from 'firebaseConfig';
-import { Announcement, Category, MenuItem, User } from 'components/types';
-import AnnouncementCard from 'components/cards/AnnouncementCard';
-import { getAnnouncements } from 'backend/announcement';
+import { Category, MenuItem, User } from 'components/types';
 import useNotifications from 'backend/notification';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import CardLoader from 'components/loaders/CardLoader';
 import { getMenu } from 'backend/menu';
 import MenuCard from 'components/cards/MenuCard';
+import TermsConditionModal from 'components/modals/TermsConditionModal';
 
 function HomeScreen() {
   const [user, setUser] = useState<User>();
@@ -30,6 +28,7 @@ function HomeScreen() {
   const [filteredMenu, setFilteredMenu] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
+  const [termsCondition, setTermsCondition] = useState<boolean>(false);
   const { expoPushToken } = useNotifications();
 
   const fetchStamps = async () => {
@@ -75,6 +74,7 @@ function HomeScreen() {
     const loadData = async () => {
       await fetchMenuFiltered();
       await fetchStamps();
+      await getTermsCondition();
       clearTimeout(showLoading);
       setLoading(false);
     };
@@ -90,6 +90,15 @@ function HomeScreen() {
       fetchMenu();
     }, [])
   );
+
+  const getTermsCondition = async () => {
+    setTermsCondition(!(await hasAcceptedLatestTerms()));
+  };
+
+  const handleTermsCondition = () => {
+    updateTermsCondition();
+    setTermsCondition(false);
+  };
 
   return (
     <View className="flex-1 bg-background">
@@ -210,6 +219,7 @@ function HomeScreen() {
             </TouchableOpacity>
           </ScrollView>
         </View>
+        <TermsConditionModal modalVisible={termsCondition} onClose={handleTermsCondition} />
       </SafeAreaView>
     </View>
   );
