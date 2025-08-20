@@ -27,29 +27,32 @@ const ImageHeaderCarousel = ({
 }: ImageHeaderCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const screenWidth = Dimensions.get('window').width;
-  const MAX_HEIGHT = screenWidth;
-  const MIN_HEIGHT = 120;
+  const EXPANDED_HEIGHT = screenWidth;
+  const COLLAPSED_HEIGHT = 120;
   const { scaleValue, handlePressIn, handlePressOut } = useButtonAnimation(1.05);
 
-  const headerHeight = useSharedValue(MAX_HEIGHT);
   const dotsOpacity = useSharedValue(1);
   const hideTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  const pan = Gesture.Pan()
-    .onUpdate((e) => {
-      headerHeight.value = Math.min(
-        MAX_HEIGHT,
-        Math.max(MIN_HEIGHT, headerHeight.value + e.translationY)
-      );
-      console.log(headerHeight.value);
+  const height = useSharedValue(EXPANDED_HEIGHT);
+  const startHeight = useSharedValue(EXPANDED_HEIGHT);
+
+  const panGesture = Gesture.Pan()
+    .onBegin(() => {
+      startHeight.value = height.value;
     })
-    .onEnd(() => {
-      const midpoint = (MAX_HEIGHT + MIN_HEIGHT) / 2;
-      headerHeight.value =
-        headerHeight.value < midpoint
-          ? withSpring(MIN_HEIGHT, { damping: 15 })
-          : withSpring(MAX_HEIGHT, { damping: 15 });
-      console.log(headerHeight.value);
+    .onUpdate((event) => {
+      const newHeight = startHeight.value + event.translationY;
+      height.value = Math.max(COLLAPSED_HEIGHT, Math.min(EXPANDED_HEIGHT, newHeight));
+    })
+    .onEnd((event) => {
+      const middle = (EXPANDED_HEIGHT + COLLAPSED_HEIGHT) / 2;
+      const shouldCollapse = height.value < middle;
+      console.log(shouldCollapse);
+      height.value = withSpring(shouldCollapse ? COLLAPSED_HEIGHT : EXPANDED_HEIGHT, {
+        damping: 20,
+        stiffness: 200,
+      });
     });
 
   const showDotsWithTimer = () => {
@@ -73,8 +76,7 @@ const ImageHeaderCarousel = ({
   }, []);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    width: screenWidth,
-    height: headerHeight.value,
+    height: height.value,
   }));
 
   const dotsAnimatedStyle = useAnimatedStyle(() => ({
@@ -125,7 +127,7 @@ const ImageHeaderCarousel = ({
         height: screenWidth,
       }}>
       <Pressable
-        onLongPress={() => handleSaveImage(index)}
+        onLongPress={() => (isDownloadable ? handleSaveImage(0) : null)}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         style={{ flex: 1 }}>
@@ -167,14 +169,11 @@ const ImageHeaderCarousel = ({
         ]}
         source={{ uri: data[0] }}
       />
-      <View className="absolute bottom-0 w-full items-center rounded-tl-3xl rounded-tr-3xl bg-background pb-2 pt-3">
-        <View className=" h-1.5 w-10 rounded-full bg-input" />
-      </View>
     </Pressable>
   );
 
   return (
-    <GestureDetector gesture={pan}>
+    <GestureDetector gesture={panGesture}>
       <Animated.View
         style={[{ alignItems: 'center' }, animatedStyle]}
         className="relative bg-background">
@@ -230,7 +229,12 @@ const ImageHeaderCarousel = ({
             </View>
           </>
         ) : data?.length === 1 ? (
-          renderSingleImage()
+          <>
+            {renderSingleImage()}
+            <View className="absolute bottom-0 w-full items-center rounded-tl-3xl rounded-tr-3xl bg-background pb-2 pt-3">
+              <View className=" h-1.5 w-10 rounded-full bg-input" />
+            </View>
+          </>
         ) : null}
       </Animated.View>
     </GestureDetector>
