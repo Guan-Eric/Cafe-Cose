@@ -14,7 +14,7 @@ import {
   Switch,
   ActivityIndicator,
 } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { Run } from 'components/types';
 import * as ImagePicker from 'expo-image-picker';
 import BackButton from 'components/BackButton';
@@ -28,12 +28,15 @@ import ImageCarousel from 'components/ImageCarousel';
 import { handleImageUpload } from 'backend/image';
 
 const CreateRunScreen = () => {
-  const [title, setTitle] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
-  const [notificationMessage, setNotificationMessage] = useState<string>('');
+  const { runTitle, runMessage, runNotificationMessage, runIsRSVP } = useLocalSearchParams();
+  const [title, setTitle] = useState<string>((runTitle as string) || '');
+  const [message, setMessage] = useState<string>((runMessage as string) || '');
+  const [notificationMessage, setNotificationMessage] = useState<string>(
+    (runNotificationMessage as string) || ''
+  );
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [date, setDate] = useState<Date>(new Date());
-  const [isRSVP, setIsRSVP] = useState<boolean>(true);
+  const [isRSVP, setIsRSVP] = useState<boolean>(runIsRSVP == 'true');
   const [blobs, setBlobs] = useState<Blob[]>([]);
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);

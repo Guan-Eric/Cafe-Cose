@@ -57,6 +57,7 @@ const EditRunScreen = () => {
   const [blobs, setBlobs] = useState<Blob[]>([]);
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [deleteloading, setDeleteLoading] = useState<boolean>(false);
 
   const handleUpdateRun = async () => {
     setLoading(true);
@@ -181,15 +182,30 @@ const EditRunScreen = () => {
 
     if (confirmDelete) {
       try {
+        setDeleteLoading(true);
         await deleteRun(id as string);
         Alert.alert('Success', 'Run deleted successfully!');
+        setDeleteLoading(false);
       } catch (error) {
         console.error('Error deleting run:', error);
         Alert.alert('Error', 'Failed to delete run.');
+        setDeleteLoading(false);
       } finally {
         router.back();
       }
     }
+  };
+
+  const handleDuplicateRun = () => {
+    router.push({
+      pathname: '/(admin)/(run)/CreateRunScreen',
+      params: {
+        runTitle: title,
+        runMessage: message,
+        runNotificationMessage: notificationMessage,
+        runIsRSVP: isRSVP.toString(),
+      },
+    });
   };
 
   const onChangeDate = (event: any, selectedDate: Date | undefined) => {
@@ -217,7 +233,7 @@ const EditRunScreen = () => {
                 value={title}
                 maxLength={40}
                 onChangeText={setTitle}
-                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
               />
             </View>
             <View className="mt-3 h-[60px] w-[254px]">
@@ -226,7 +242,7 @@ const EditRunScreen = () => {
                 value={notificationMessage}
                 maxLength={120}
                 onChangeText={setNotificationMessage}
-                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
               />
             </View>
             <View className="mt-3 h-[180px] w-[254px]">
@@ -235,7 +251,7 @@ const EditRunScreen = () => {
                 value={message}
                 onChangeText={setMessage}
                 multiline
-                className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
               />
             </View>
             <View className="mt-3">
@@ -268,6 +284,11 @@ const EditRunScreen = () => {
               </TouchableOpacity>
             )}
             <TouchableOpacity
+              onPress={handleDuplicateRun}
+              className="mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] border-2 border-primary bg-background">
+              <Text className="font-sans text-primary">Duplicate Run</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={handleUpdateRun}
               disabled={loading}
               className={`mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading ? 'bg-gray-400' : 'bg-primary'}`}>
@@ -279,9 +300,13 @@ const EditRunScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleDelete}
-              disabled={loading}
-              className={`mb-4 mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] ${loading ? 'bg-gray-400' : 'bg-red-500'}`}>
-              <Text className="font-sans text-white">Delete Item</Text>
+              disabled={deleteloading}
+              className={`mb-4 mt-10 h-[42px] w-[240px] items-center justify-center rounded-[20px] ${deleteloading ? 'bg-gray-400' : 'bg-red-500'}`}>
+              {deleteloading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text className="font-sans text-white">Delete Item</Text>
+              )}
             </TouchableOpacity>
           </View>
         </ScrollView>
