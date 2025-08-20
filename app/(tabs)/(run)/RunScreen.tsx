@@ -5,7 +5,7 @@ import { router, useFocusEffect } from 'expo-router';
 import { Run } from 'components/types';
 import RunCard from 'components/cards/RunCard';
 import CardLoader from 'components/loaders/CardLoader';
-import RunImageHeader from 'components/RunImageHeader';
+import RunVideoHeader from 'components/RunVideoHeader';
 
 function RunScreen() {
   const [runs, setRuns] = useState<Run[]>([]);
@@ -39,7 +39,7 @@ function RunScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <RunImageHeader />
+      <RunVideoHeader />
       <ScrollView className="flex-1 ">
         <SafeAreaView className="flex-1 px-4 ">
           <View className="mb-2 px-6 ">

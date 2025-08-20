@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, Pressable, Image, Animated } from 'react-native';
+import { View, Text, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Announcement } from 'components/types';
 import { format } from 'date-fns';
 import useButtonAnimation from 'components/useButtonAnimation';
+import Animated from 'react-native-reanimated';
 
 interface AnnouncementCardProps {
   announcement: Announcement;
@@ -16,7 +17,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, onPre
     <Pressable onPress={onPress} onPressIn={handlePressIn} onPressOut={handlePressOut}>
       <Animated.View
         className="m-2 w-[95%] flex-row rounded-2xl bg-card p-4 shadow-sm"
-        style={{ transform: [{ scale: scaleValue }] }}>
+        style={{ transform: [{ scale: scaleValue.value }] }}>
         <View className="flex-1">
           {announcement.imageUrls ? (
             <Image
