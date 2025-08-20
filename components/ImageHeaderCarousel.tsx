@@ -14,8 +14,8 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 interface ImageHeaderCarouselProps {
   data: string[];
-  runId: string; // Add runId prop
-  imageStoragePaths?: string[]; // Optional: if you have the storage paths
+  runId: string;
+  imageStoragePaths?: string[];
   isDownloadable: boolean;
 }
 
@@ -45,10 +45,9 @@ const ImageHeaderCarousel = ({
       const newHeight = startHeight.value + event.translationY;
       height.value = Math.max(COLLAPSED_HEIGHT, Math.min(EXPANDED_HEIGHT, newHeight));
     })
-    .onEnd((event) => {
+    .onEnd(() => {
       const middle = (EXPANDED_HEIGHT + COLLAPSED_HEIGHT) / 2;
       const shouldCollapse = height.value < middle;
-      console.log(shouldCollapse);
       height.value = withSpring(shouldCollapse ? COLLAPSED_HEIGHT : EXPANDED_HEIGHT, {
         damping: 20,
         stiffness: 200,
@@ -110,7 +109,6 @@ const ImageHeaderCarousel = ({
 
     if (confirmSave) {
       try {
-        // If we have storage paths, use them; otherwise construct from runId
         const storagePath = imageStoragePaths?.[index] || `runs/${runId}_${index}`;
         await saveImageToGallery(storagePath);
       } catch (error) {

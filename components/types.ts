@@ -8,6 +8,7 @@ export interface User {
   runs: boolean;
   admin: boolean;
   tokens: string[];
+  showTermsCondition: boolean;
 }
 
 export interface MenuItem {
