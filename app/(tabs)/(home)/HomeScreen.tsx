@@ -12,7 +12,7 @@ import {
 import { StatusBar } from 'expo-status-bar';
 import { router, useFocusEffect } from 'expo-router';
 import LoyaltyCard from '../../../components/cards/LoyaltyCard';
-import { getUser, savePushToken, updateTermsCondition } from 'backend/user';
+import { getUser, hasAcceptedLatestTerms, savePushToken, updateTermsCondition } from 'backend/user';
 import { FIREBASE_AUTH } from 'firebaseConfig';
 import { Announcement, Category, MenuItem, User } from 'components/types';
 import AnnouncementCard from 'components/cards/AnnouncementCard';
@@ -95,13 +95,7 @@ function HomeScreen() {
   );
 
   const getTermsCondition = async () => {
-    const user = FIREBASE_AUTH.currentUser;
-    if (user) {
-      const userData = await getUser(user.uid);
-      setTermsCondition(userData?.showTermsCondition ?? false);
-    } else {
-      setTermsCondition(false);
-    }
+    setTermsCondition(!(await hasAcceptedLatestTerms()));
   };
 
   const handleTermsCondition = () => {
