@@ -149,12 +149,12 @@ const ImageHeaderCarousel = ({
 
   const renderSingleImage = () => (
     <Pressable
-      onLongPress={() => handleSaveImage(0)}
+      onLongPress={() => (isDownloadable ? handleSaveImage(0) : null)}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       style={{
         width: screenWidth,
-        height: screenWidth, // Fixed height as in your original code
+        height: screenWidth,
         position: 'relative',
       }}>
       <Animated.Image
