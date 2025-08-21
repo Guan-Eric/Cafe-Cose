@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, Button, Modal, Pressable, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, Button, Modal, SafeAreaView, TouchableOpacity } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { getUser, incrementStamp } from 'backend/user';
 import { User } from 'components/types';
@@ -18,7 +18,7 @@ function QRScannerScreen() {
     const user = (await getUser(data)) as User;
     setScanned(true);
     setUserId(data);
-    setCurrentPoints(user.points);
+    setCurrentPoints(user.points % 10);
     setUserName(user.name);
     setModalVisible(true);
   };
@@ -41,7 +41,7 @@ function QRScannerScreen() {
   }
   if (!permission.granted) {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView className="flex-1">
         <Text>No access to camera</Text>
         <Button onPress={requestPermission} title="Grant Permission" />
       </SafeAreaView>
@@ -49,7 +49,7 @@ function QRScannerScreen() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View className="flex-1">
       <BackButtonWithBackground />
       <CameraView
         facing="back"
@@ -65,45 +65,39 @@ function QRScannerScreen() {
         visible={modalVisible}
         onRequestClose={handleCancel}>
         <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }}>
-          <View style={{ width: 300, padding: 20, backgroundColor: 'white', borderRadius: 10 }}>
-            <Text style={{ fontSize: 18, marginBottom: 10 }}>Give Stamp to {userName}?</Text>
-            <Text style={{ marginBottom: 20 }}>Do you want to give a stamp to this user?</Text>
+          className="flex-1 items-center justify-center"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+          <View className="w-75 rounded-3xl bg-background p-5">
+            <Text className="mb-2 self-center font-sans text-xl">Give Stamp to {userName}?</Text>
+            <Text className="mb-2 self-center font-sans">
+              How many stamps do you want to give to this user?
+            </Text>
             {currentPoints + stampCount >= 9 ? (
-              <Text style={{ marginBottom: 10, fontWeight: 'bold', color: 'green' }}>
+              <Text className=" self-center font-sans text-primary">
                 🎉 This stamp will give {userName} a free drink!
               </Text>
             ) : null}
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: 10,
-              }}>
+            <View className="my-4 flex-row items-center justify-center">
               <TouchableOpacity onPress={() => setStampCount((prev) => Math.max(1, prev - 1))}>
-                <Text style={{ fontSize: 20, paddingHorizontal: 10 }}>−</Text>
+                <Text className="px-2 font-sans text-3xl">−</Text>
               </TouchableOpacity>
-              <Text style={{ fontSize: 20 }}>{stampCount}</Text>
+              <Text className="font-sans text-3xl">{stampCount}</Text>
               <TouchableOpacity onPress={() => setStampCount((prev) => prev + 1)}>
-                <Text style={{ fontSize: 20, paddingHorizontal: 10 }}>+</Text>
+                <Text className="px-2 font-sans text-3xl">+</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              onPress={handleGiveStamp}
-              style={{ backgroundColor: '#3490de', padding: 10, borderRadius: 5 }}>
-              <Text style={{ color: 'white', textAlign: 'center' }}>Yes</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleCancel}
-              style={{ marginTop: 10, padding: 10, borderRadius: 5 }}>
-              <Text style={{ textAlign: 'center' }}>Cancel</Text>
-            </TouchableOpacity>
+            <View className="mt-4 flex-row gap-4 self-center">
+              <TouchableOpacity
+                onPress={handleGiveStamp}
+                className="w-[100px] self-center rounded-full bg-primary p-2">
+                <Text className="text-center font-sans text-offwhite">Yes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleCancel}
+                className=" w-[100px] self-center rounded-full bg-gray-400 p-2">
+                <Text className="text-center font-sans text-offwhite">Cancel</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>

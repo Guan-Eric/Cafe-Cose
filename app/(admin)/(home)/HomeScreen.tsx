@@ -10,7 +10,6 @@ function HomeScreen() {
       <StatusBar style="light" />
       <View className="flex-1">
         <View className="flex-row items-center justify-between px-4 py-2">
-          <Text className="font-sans text-3xl text-text">Admin</Text>
           <TouchableOpacity
             className="mr-2 rounded-full bg-primary px-4 py-2"
             onPress={() =>
@@ -25,26 +24,26 @@ function HomeScreen() {
           </TouchableOpacity>
         </View>
         <View className="px-4">
-          <View className="py-4">
-            <Text className="font-sans text-3xl text-primary">Café Cosé</Text>
+          <View className="self-center py-4">
+            <Text className="self-center font-sans text-3xl text-primary">Café Cosé - Admin</Text>
           </View>
           <View className="gap-4 px-4 py-2">
             <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/QRScannerScreen')}
-              className="flex-row items-center justify-center rounded-full bg-green-500 px-4 py-4">
+              className="flex-row items-center justify-center rounded-3xl bg-green-500 px-4 py-4">
               <Text className="mr-2 self-center font-sans text-lg text-offwhite">Scan QR Code</Text>
               <MaterialCommunityIcons name="camera" size={24} color="white" />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/PromotionScreen')}
-              className="flex-row items-center justify-center rounded-full bg-blue-500 px-4 py-4">
+              className="flex-row items-center justify-center rounded-3xl bg-blue-500 px-4 py-4">
               <Text className="mr-2 self-center font-sans text-lg text-offwhite">
                 View Promotion
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/FeedbackScreen')}
-              className="flex-row items-center justify-center rounded-full bg-gray-500 px-4 py-4">
+              className="flex-row items-center justify-center rounded-3xl bg-gray-500 px-4 py-4">
               <Text className="mr-2 self-center font-sans text-lg text-offwhite">
                 View Feedback
               </Text>
