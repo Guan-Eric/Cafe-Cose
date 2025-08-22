@@ -10,6 +10,7 @@ export default function HomeLayout() {
       <Stack.Screen name="EditPromotionScreen" options={{ headerShown: false }} />
       <Stack.Screen name="FeedbackScreen" options={{ headerShown: false }} />
       <Stack.Screen name="ViewFeedbackScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="ViewOpeningHoursScreen" options={{ headerShown: false }} />
     </Stack>
   );
 }
