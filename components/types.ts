@@ -78,15 +78,15 @@ export interface Feedback {
 
 export interface Hours {
   defaultHours: {
-    monday: { open: string; close: string };
-    tuesday: { open: string; close: string };
-    wednesday: { open: string; close: string };
-    thursday: { open: string; close: string };
-    friday: { open: string; close: string };
-    saturday: { open: string; close: string };
-    sunday: { open: string; close: string };
+    Sunday: { open: string; close: string };
+    Monday: { open: string; close: string };
+    Tuesday: { open: string; close: string };
+    Wednesday: { open: string; close: string };
+    Thursday: { open: string; close: string };
+    Ffriday: { open: string; close: string };
+    Saturday: { open: string; close: string };
   };
-  holidays: Holiday[];
+  holiday: Holiday[];
 }
 
 export interface Holiday {

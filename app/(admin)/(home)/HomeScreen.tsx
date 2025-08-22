@@ -48,6 +48,13 @@ function HomeScreen() {
                 View Feedback
               </Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.push('/(admin)/(home)/ViewOpeningHoursScreen')}
+              className="flex-row items-center justify-center rounded-3xl bg-primary px-4 py-4">
+              <Text className="mr-2 self-center font-sans text-lg text-offwhite">
+                View Opening Hours
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
