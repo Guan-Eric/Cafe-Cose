@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Animated, View, Text, Image, Pressable, Dimensions, TouchableOpacity } from 'react-native';
+import { Animated, View, Text, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,17 +11,17 @@ const slides = [
   {
     title: 'Welcome to Café Cosé',
     description: 'Earn stamps with every coffee you buy.',
-    image: require('../assets/logo.png'),
+    image: require('../assets/slide_1.png'),
   },
   {
     title: 'Join our Run Club',
     description: 'Stay active and enjoy your runs with us.',
-    image: require('../assets/logo.png'),
+    image: require('../assets/slide_2.png'),
   },
   {
     title: 'Get Exclusive Offers',
     description: 'Be the first to know about new deals or drinks.',
-    image: require('../assets/logo.png'),
+    image: require('../assets/slide_3.png'),
   },
 ];
 
@@ -48,44 +48,36 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#f7f5f1' }}>
+    <SafeAreaView className="flex-1 justify-around bg-background">
       <Animated.View
         style={{
-          flexDirection: 'row',
           width: width * slides.length,
           transform: [{ translateX }],
-        }}>
+        }}
+        className="flex-row">
         {slides.map((slide, i) => (
-          <View key={i} style={{ width, alignItems: 'center', padding: 20 }}>
-            <Image source={slide.image} style={{ width: 250, height: 250 }} resizeMode="contain" />
-            <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#1a1a1a', marginTop: 20 }}>
-              {slide.title}
-            </Text>
-            <Text style={{ fontSize: 16, color: '#555', marginTop: 10, textAlign: 'center' }}>
-              {slide.description}
-            </Text>
+          <View key={i} className="w-full items-center p-5" style={{ width }}>
+            <Image source={slide.image} style={{ width, height: width }} resizeMode="contain" />
+            <Text className="mt-5 font-sans text-2xl text-primary">{slide.title}</Text>
+            <Text className="text-sans mt-2 text-center text-text">{slide.description}</Text>
           </View>
         ))}
       </Animated.View>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
+
+      {/* Dots */}
+      <View className="mt-5 flex-row justify-center">
         {slides.map((_, i) => (
           <View
             key={i}
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: 4,
-              marginHorizontal: 6,
-              backgroundColor: i === index ? '#762e1f' : '#ccc',
-            }}
+            className={`mx-1.5 h-2 w-2 rounded-full ${i === index ? 'bg-primary' : 'bg-[#ccc]'}`}
           />
         ))}
       </View>
-      <View style={{ padding: 20, alignItems: 'center' }}>
-        <TouchableOpacity
-          onPress={handleNext}
-          style={{ backgroundColor: '#762e1f', padding: 14, borderRadius: 8 }}>
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>
+
+      {/* Button */}
+      <View className="items-center p-5">
+        <TouchableOpacity onPress={handleNext} className="rounded-full bg-primary px-6 py-3">
+          <Text className="font-bold text-white">
             {index === slides.length - 1 ? 'Get Started' : 'Next'}
           </Text>
         </TouchableOpacity>
