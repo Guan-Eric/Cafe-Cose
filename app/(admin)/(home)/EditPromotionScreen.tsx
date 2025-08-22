@@ -189,7 +189,7 @@ const EditAnnouncementScreen = () => {
           <ScrollView
             contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
             keyboardShouldPersistTaps="handled">
-            <BackButton />
+            <BackButton color="#3C2A20" />
             <View className="flex-1 items-center justify-center ">
               <View className="items-center pb-[30px]">
                 <Text className="self-center font-sans text-4xl text-text">Edit Announcement</Text>

@@ -60,7 +60,7 @@ const ViewRunScreen = () => {
       ) : null}
       <SafeAreaView className="flex-1 bg-background">
         <ScrollView>
-          {imageUrls.length === 0 ? <BackButton /> : null}
+          {imageUrls.length === 0 ? <BackButton color="#3C2A20" /> : null}
           <View className="mt-2 flex-row px-4">
             <Text className="font-sans text-2xl text-text">{runTitle}</Text>
           </View>

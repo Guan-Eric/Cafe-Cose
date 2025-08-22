@@ -138,7 +138,7 @@ const ViewOpeningHoursScreen = () => {
             keyboardShouldPersistTaps="handled">
             {/* Header */}
             <View className="mb-6 flex-row items-center">
-              <BackButton />
+              <BackButton color="#3C2A20" />
               <Text className=" text-3xl font-bold text-text">Edit Opening Hours</Text>
             </View>
 

@@ -156,7 +156,7 @@ const EditMenuItemForm = () => {
           <ScrollView
             contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
             keyboardShouldPersistTaps="handled">
-            <BackButton />
+            <BackButton color="#3C2A20" />
             <View className="flex-1 items-center justify-center ">
               <View className="items-center pb-[30px]">
                 <Text className="self-center font-sans text-4xl text-text">Add Menu Item</Text>
@@ -215,7 +215,12 @@ const EditMenuItemForm = () => {
                 </View>
                 <View className="mt-3 h-[60px] w-[254px] flex-row items-center justify-between">
                   <Text className="font-sans text-text">Available</Text>
-                  <Switch value={available} onValueChange={setAvailable} className="ml-2" />
+                  <Switch
+                    value={available}
+                    onValueChange={setAvailable}
+                    className="ml-2"
+                    trackColor={{ false: '#e7e6e4', true: '#762E1F' }}
+                  />
                 </View>
                 {imageUrls.length > 0 ? (
                   <TouchableOpacity onPress={() => handleImageUpload(setBlobs, setImageUrls)}>

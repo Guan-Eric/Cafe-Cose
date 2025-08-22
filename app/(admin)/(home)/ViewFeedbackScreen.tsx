@@ -11,7 +11,7 @@ export default function ViewFeedbackScreen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="flex-row items-center">
-        <BackButton />
+        <BackButton color="#3C2A20" />
         <Text className="text-3xl font-bold text-text">Feedback</Text>
       </View>
       <ScrollView>

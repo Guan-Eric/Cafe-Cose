@@ -76,7 +76,7 @@ function SignUpScreen() {
       <View className="flex-1 bg-background">
         <KeyboardAvoidingView behavior="padding" className="flex-1">
           <SafeAreaView className="flex-1">
-            <BackButton />
+            <BackButton color="#3C2A20" />
             <View className="flex-1 items-center justify-center">
               <View className="items-center pb-[40px]">
                 <Image
@@ -91,7 +91,7 @@ function SignUpScreen() {
                 <View className="h-[60px] w-[254px]">
                   <Text className="font-sans text-text">Name</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                     placeholder="Enter your name"
                     value={name}
                     onChangeText={setName}
@@ -103,7 +103,7 @@ function SignUpScreen() {
                 <View className="mt-5 h-[60px] w-[254px]">
                   <Text className="font-sans text-text">E-mail</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                     placeholder="e.g. johnsmith@email.com"
                     value={email}
                     onChangeText={onChangeEmail}
@@ -117,7 +117,7 @@ function SignUpScreen() {
                 <View className="mt-5 h-[60px] w-[254px]">
                   <Text className="font-sans text-text">Password</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
@@ -129,7 +129,7 @@ function SignUpScreen() {
                 <View className="mt-5 h-[60px] w-[254px]">
                   <Text className="font-sans text-text">Confirm Password</Text>
                   <TextInput
-                    className="text-m bg-input mt-2 flex-1 rounded-[10px] px-[10px] font-sans text-text"
+                    className="text-m mt-2 flex-1 rounded-[10px] bg-input px-[10px] font-sans text-text"
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
                     secureTextEntry

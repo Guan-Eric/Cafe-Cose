@@ -30,23 +30,21 @@ function HomeScreen() {
           <View className="gap-4 px-4 py-2">
             <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/QRScannerScreen')}
-              className="flex-row items-center justify-center rounded-3xl bg-green-500 px-4 py-4">
-              <Text className="mr-2 self-center font-sans text-lg text-offwhite">Scan QR Code</Text>
-              <MaterialCommunityIcons name="camera" size={24} color="white" />
+              className="flex-row items-center justify-center rounded-3xl border-2 border-primary bg-background px-4 py-4">
+              <Text className="mr-2 self-center font-sans text-lg text-primary">Scan QR Code</Text>
+              <MaterialCommunityIcons name="camera" size={24} color="#762E1F" />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/PromotionScreen')}
-              className="flex-row items-center justify-center rounded-3xl bg-blue-500 px-4 py-4">
+              className="flex-row items-center justify-center rounded-3xl bg-primary px-4 py-4">
               <Text className="mr-2 self-center font-sans text-lg text-offwhite">
                 View Promotion
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/FeedbackScreen')}
-              className="flex-row items-center justify-center rounded-3xl bg-gray-500 px-4 py-4">
-              <Text className="mr-2 self-center font-sans text-lg text-offwhite">
-                View Feedback
-              </Text>
+              className="flex-row items-center justify-center rounded-3xl border-2 border-primary bg-background px-4 py-4">
+              <Text className="mr-2 self-center font-sans text-lg text-primary">View Feedback</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => router.push('/(admin)/(home)/ViewOpeningHoursScreen')}

@@ -49,7 +49,7 @@ const FeedbackScreen = () => {
 
   return (
     <SafeAreaView className="flex-1">
-      <BackButton />
+      <BackButton color="#3C2A20" />
       <FlatList
         data={feedbacks}
         renderItem={renderItem}

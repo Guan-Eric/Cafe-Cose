@@ -19,7 +19,7 @@ const ViewMenuItem = () => {
       ) : null}
       <SafeAreaView className="flex-1 bg-background">
         <View className="mb-2 flex-row items-center">
-          {imageUrls.length == 0 ? <BackButton /> : null}
+          {imageUrls.length == 0 ? <BackButton color="#3C2A20" /> : null}
         </View>
         <Text className="px-4 font-sans text-3xl text-text">{name}</Text>
         <Text className="mt-2 px-4 font-sans text-2xl text-primary">

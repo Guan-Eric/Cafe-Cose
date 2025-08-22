@@ -111,13 +111,14 @@ function SettingsScreen() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View className="flex-1 bg-background">
+        <View className="absolute left-0 right-0 top-0 h-[235px] bg-primary" />
         <SafeAreaView>
           <View className="flex-row items-center ">
-            <BackButton />
-            <Text className="font-sans text-2xl text-text">Settings</Text>
+            <BackButton color="#F8F8F8" />
+            <Text className="font-sans text-3xl text-offwhite">Settings</Text>
           </View>
           <View className="items-center">
-            <View className="m-2 w-[90%] rounded-2xl bg-white p-5 shadow-sm">
+            <View className="m-2 w-[90%] rounded-2xl bg-background p-5 shadow-sm">
               <Text className="mb-4 font-sans text-lg">Profile</Text>
               <View className="mb-4 items-center">
                 <TouchableOpacity onPress={handleImageUpload}>
@@ -130,11 +131,11 @@ function SettingsScreen() {
                 <TextInput
                   value={name}
                   onChangeText={setName}
-                  className="rounded-lg border border-gray-300 p-2"
+                  className="rounded-lg bg-input p-2"
                 />
               </View>
             </View>
-            <View className="m-2 w-[90%] rounded-2xl bg-white p-5 shadow-sm">
+            <View className="m-2 w-[90%] rounded-2xl bg-background p-5 shadow-sm">
               <Text className="mb-4 font-sans text-lg">Notifications</Text>
 
               <View className="mb-4 flex-row items-center justify-between">
@@ -142,7 +143,7 @@ function SettingsScreen() {
                 <Switch
                   value={announcementNotifications}
                   onValueChange={toggleAnnouncementNotifications}
-                  trackColor={{ false: '#767577', true: '#4CAF50' }}
+                  trackColor={{ false: '#e7e6e4', true: '#762E1F' }}
                 />
               </View>
 
@@ -151,20 +152,20 @@ function SettingsScreen() {
                 <Switch
                   value={runNotifications}
                   onValueChange={toggleRunNotifications}
-                  trackColor={{ false: '#767577', true: '#4CAF50' }}
+                  trackColor={{ false: '#e7e6e4', true: '#762E1F' }}
                 />
               </View>
             </View>
           </View>
           <TouchableOpacity
-            className="mt-4 w-[200px] items-center self-center rounded-full bg-blue-500 p-4"
+            className="mt-4 w-[160px] items-center self-center rounded-full bg-primary p-3"
             onPress={() => {
               handleSave();
             }}>
-            <Text className="font-sans text-white">Save Changes</Text>
+            <Text className="font-sans text-offwhite">Save Changes</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            className="m-2 mt-20 w-[200px] items-center self-center rounded-full bg-red-500 p-4"
+            className="m-2 mt-20 w-[160px] items-center self-center rounded-full bg-red-500 p-3"
             onPress={() => {
               logOut();
             }}>

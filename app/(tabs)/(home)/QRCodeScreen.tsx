@@ -39,7 +39,7 @@ const QRCodeScreen: React.FC = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#f7f5f1]">
-      <BackButton />
+      <BackButton color="#3C2A20" />
       <View className="flex-1 items-center justify-center px-4">
         <Text className="mb-2 font-sans text-3xl text-primary">Your QR Code</Text>
         <Text className="mb-6 font-sans text-text">Scan at the counter to earn stamps ☕</Text>

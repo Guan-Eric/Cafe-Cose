@@ -142,7 +142,7 @@ const CreateRunScreen = () => {
             contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
             keyboardShouldPersistTaps="handled">
             <View className="flex-row items-center">
-              <BackButton />
+              <BackButton color="#3C2A20" />
               <Text className="font-sans text-2xl text-text">Create Run</Text>
             </View>
             <View className="flex-1 items-center justify-center">
@@ -189,7 +189,12 @@ const CreateRunScreen = () => {
               </View>
               <View className="mt-3 h-[60px] w-[254px] flex-row items-center justify-between">
                 <Text className="font-sans text-text">RSVP?</Text>
-                <Switch value={isRSVP} onValueChange={setIsRSVP} className="ml-2" />
+                <Switch
+                  value={isRSVP}
+                  onValueChange={setIsRSVP}
+                  className="ml-2"
+                  trackColor={{ false: '#e7e6e4', true: '#762E1F' }}
+                />
               </View>
               {imageUrls.length > 0 ? (
                 <TouchableOpacity onPress={() => handleImageUpload(setBlobs, setImageUrls)}>

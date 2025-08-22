@@ -128,7 +128,7 @@ const CreateAnnouncementScreen = () => {
             contentContainerStyle={{ flexGrow: 1, paddingBottom: 40 }}
             keyboardShouldPersistTaps="handled">
             <View className="flex-row items-center">
-              <BackButton />
+              <BackButton color="#3C2A20" />
               <Text className="font-sans text-2xl text-text">Create Announcement</Text>
             </View>
             <View className="flex-1 items-center justify-center">

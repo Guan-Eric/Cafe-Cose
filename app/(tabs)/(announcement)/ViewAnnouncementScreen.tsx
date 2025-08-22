@@ -22,7 +22,7 @@ const ViewAnnouncementScreen = () => {
       ) : null}
       <SafeAreaView className="flex-1 bg-background p-6">
         <View className="mb-2 flex-row items-center">
-          {imageUrls.length == 0 ? <BackButton /> : null}
+          {imageUrls.length == 0 ? <BackButton color="#3C2A20" /> : null}
         </View>
         <ScrollView>
           <Text className="px-4 font-sans text-3xl text-text">{title}</Text>

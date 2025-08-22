@@ -23,7 +23,7 @@ const FeedbackScreen = () => {
   return (
     <SafeAreaView className="flex-1  bg-background ">
       <View className="mb-4 flex-row items-center">
-        <BackButton />
+        <BackButton color="#3C2A20" />
         <Text className="font-sans text-3xl text-text">User Feedback</Text>
       </View>
       <TextInput
